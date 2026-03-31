@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
+import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { authAPI } from '../api/auth';
 
 const AuthContext = createContext(null);
@@ -60,8 +61,13 @@ export function AuthProvider({ children }) {
     setUser((prev) => ({ ...prev, ...userData }));
   };
 
+  const value = useMemo(
+    () => ({ user, loading, login, register, logout, updateUser, fetchUser }),
+    [user, loading, login, register, logout, updateUser, fetchUser]
+  );
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, updateUser, fetchUser }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );
@@ -72,3 +78,7 @@ export function useAuth() {
   if (!context) throw new Error('useAuth must be used within AuthProvider');
   return context;
 }
+
+AuthProvider.propTypes = {
+  children: PropTypes.node,
+};

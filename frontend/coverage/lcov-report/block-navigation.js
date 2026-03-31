@@ -84,4 +84,4 @@ var jumpToCode = (function init() {
         }
     };
 })();
-window.addEventListener('keydown', jumpToCode);
+globalThis.addEventListener('keydown', jumpToCode);

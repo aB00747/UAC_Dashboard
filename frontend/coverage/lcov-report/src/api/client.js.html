@@ -184,10 +184,10 @@ client.interceptors.response.use(
 <span class="cstat-no" title="statement not covered" >        } catch {</span>
 <span class="cstat-no" title="statement not covered" >          localStorage.removeItem('access_token');</span>
 <span class="cstat-no" title="statement not covered" >          localStorage.removeItem('refresh_token');</span>
-<span class="cstat-no" title="statement not covered" >          window.location.href = '/login';</span>
+<span class="cstat-no" title="statement not covered" >          globalThis.location.href = '/login';</span>
 <span class="cstat-no" title="statement not covered" >        }</span>
 <span class="cstat-no" title="statement not covered" >      } else {</span>
-<span class="cstat-no" title="statement not covered" >        window.location.href = '/login';</span>
+<span class="cstat-no" title="statement not covered" >        globalThis.location.href = '/login';</span>
 <span class="cstat-no" title="statement not covered" >      }</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" >    return Promise.reject(error);</span>
@@ -206,7 +206,7 @@ export default client;
             </div>
         <script src="../../prettify.js"></script>
         <script>
-            window.onload = function () {
+            globalThis.onload = function () {
                 prettyPrint();
             };
         </script>

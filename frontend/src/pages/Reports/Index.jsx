@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
 import { reportsAPI } from '../../api/reports';
-import { formatCurrency } from '../../utils/format';
-import { classNames } from '../../utils/format';
+import { formatCurrency, classNames } from '../../utils/format';
 import { useTheme } from '../../contexts/ThemeContext';
 import toast from 'react-hot-toast';
 import { BarChart2, ShoppingCart, Package, TrendingUp } from 'lucide-react';
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
-  PieChart, Pie, Cell,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  PieChart, Pie,
 } from 'recharts';
+import { StatCard } from '../../components/common';
+import { PageSpinner } from '../../components/ui/Spinner';
 
 const COLORS = ['#4f46e5', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
 const TABS = ['sales', 'inventory'];
@@ -30,18 +31,13 @@ export default function Reports() {
         ]);
         setSalesData(salesRes.data);
         setInventoryData(invRes.data);
-      } catch {
-        toast.error('Failed to load reports');
-      } finally {
-        setLoading(false);
-      }
+      } catch { toast.error('Failed to load reports'); }
+      finally { setLoading(false); }
     }
     load();
   }, []);
 
-  if (loading) {
-    return <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" /></div>;
-  }
+  if (loading) return <PageSpinner />;
 
   const tooltipStyle = isDark
     ? { backgroundColor: '#1f2937', border: '1px solid #374151', color: '#fff' }
@@ -94,7 +90,7 @@ export default function Reports() {
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie data={salesData.by_payment} cx="50%" cy="50%" outerRadius={100} dataKey="count" label={({ payment_status, count }) => `${payment_status}: ${count}`}>
-                    {(salesData.by_payment || []).map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                    {(salesData.by_payment || []).map((item, i) => <Pie key={item.payment_status || i} fill={COLORS[i % COLORS.length]} />)}
                   </Pie>
                   <Tooltip contentStyle={tooltipStyle} />
                 </PieChart>
@@ -107,7 +103,7 @@ export default function Reports() {
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Top Customers</h3>
               <div className="space-y-2">
                 {(salesData.top_customers || []).map((c, i) => (
-                  <div key={i} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg text-sm">
+                  <div key={c.id || i} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg text-sm">
                     <div>
                       <span className="font-medium text-gray-900 dark:text-white">{c.customer__first_name} {c.customer__last_name}</span>
                       {c.customer__company_name && <span className="text-gray-500 dark:text-gray-400 ml-1">({c.customer__company_name})</span>}
@@ -128,7 +124,7 @@ export default function Reports() {
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Top Products</h3>
               <div className="space-y-2">
                 {(salesData.top_products || []).map((p, i) => (
-                  <div key={i} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg text-sm">
+                  <div key={p.id || i} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg text-sm">
                     <span className="font-medium text-gray-900 dark:text-white">{p.chemical__chemical_name}</span>
                     <div className="text-right">
                       <span className="font-medium text-gray-900 dark:text-white">{formatCurrency(p.total_value)}</span>
@@ -173,7 +169,7 @@ export default function Reports() {
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Low Stock Items</h3>
               <div className="space-y-2 max-h-[300px] overflow-y-auto">
                 {(inventoryData.low_stock_items || []).map((item, i) => (
-                  <div key={i} className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/20 rounded-lg text-sm border border-red-100 dark:border-red-800/30">
+                  <div key={item.id || i} className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/20 rounded-lg text-sm border border-red-100 dark:border-red-800/30">
                     <div>
                       <p className="font-medium text-gray-900 dark:text-white">{item.chemical_name}</p>
                       <p className="text-xs text-gray-500 dark:text-gray-400">{item.chemical_code} - Min: {item.min_quantity} {item.unit}</p>
@@ -189,20 +185,6 @@ export default function Reports() {
           </div>
         </div>
       )}
-    </div>
-  );
-}
-
-function StatCard({ label, value, icon: Icon, color }) {
-  return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 flex items-center gap-4">
-      <div className={`${color} p-3 rounded-lg`}>
-        <Icon className="h-6 w-6 text-white" />
-      </div>
-      <div>
-        <p className="text-sm text-gray-500 dark:text-gray-400">{label}</p>
-        <p className="text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
-      </div>
     </div>
   );
 }

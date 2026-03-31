@@ -207,4 +207,4 @@ var addSorting = (function() {
     };
 })();
 
-window.addEventListener('load', addSorting);
+globalThis.addEventListener('load', addSorting);

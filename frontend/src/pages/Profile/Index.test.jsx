@@ -113,21 +113,21 @@ describe('Profile', () => {
   it('calls deleteProfile after confirm', async () => {
     const { logout } = setup();
     authAPI.deleteProfile.mockResolvedValue({});
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    vi.spyOn(globalThis, 'confirm').mockReturnValue(true);
     render$();
     fireEvent.click(screen.getByText('Delete Account'));
     await waitFor(() => expect(authAPI.deleteProfile).toHaveBeenCalled());
     expect(logout).toHaveBeenCalled();
     expect(mockNavigate).toHaveBeenCalledWith('/login');
-    window.confirm.mockRestore();
+    globalThis.confirm.mockRestore();
   });
 
   it('does not delete when confirm is cancelled', async () => {
     setup();
-    vi.spyOn(window, 'confirm').mockReturnValue(false);
+    vi.spyOn(globalThis, 'confirm').mockReturnValue(false);
     render$();
     fireEvent.click(screen.getByText('Delete Account'));
     expect(authAPI.deleteProfile).not.toHaveBeenCalled();
-    window.confirm.mockRestore();
+    globalThis.confirm.mockRestore();
   });
 });

@@ -1153,12 +1153,12 @@ export default function Customers() {
 <span class="fstat-no" title="function not covered" >  async function handleExport() {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
 <span class="cstat-no" title="statement not covered" >      const { data } = await customersAPI.export();</span>
-<span class="cstat-no" title="statement not covered" >      const url = window.URL.createObjectURL(new Blob([data]));</span>
+<span class="cstat-no" title="statement not covered" >      const url = globalThis.URL.createObjectURL(new Blob([data]));</span>
 <span class="cstat-no" title="statement not covered" >      const a = document.createElement('a');</span>
 <span class="cstat-no" title="statement not covered" >      a.href = url;</span>
 <span class="cstat-no" title="statement not covered" >      a.download = 'customers.csv';</span>
 <span class="cstat-no" title="statement not covered" >      a.click();</span>
-<span class="cstat-no" title="statement not covered" >      window.URL.revokeObjectURL(url);</span>
+<span class="cstat-no" title="statement not covered" >      globalThis.URL.revokeObjectURL(url);</span>
 <span class="cstat-no" title="statement not covered" >    } catch {</span>
 <span class="cstat-no" title="statement not covered" >      toast.error('Export failed');</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
@@ -1167,12 +1167,12 @@ export default function Customers() {
 <span class="fstat-no" title="function not covered" >  async function handleTemplateDownload() {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
 <span class="cstat-no" title="statement not covered" >      const { data } = await customersAPI.exportTemplate('xlsx');</span>
-<span class="cstat-no" title="statement not covered" >      const url = window.URL.createObjectURL(new Blob([data]));</span>
+<span class="cstat-no" title="statement not covered" >      const url = globalThis.URL.createObjectURL(new Blob([data]));</span>
 <span class="cstat-no" title="statement not covered" >      const a = document.createElement('a');</span>
 <span class="cstat-no" title="statement not covered" >      a.href = url;</span>
 <span class="cstat-no" title="statement not covered" >      a.download = 'customer_template.xlsx';</span>
 <span class="cstat-no" title="statement not covered" >      a.click();</span>
-<span class="cstat-no" title="statement not covered" >      window.URL.revokeObjectURL(url);</span>
+<span class="cstat-no" title="statement not covered" >      globalThis.URL.revokeObjectURL(url);</span>
 <span class="cstat-no" title="statement not covered" >    } catch {</span>
 <span class="cstat-no" title="statement not covered" >      toast.error('Download failed');</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
@@ -1511,7 +1511,7 @@ function FormField({ label, value, onChange, type = 'text', required = false }) 
             </div>
         <script src="../../../prettify.js"></script>
         <script>
-            window.onload = function () {
+            globalThis.onload = function () {
                 prettyPrint();
             };
         </script>

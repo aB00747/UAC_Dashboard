@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { brandingAPI } from '../api/core';
 import logo from '../../public/UAC.svg'
 
@@ -48,8 +49,10 @@ export function BrandingProvider({ children }) {
     }
   }, [refreshBranding]);
 
+  const value = useMemo(() => ({ ...branding, refreshBranding }), [refreshBranding, branding]);
+
   return (
-    <BrandingContext.Provider value={{ ...branding, refreshBranding }}>
+    <BrandingContext.Provider value={value}>
       {children}
     </BrandingContext.Provider>
   );
@@ -60,3 +63,7 @@ export function useBranding() {
   if (!context) throw new Error('useBranding must be used within BrandingProvider');
   return context;
 }
+
+BrandingProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
