@@ -8,6 +8,7 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   PieChart, Pie, Cell,
 } from 'recharts';
+import AIInsightsWidget from '../../components/AIInsightsWidget';
 
 const COLORS = ['#4f46e5', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 
@@ -176,6 +177,9 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      {/* AI Insights */}
+      <AIInsightsWidget />
     </div>
   );
 }

@@ -18,7 +18,7 @@ export function BrandingProvider({ children }) {
       const { data } = await brandingAPI.get();
       const newBranding = {
         systemName: data.system_name || DEFAULTS.systemName,
-        logoUrl: data.logo_url || '',
+        logoUrl: data.logo_url || DEFAULTS.logoUrl,
         faviconUrl: data.favicon_url || '',
       };
       setBranding(newBranding);

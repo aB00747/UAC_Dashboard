@@ -10,10 +10,12 @@ import {
   BarChart2,
   FileText,
   Settings,
+  Bot,
 } from 'lucide-react';
 
 export const navigation = [
   { name: 'Dashboard', href: '/', icon: Home },
+  { name: 'AI Assistant', href: '/ai', icon: Bot },
   { name: 'Customers', href: '/customers', icon: Users },
   { name: 'Inventory', href: '/inventory', icon: Package },
   { name: 'Orders', href: '/orders', icon: ShoppingCart },

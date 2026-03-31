@@ -15,6 +15,7 @@ import Documents from './pages/Documents/Index';
 import SettingsPage from './pages/Settings/Index';
 import UsersPage from './pages/Users/Index';
 import Profile from './pages/Profile/Index';
+import AIAssistant from './pages/AI/Index';
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
       </Route>
       <Route element={<AuthenticatedLayout />}>
         <Route path="/" element={<Dashboard />} />
+        <Route path="/ai" element={<AIAssistant />} />
         <Route path="/customers" element={<Customers />} />
         <Route path="/inventory" element={<Inventory />} />
         <Route path="/orders" element={<Orders />} />

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'apps.messaging',
     'apps.documents',
     'apps.reports',
+    'apps.ai',
 ]
 
 MIDDLEWARE = [
@@ -142,3 +143,7 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# AI Service
+AI_SERVICE_URL = os.environ.get('AI_SERVICE_URL', 'http://localhost:8001')
+AI_SERVICE_API_KEY = os.environ.get('AI_SERVICE_API_KEY', 'umiya-ai-dev-key-change-in-production')

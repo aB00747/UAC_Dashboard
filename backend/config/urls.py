@@ -14,6 +14,7 @@ urlpatterns = [
     path('api/messages/', include('apps.messaging.urls')),
     path('api/documents/', include('apps.documents.urls')),
     path('api/reports/', include('apps.reports.urls')),
+    path('api/ai/', include('apps.ai.urls')),
 ]
 
 if settings.DEBUG:
