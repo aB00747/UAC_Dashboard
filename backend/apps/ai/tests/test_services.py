@@ -195,11 +195,11 @@ class ProcessDocumentServiceTest(TestCase):
     @patch('apps.ai.services.ai_client.httpx.Client')
     def test_success(self, mock_cls):
         _mock_httpx_client(mock_cls, 'post', {'processed': True})
-        result = AIServiceClient().process_document('/tmp/a.pdf', 'a.pdf', 'pdf', user_id=1)
+        result = AIServiceClient().process_document('tmp_path', 'a.pdf', 'pdf', user_id=1)
         self.assertEqual(result, {'processed': True})
 
     @patch('apps.ai.services.ai_client.httpx.Client')
     def test_connect_error(self, mock_cls):
         _mock_httpx_client(mock_cls, 'post', side_effect=httpx.ConnectError('refused'))
         with self.assertRaises(AIServiceUnavailable):
-            AIServiceClient().process_document('/tmp/a.pdf', 'a.pdf', 'pdf', user_id=1)
+            AIServiceClient().process_document('tmp_path', 'a.pdf', 'pdf', user_id=1)
