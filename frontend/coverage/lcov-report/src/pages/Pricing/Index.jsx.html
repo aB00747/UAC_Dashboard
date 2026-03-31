@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">47.44% </span>
+                <span class="strong">45.45% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>65/137</span>
+                <span class='fraction'>55/121</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">47.44% </span>
+                <span class="strong">45.45% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>65/137</span>
+                <span class='fraction'>55/121</span>
             </div>
         
             
@@ -198,22 +198,8 @@
 <a name='L133'></a><a href='#L133'>133</a>
 <a name='L134'></a><a href='#L134'>134</a>
 <a name='L135'></a><a href='#L135'>135</a>
-<a name='L136'></a><a href='#L136'>136</a>
-<a name='L137'></a><a href='#L137'>137</a>
-<a name='L138'></a><a href='#L138'>138</a>
-<a name='L139'></a><a href='#L139'>139</a>
-<a name='L140'></a><a href='#L140'>140</a>
-<a name='L141'></a><a href='#L141'>141</a>
-<a name='L142'></a><a href='#L142'>142</a>
-<a name='L143'></a><a href='#L143'>143</a>
-<a name='L144'></a><a href='#L144'>144</a>
-<a name='L145'></a><a href='#L145'>145</a>
-<a name='L146'></a><a href='#L146'>146</a>
-<a name='L147'></a><a href='#L147'>147</a>
-<a name='L148'></a><a href='#L148'>148</a>
-<a name='L149'></a><a href='#L149'>149</a>
-<a name='L150'></a><a href='#L150'>150</a>
-<a name='L151'></a><a href='#L151'>151</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L136'></a><a href='#L136'>136</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -258,8 +244,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">9x</span>
@@ -268,22 +252,11 @@
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
@@ -313,10 +286,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -365,9 +335,10 @@
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useState, useEffect } from 'react';
 import { chemicalsAPI } from '../../api/inventory';
-import { formatCurrency } from '../../utils/format';
 import toast from 'react-hot-toast';
-import { Save, Search } from 'lucide-react';
+import { Save } from 'lucide-react';
+import { PageHeader, SearchInput } from '../../components/common';
+import { PageSpinner } from '../../components/ui/Spinner';
 &nbsp;
 export default function Pricing() {
   const [chemicals, setChemicals] = useState([]);
@@ -406,9 +377,7 @@ export default function Pricing() {
 <span class="cstat-no" title="statement not covered" >        delete next[chem.id];</span>
 <span class="cstat-no" title="statement not covered" >        return next;</span>
 <span class="cstat-no" title="statement not covered" >      });</span>
-<span class="cstat-no" title="statement not covered" >    } catch {</span>
-<span class="cstat-no" title="statement not covered" >      toast.error('Update failed');</span>
-<span class="cstat-no" title="statement not covered" >    }</span>
+<span class="cstat-no" title="statement not covered" >    } catch { toast.error('Update failed'); }</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
   const filtered = chemicals.filter(
@@ -417,25 +386,14 @@ export default function Pricing() {
 <span class="cstat-no" title="statement not covered" >      c.chemical_code.toLowerCase().includes(search.toLowerCase())</span>
   );
 &nbsp;
-  if (loading) {
-    return &lt;div className="flex justify-center py-20"&gt;&lt;div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" /&gt;&lt;/div&gt;;
-  }
+  if (loading) return &lt;PageSpinner /&gt;;
 &nbsp;
   return (
     &lt;div className="space-y-4"&gt;
-      &lt;h1 className="text-2xl font-bold text-gray-900 dark:text-white"&gt;Pricing Management&lt;/h1&gt;
+      &lt;PageHeader title="Pricing Management" /&gt;
 &nbsp;
       &lt;div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4"&gt;
-        &lt;div className="relative max-w-md"&gt;
-          &lt;Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" /&gt;
-          &lt;input
-            type="text"
-            placeholder="Search chemicals..."
-            className="w-full pl-9 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            value={search}
-            onChange={<span class="fstat-no" title="function not covered" >(e) =&gt; setSearch(e.target.value)}</span>
-          /&gt;
-        &lt;/div&gt;
+        &lt;SearchInput placeholder="Search chemicals..." value={search} onChange={<span class="fstat-no" title="function not covered" >(e) =&gt; setSearch(e.target.value)} c</span>lassName="max-w-md" /&gt;
       &lt;/div&gt;
 &nbsp;
       &lt;div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden"&gt;
@@ -454,44 +412,41 @@ export default function Pricing() {
           &lt;tbody&gt;
             {filtered.map((c) =&gt; {
 <span class="cstat-no" title="statement not covered" >              const e = edited[c.id] || {};</span>
-<span class="cstat-no" title="statement not covered" >              const pp = parseFloat(e.purchase_price ?? c.purchase_price) || 0;</span>
-<span class="cstat-no" title="statement not covered" >              const sp = parseFloat(e.selling_price ?? c.selling_price) || 0;</span>
+<span class="cstat-no" title="statement not covered" >              const pp = Number.parseFloat(e.purchase_price ?? c.purchase_price) || 0;</span>
+<span class="cstat-no" title="statement not covered" >              const sp = Number.parseFloat(e.selling_price ?? c.selling_price) || 0;</span>
 <span class="cstat-no" title="statement not covered" >              const margin = pp &gt; 0 ? (((sp - pp) / pp) * 100).toFixed(1) : '-';</span>
 <span class="cstat-no" title="statement not covered" >              const isEdited = !!edited[c.id];</span>
+<span class="cstat-no" title="statement not covered" >              const marginColor = (margin) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >                if (margin &gt; 0) return 'text-green-500';</span>
+<span class="cstat-no" title="statement not covered" >                if (margin &lt; 0) return 'text-red-500';</span>
+<span class="cstat-no" title="statement not covered" >                return 'text-gray-500';</span>
+<span class="cstat-no" title="statement not covered" >              }</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >              return (</span>
 <span class="cstat-no" title="statement not covered" >                &lt;tr key={c.id} className="border-b border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/30"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                  &lt;td className="py-3 px-4 font-medium text-gray-900 dark:text-white"&gt;{c.chemical_name}&lt;/td&gt;</span>
 <span class="cstat-no" title="statement not covered" >                  &lt;td className="py-3 px-4 text-gray-600 dark:text-gray-400"&gt;{c.chemical_code}&lt;/td&gt;</span>
 <span class="cstat-no" title="statement not covered" >                  &lt;td className="py-3 px-4 text-right"&gt;</span>
-<span class="cstat-no" title="statement not covered" >                    &lt;input</span>
-<span class="cstat-no" title="statement not covered" >                      type="number"</span>
-<span class="cstat-no" title="statement not covered" >                      step="any"</span>
+<span class="cstat-no" title="statement not covered" >                    &lt;input type="number" step="any"</span>
 <span class="cstat-no" title="statement not covered" >                      className="w-28 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm text-right bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"</span>
 <span class="cstat-no" title="statement not covered" >                      value={e.purchase_price ?? c.purchase_price}</span>
-<span class="cstat-no" title="statement not covered" >                      onChange={(ev) =&gt; handleChange(c.id, 'purchase_price', ev.target.value)}</span>
-<span class="cstat-no" title="statement not covered" >                    /&gt;</span>
+<span class="cstat-no" title="statement not covered" >                      onChange={(ev) =&gt; handleChange(c.id, 'purchase_price', ev.target.value)} /&gt;</span>
 <span class="cstat-no" title="statement not covered" >                  &lt;/td&gt;</span>
 <span class="cstat-no" title="statement not covered" >                  &lt;td className="py-3 px-4 text-right"&gt;</span>
-<span class="cstat-no" title="statement not covered" >                    &lt;input</span>
-<span class="cstat-no" title="statement not covered" >                      type="number"</span>
-<span class="cstat-no" title="statement not covered" >                      step="any"</span>
+<span class="cstat-no" title="statement not covered" >                    &lt;input type="number" step="any"</span>
 <span class="cstat-no" title="statement not covered" >                      className="w-28 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm text-right bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"</span>
 <span class="cstat-no" title="statement not covered" >                      value={e.selling_price ?? c.selling_price}</span>
-<span class="cstat-no" title="statement not covered" >                      onChange={(ev) =&gt; handleChange(c.id, 'selling_price', ev.target.value)}</span>
-<span class="cstat-no" title="statement not covered" >                    /&gt;</span>
+<span class="cstat-no" title="statement not covered" >                      onChange={(ev) =&gt; handleChange(c.id, 'selling_price', ev.target.value)} /&gt;</span>
 <span class="cstat-no" title="statement not covered" >                  &lt;/td&gt;</span>
 <span class="cstat-no" title="statement not covered" >                  &lt;td className="py-3 px-4 text-right"&gt;</span>
-<span class="cstat-no" title="statement not covered" >                    &lt;input</span>
-<span class="cstat-no" title="statement not covered" >                      type="number"</span>
-<span class="cstat-no" title="statement not covered" >                      step="any"</span>
+<span class="cstat-no" title="statement not covered" >                    &lt;input type="number" step="any"</span>
 <span class="cstat-no" title="statement not covered" >                      className="w-20 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm text-right bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"</span>
 <span class="cstat-no" title="statement not covered" >                      value={e.gst_percentage ?? c.gst_percentage}</span>
-<span class="cstat-no" title="statement not covered" >                      onChange={(ev) =&gt; handleChange(c.id, 'gst_percentage', ev.target.value)}</span>
-<span class="cstat-no" title="statement not covered" >                    /&gt;</span>
+<span class="cstat-no" title="statement not covered" >                      onChange={(ev) =&gt; handleChange(c.id, 'gst_percentage', ev.target.value)} /&gt;</span>
 <span class="cstat-no" title="statement not covered" >                  &lt;/td&gt;</span>
 <span class="cstat-no" title="statement not covered" >                  &lt;td className="py-3 px-4 text-right"&gt;</span>
-<span class="cstat-no" title="statement not covered" >                    &lt;span className={`font-medium ${parseFloat(margin) &gt; 0 ? 'text-green-600 dark:text-green-400' : parseFloat(margin) &lt; 0 ? 'text-red-600 dark:text-red-400' : 'text-gray-500 dark:text-gray-400'}`}&gt;</span>
-<span class="cstat-no" title="statement not covered" >                      {margin !== '-' ? `${margin}%` : '-'}</span>
+<span class="cstat-no" title="statement not covered" >                    &lt;span className={`font-medium ${marginColor(Number.parseFloat(margin))}`}&gt;</span>
+<span class="cstat-no" title="statement not covered" >                      {margin === '-' ? '-' : `${margin}%`}</span>
 <span class="cstat-no" title="statement not covered" >                    &lt;/span&gt;</span>
 <span class="cstat-no" title="statement not covered" >                  &lt;/td&gt;</span>
 <span class="cstat-no" title="statement not covered" >                  &lt;td className="py-3 px-4 text-right"&gt;</span>
@@ -520,7 +475,7 @@ export default function Pricing() {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-22T08:34:39.795Z
+                at 2026-03-31T11:11:19.484Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

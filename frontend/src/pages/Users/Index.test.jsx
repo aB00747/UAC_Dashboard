@@ -183,25 +183,25 @@ describe('UsersPage', () => {
   it('calls usersAPI.delete after confirm', async () => {
     setup();
     usersAPI.delete.mockResolvedValue({});
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    vi.spyOn(globalThis, 'confirm').mockReturnValue(true);
     render(<UsersPage />);
     await waitFor(() => screen.getByText('alice@ex.com'));
     const deleteBtns = document.querySelectorAll('button[class*="hover:text-red"]');
     fireEvent.click(deleteBtns[0]);
     await waitFor(() => expect(usersAPI.delete).toHaveBeenCalledWith(1));
     expect(toast.success).toHaveBeenCalledWith('User deleted');
-    window.confirm.mockRestore();
+    globalThis.confirm.mockRestore();
   });
 
   it('does not delete when confirm is cancelled', async () => {
     setup();
-    vi.spyOn(window, 'confirm').mockReturnValue(false);
+    vi.spyOn(globalThis, 'confirm').mockReturnValue(false);
     render(<UsersPage />);
     await waitFor(() => screen.getByText('alice@ex.com'));
     const deleteBtns = document.querySelectorAll('button[class*="hover:text-red"]');
     fireEvent.click(deleteBtns[0]);
     expect(usersAPI.delete).not.toHaveBeenCalled();
-    window.confirm.mockRestore();
+    globalThis.confirm.mockRestore();
   });
 
   it('renders role badges for users', async () => {

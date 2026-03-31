@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 vi.mock('./contexts/AuthContext', () => ({
@@ -25,13 +25,13 @@ vi.mock('./components/SidebarContent', () => ({
 import App from './App';
 
 describe('App routing', () => {
-  it('renders login page at /login', () => {
+  it('renders login page at /login', async () => {
     render(<MemoryRouter initialEntries={['/login']}><App /></MemoryRouter>);
-    expect(screen.getByRole('button', { name: /sign in/i })).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByRole('button', { name: /sign in/i })).toBeInTheDocument());
   });
 
-  it('renders register page at /register', () => {
+  it('renders register page at /register', async () => {
     render(<MemoryRouter initialEntries={['/register']}><App /></MemoryRouter>);
-    expect(screen.getByRole('button', { name: /Register/i })).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByRole('button', { name: /Register/i })).toBeInTheDocument());
   });
 });

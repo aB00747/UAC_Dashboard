@@ -1,5 +1,5 @@
 export function formatCurrency(amount) {
-  const num = parseFloat(amount) || 0;
+  const num = Number.parseFloat(amount) || 0;
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',
     currency: 'INR',

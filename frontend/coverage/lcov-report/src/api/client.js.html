@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">51.28% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>13/39</span>
+                <span class='fraction'>20/39</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>2/6</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">51.28% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>13/39</span>
+                <span class='fraction'>20/39</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -117,16 +117,18 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -144,10 +146,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -161,18 +161,18 @@ const client = axios.create({
 });
 &nbsp;
 client.interceptors.request.use((config) =&gt; {
-<span class="cstat-no" title="statement not covered" >  const token = localStorage.getItem('access_token');</span>
-<span class="cstat-no" title="statement not covered" >  if (token) {</span>
+  const token = localStorage.getItem('access_token');
+  if (token) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
 <span class="cstat-no" title="statement not covered" >    config.headers.Authorization = `Bearer ${token}`;</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
-<span class="cstat-no" title="statement not covered" >  return config;</span>
+  return config;
 });
 &nbsp;
 client.interceptors.response.use(
 <span class="fstat-no" title="function not covered" >  (response) =&gt; response,</span>
   async (error) =&gt; {
-<span class="cstat-no" title="statement not covered" >    const originalRequest = error.config;</span>
-<span class="cstat-no" title="statement not covered" >    if (error.response?.status === 401 &amp;&amp; !originalRequest._retry) {</span>
+    const originalRequest = error.config;
+    if (error.response<span class="branch-0 cbranch-no" title="branch not covered" >?.status </span>=== 401 <span class="branch-0 cbranch-no" title="branch not covered" >&amp;&amp; !originalRequest._retry)</span> <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
 <span class="cstat-no" title="statement not covered" >      originalRequest._retry = true;</span>
 <span class="cstat-no" title="statement not covered" >      const refresh = localStorage.getItem('refresh_token');</span>
 <span class="cstat-no" title="statement not covered" >      if (refresh) {</span>
@@ -184,14 +184,14 @@ client.interceptors.response.use(
 <span class="cstat-no" title="statement not covered" >        } catch {</span>
 <span class="cstat-no" title="statement not covered" >          localStorage.removeItem('access_token');</span>
 <span class="cstat-no" title="statement not covered" >          localStorage.removeItem('refresh_token');</span>
-<span class="cstat-no" title="statement not covered" >          window.location.href = '/login';</span>
+<span class="cstat-no" title="statement not covered" >          globalThis.location.href = '/login';</span>
 <span class="cstat-no" title="statement not covered" >        }</span>
 <span class="cstat-no" title="statement not covered" >      } else {</span>
-<span class="cstat-no" title="statement not covered" >        window.location.href = '/login';</span>
+<span class="cstat-no" title="statement not covered" >        globalThis.location.href = '/login';</span>
 <span class="cstat-no" title="statement not covered" >      }</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
-<span class="cstat-no" title="statement not covered" >    return Promise.reject(error);</span>
-<span class="cstat-no" title="statement not covered" >  }</span>
+    return Promise.reject(error);
+  }
 );
 &nbsp;
 export default client;
@@ -202,7 +202,7 @@ export default client;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-22T08:34:39.795Z
+                at 2026-03-31T11:11:19.484Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -1,6 +1,6 @@
+import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { aiAPI } from '../api/ai';
-import { useTheme } from '../contexts/ThemeContext';
 import { Sparkles, RefreshCw, AlertTriangle, TrendingUp, ShoppingCart, Users, Package, Info } from 'lucide-react';
 
 const categoryIcons = {
@@ -29,7 +29,6 @@ const priorityIconColors = {
 };
 
 export default function AIInsightsWidget() {
-  const { isDark } = useTheme();
   const [insights, setInsights] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -88,8 +87,8 @@ export default function AIInsightsWidget() {
 
       {loading ? (
         <div className="space-y-3">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="animate-pulse rounded-lg border border-gray-200 dark:border-gray-700 p-3">
+          {[1, 2, 3].map((id) => (
+            <div key={`skeleton-${id}`} className="animate-pulse rounded-lg border border-gray-200 dark:border-gray-700 p-3">
               <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mb-2" />
               <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full" />
             </div>
@@ -97,14 +96,14 @@ export default function AIInsightsWidget() {
         </div>
       ) : (
         <div className="space-y-3">
-          {insights.map((insight, i) => {
+          {insights.map((insight) => {
             const CategoryIcon = categoryIcons[insight.category] || TrendingUp;
             const PriorityIcon = priorityIcons[insight.priority] || Info;
             const style = priorityStyles[insight.priority] || priorityStyles.info;
             const iconColor = priorityIconColors[insight.priority] || priorityIconColors.info;
 
             return (
-              <div key={i} className={`rounded-lg border p-3 ${style}`}>
+              <div key={`insight-${insight.title}`} className={`rounded-lg border p-3 ${style}`}>
                 <div className="flex items-start gap-3">
                   <div className={`mt-0.5 ${iconColor}`}>
                     <PriorityIcon className="h-4 w-4" />
@@ -128,3 +127,7 @@ export default function AIInsightsWidget() {
     </div>
   );
 }
+
+AIInsightsWidget.prototype = {
+  className: PropTypes.string,
+};

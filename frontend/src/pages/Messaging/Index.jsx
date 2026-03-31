@@ -3,7 +3,10 @@ import { messagesAPI } from '../../api/messaging';
 import { formatDateTime, classNames } from '../../utils/format';
 import { useAuth } from '../../contexts/AuthContext';
 import toast from 'react-hot-toast';
-import { Plus, X, Send, Mail, MailOpen } from 'lucide-react';
+import { Plus, Send, Mail, MailOpen } from 'lucide-react';
+import { Button, Modal } from '../../components/ui';
+import { PageHeader, FormField } from '../../components/common';
+import { PageSpinner } from '../../components/ui/Spinner';
 import client from '../../api/client';
 
 export default function Messaging() {
@@ -12,24 +15,18 @@ export default function Messaging() {
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState(null);
   const [composeOpen, setComposeOpen] = useState(false);
-  const [users, setUsers] = useState([]);
   const [form, setForm] = useState({ recipient: '', subject: '', body: '' });
   const [sending, setSending] = useState(false);
 
-  useEffect(() => {
-    loadMessages();
-  }, []);
+  useEffect(() => { loadMessages(); }, []);
 
   async function loadMessages() {
     setLoading(true);
     try {
       const { data } = await messagesAPI.list();
       setMessages(data.results || data || []);
-    } catch {
-      toast.error('Failed to load messages');
-    } finally {
-      setLoading(false);
-    }
+    } catch { toast.error('Failed to load messages'); }
+    finally { setLoading(false); }
   }
 
   async function viewMessage(msg) {
@@ -40,16 +37,11 @@ export default function Messaging() {
         await messagesAPI.markRead(msg.id);
         setMessages((prev) => prev.map((m) => m.id === msg.id ? { ...m, is_read: true } : m));
       }
-    } catch {
-      toast.error('Failed to load message');
-    }
+    } catch { toast.error('Failed to load message'); }
   }
 
   async function openCompose() {
-    try {
-      const { data } = await client.get('/auth/me/');
-      setUsers([]);
-    } catch { /* ignore */ }
+    try { await client.get('/auth/me/'); } catch { /* ignore */ }
     setForm({ recipient: '', subject: '', body: '' });
     setComposeOpen(true);
   }
@@ -62,25 +54,17 @@ export default function Messaging() {
       toast.success('Message sent');
       setComposeOpen(false);
       loadMessages();
-    } catch {
-      toast.error('Send failed');
-    } finally {
-      setSending(false);
-    }
+    } catch { toast.error('Send failed'); }
+    finally { setSending(false); }
   }
 
-  if (loading) {
-    return <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" /></div>;
-  }
+  if (loading) return <PageSpinner />;
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Messaging</h1>
-        <button onClick={openCompose} className="flex items-center gap-1.5 px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700">
-          <Plus className="h-4 w-4" /> Compose
-        </button>
-      </div>
+      <PageHeader title="Messaging">
+        <Button icon={Plus} onClick={openCompose}>Compose</Button>
+      </PageHeader>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Message list */}
@@ -104,7 +88,7 @@ export default function Messaging() {
                 >
                   <div className="flex items-center gap-2">
                     {msg.is_read ? <MailOpen className="h-4 w-4 text-gray-400" /> : <Mail className="h-4 w-4 text-indigo-500 dark:text-indigo-400" />}
-                    <span className={classNames('text-sm', !msg.is_read ? 'font-semibold text-gray-900 dark:text-white' : 'text-gray-700 dark:text-gray-300')}>
+                    <span className={classNames('text-sm', msg.is_read ? 'text-gray-700 dark:text-gray-300' : 'font-semibold text-gray-900 dark:text-white')}>
                       {msg.sender_name || `User #${msg.sender}`}
                     </span>
                   </div>
@@ -154,36 +138,28 @@ export default function Messaging() {
         </div>
       </div>
 
-      {/* Compose */}
       {composeOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-lg m-4">
-            <div className="flex items-center justify-between p-5 border-b border-gray-200 dark:border-gray-700">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">New Message</h3>
-              <button onClick={() => setComposeOpen(false)} className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"><X className="h-5 w-5 text-gray-500 dark:text-gray-400" /></button>
+        <Modal maxWidth="max-w-lg">
+          <Modal.Header onClose={() => setComposeOpen(false)}>New Message</Modal.Header>
+          <form onSubmit={handleSend} className="p-5 space-y-4">
+            <FormField label="Recipient User ID *" type="number" required value={form.recipient}
+              onChange={(v) => setForm({ ...form, recipient: v })} placeholder="Enter user ID" />
+            <FormField label="Subject *" required value={form.subject}
+              onChange={(v) => setForm({ ...form, subject: v })} />
+            <div>
+              <label htmlFor='message' className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Message *</label>
+              <textarea required rows={5}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} />
             </div>
-            <form onSubmit={handleSend} className="p-5 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Recipient User ID *</label>
-                <input type="number" required className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white" value={form.recipient} onChange={(e) => setForm({ ...form, recipient: e.target.value })} placeholder="Enter user ID" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Subject *</label>
-                <input type="text" required className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white" value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Message *</label>
-                <textarea required rows={5} className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white" value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} />
-              </div>
-              <div className="flex justify-end gap-3">
-                <button type="button" onClick={() => setComposeOpen(false)} className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">Cancel</button>
-                <button type="submit" disabled={sending} className="flex items-center gap-1.5 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700 disabled:opacity-50">
-                  <Send className="h-4 w-4" /> {sending ? 'Sending...' : 'Send'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+            <div className="flex justify-end gap-3">
+              <Button variant="secondary" type="button" onClick={() => setComposeOpen(false)}>Cancel</Button>
+              <Button type="submit" icon={Send} disabled={sending} loading={sending}>
+                {sending ? 'Sending...' : 'Send'}
+              </Button>
+            </div>
+          </form>
+        </Modal>
       )}
     </div>
   );

@@ -27,7 +27,7 @@ export default function Login() {
     <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 space-y-5">
       <h2 className="text-xl font-semibold text-gray-900 dark:text-white text-center">Sign in to your account</h2>
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Username</label>
+        <label htmlFor='username' className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Username</label>
         <input
           type="text"
           required
@@ -37,7 +37,7 @@ export default function Login() {
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
+        <label htmlFor='password' className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
         <input
           type="password"
           required
