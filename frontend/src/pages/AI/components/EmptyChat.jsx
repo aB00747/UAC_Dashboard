@@ -4,9 +4,10 @@ import { Bot } from 'lucide-react';
 const SUGGESTED_QUESTIONS = [
   'What is our current revenue summary?',
   'Which chemicals are running low on stock?',
+  'What is the current market price of Sulfuric Acid in India?',
+  'Place an order for 100kg HCL for new customer Rajesh from Mumbai',
+  'Add Sodium Hydroxide to inventory and place an order for it',
   'Who are our top 5 customers by revenue?',
-  'How many orders are pending right now?',
-  'Place an order for 100kg HCL for customer John',
 ];
 
 export default function EmptyChat({ onSend, disabled }) {
@@ -15,7 +16,7 @@ export default function EmptyChat({ onSend, disabled }) {
       <Bot className="h-16 w-16 text-indigo-200 dark:text-indigo-800 mb-4" />
       <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Umiya AI Assistant</h2>
       <p className="text-sm text-gray-500 dark:text-gray-400 mb-8 max-w-md">
-        Ask me anything about your business - sales, inventory, customers, orders, and more. I can also place orders and create customers for you.
+        I can autonomously handle your business tasks - place orders, create customers, add chemicals, check market prices, and chain multiple actions together. Just tell me what you need.
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-w-lg w-full">
         {SUGGESTED_QUESTIONS.map((q) => (

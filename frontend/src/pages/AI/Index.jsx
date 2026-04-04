@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { aiAPI } from '../../api/ai';
 import { ordersAPI } from '../../api/orders';
 import { customersAPI } from '../../api/customers';
+import { chemicalsAPI, stockEntriesAPI } from '../../api/inventory';
 import toast from 'react-hot-toast';
 import {
   Bot, Loader2, WifiOff, ChevronDown, Sparkles, Database, ShoppingCart, Users, Package,
@@ -29,14 +30,26 @@ export default function AIAssistant() {
   const [contextType, setContextType] = useState('general');
   const [isOnline, setIsOnline] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  // Single action state
   const [pendingAction, setPendingAction] = useState(null);
   const [executingAction, setExecutingAction] = useState(false);
   const [actionResults, setActionResults] = useState({});
+
+  // Multi-step plan state
+  const [pendingPlan, setPendingPlan] = useState(null);
+  const [executingPlan, setExecutingPlan] = useState(false);
+  const [currentPlanStep, setCurrentPlanStep] = useState(null);
+  const [planStepStatuses, setPlanStepStatuses] = useState({});
+  const [planResults, setPlanResults] = useState({});
+  const [waitingForApproval, setWaitingForApproval] = useState(null);
+  const approvalResolverRef = useRef(null);
+
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
   useEffect(() => {
-    checkHealth();
+    void checkHealth();
     const interval = setInterval(checkHealth, 30000);
     return () => clearInterval(interval);
   }, []);
@@ -58,8 +71,7 @@ export default function AIAssistant() {
 
   async function loadConversationMessages(conversationId) {
     setLoading(true);
-    setPendingAction(null);
-    setActionResults({});
+    clearActionState();
     try {
       const { data } = await aiAPI.getConversationMessages(conversationId);
       setMessages(data.messages || []);
@@ -68,13 +80,26 @@ export default function AIAssistant() {
     finally { setLoading(false); }
   }
 
+  function clearActionState() {
+    setPendingAction(null);
+    setPendingPlan(null);
+    setActionResults({});
+    setPlanResults({});
+    setPlanStepStatuses({});
+    setPlanStepResults({});
+    setCurrentPlanStep(null);
+    setWaitingForApproval(null);
+    setExecutingAction(false);
+    setExecutingPlan(false);
+  }
+
   async function handleSend(messageText) {
     const text = messageText || input.trim();
     if (!text || sending) return;
 
     setInput('');
     setSending(true);
-    setPendingAction(null);
+    clearActionState();
 
     const userMsg = { role: 'user', content: text, timestamp: new Date().toISOString() };
     setMessages((prev) => [...prev, userMsg]);
@@ -89,9 +114,17 @@ export default function AIAssistant() {
       const assistantMsg = { role: 'assistant', content: data.response, timestamp: new Date().toISOString() };
       setMessages((prev) => {
         const updated = [...prev, assistantMsg];
-        if (data.action?.type) {
-          setPendingAction({ messageIndex: updated.length - 1, action: data.action });
+        const msgIndex = updated.length - 1;
+
+        // Check for action plan (multi-step)
+        if (data.action_plan?.steps?.length) {
+          setPendingPlan({ messageIndex: msgIndex, plan: data.action_plan });
         }
+        // Check for single action
+        else if (data.action?.type) {
+          setPendingAction({ messageIndex: msgIndex, action: data.action });
+        }
+
         return updated;
       });
 
@@ -110,20 +143,15 @@ export default function AIAssistant() {
     }
   }
 
+  // ── Single action execution (backward compatible) ──────────────
+
   async function handleConfirmAction() {
     if (!pendingAction) return;
     const { messageIndex, action } = pendingAction;
 
     setExecutingAction(true);
     try {
-      let result = null;
-      if (action.type === 'create_order') {
-        const { data } = await ordersAPI.create(action.params);
-        result = { message: `Order ${data.order_number || '#' + data.id} created successfully!`, link: '/orders', linkLabel: 'View Orders' };
-      } else if (action.type === 'create_customer') {
-        const { data } = await customersAPI.create(action.params);
-        result = { message: `Customer "${data.first_name} ${data.last_name}" created successfully!`, link: '/customers', linkLabel: 'View Customers' };
-      }
+      const result = await executeAction(action.type, action.params);
       if (result) {
         setActionResults((prev) => ({ ...prev, [messageIndex]: result }));
         toast.success(result.message);
@@ -143,11 +171,203 @@ export default function AIAssistant() {
     toast('Action cancelled', { icon: 'x' });
   }
 
+  // ── Multi-step plan execution ──────────────────────────────────
+
+  const handleExecutePlan = useCallback(async () => {
+    if (!pendingPlan) return;
+    const { messageIndex, plan } = pendingPlan;
+    const steps = plan.steps;
+    const stepResults = {};
+    const statuses = {};
+
+    setExecutingPlan(true);
+
+    for (let i = 0; i < steps.length; i++) {
+      const step = steps[i];
+      setCurrentPlanStep(i);
+
+      // For high-risk steps, wait for user approval
+      if (!step.auto_execute && step.risk_level === 'high') {
+        statuses[i] = 'waiting';
+        setPlanStepStatuses({ ...statuses });
+        setWaitingForApproval(i);
+
+        // Wait for user to approve this step
+        const approved = await new Promise((resolve) => {
+          approvalResolverRef.current = resolve;
+        });
+
+        if (!approved) {
+          statuses[i] = 'failed';
+          setPlanStepStatuses({ ...statuses });
+          toast('Plan execution cancelled at step ' + (i + 1), { icon: 'x' });
+          break;
+        }
+      }
+
+      statuses[i] = 'executing';
+      setPlanStepStatuses({ ...statuses });
+
+      try {
+        // Substitute IDs from previous steps
+        const params = substituteStepReferences(step, stepResults, steps);
+
+        const result = await executeAction(step.type, params);
+        stepResults[step.step_id] = result;
+
+        statuses[i] = 'done';
+        setPlanStepStatuses({ ...statuses });
+        setPlanStepResults({ ...stepResults });
+
+        if (result?.message) {
+          toast.success(`Step ${i + 1}: ${result.message}`);
+        }
+      } catch (err) {
+        statuses[i] = 'failed';
+        setPlanStepStatuses({ ...statuses });
+
+        const detail = err.response?.data?.detail || err.response?.data || 'Step failed';
+        const errorMsg = typeof detail === 'object' ? JSON.stringify(detail) : String(detail);
+        toast.error(`Step ${i + 1} failed: ${errorMsg}`);
+        break; // Stop on failure
+      }
+    }
+
+    const allDone = Object.values(statuses).every(s => s === 'done');
+    if (allDone) {
+      setPlanResults((prev) => ({
+        ...prev,
+        [messageIndex]: {
+          message: `All ${steps.length} steps completed successfully!`,
+          link: steps[steps.length - 1]?.type === 'create_order' ? '/orders' : '/inventory',
+          linkLabel: 'View Results',
+        },
+      }));
+    }
+
+    setExecutingPlan(false);
+    setCurrentPlanStep(null);
+    setWaitingForApproval(null);
+  }, [pendingPlan]);
+
+  function handleApproveStep() {
+    if (approvalResolverRef.current) {
+      approvalResolverRef.current(true);
+      approvalResolverRef.current = null;
+    }
+  }
+
+  function handleCancelPlan() {
+    if (approvalResolverRef.current) {
+      approvalResolverRef.current(false);
+      approvalResolverRef.current = null;
+    }
+    setPendingPlan(null);
+    setExecutingPlan(false);
+    setCurrentPlanStep(null);
+    setWaitingForApproval(null);
+    toast('Plan cancelled', { icon: 'x' });
+  }
+
+  // ── Shared action executor ─────────────────────────────────────
+
+  async function executeAction(type, params) {
+    if (type === 'create_order') {
+      const { data } = await ordersAPI.create(params);
+      return {
+        message: `Order ${data.order_number || '#' + data.id} created successfully!`,
+        link: '/orders',
+        linkLabel: 'View Orders',
+        id: data.id,
+      };
+    }
+    if (type === 'create_customer') {
+      const { data } = await customersAPI.create(params);
+      return {
+        message: `Customer "${data.first_name} ${data.last_name}" created successfully!`,
+        link: '/customers',
+        linkLabel: 'View Customers',
+        id: data.id,
+      };
+    }
+    if (type === 'create_chemical') {
+      const { data } = await chemicalsAPI.create(params);
+      return {
+        message: `Chemical "${data.chemical_name}" added to inventory!`,
+        link: '/inventory',
+        linkLabel: 'View Inventory',
+        id: data.id,
+      };
+    }
+    if (type === 'update_inventory') {
+      const { data } = await stockEntriesAPI.create(params);
+      return {
+        message: `Inventory updated successfully!`,
+        link: '/inventory',
+        linkLabel: 'View Inventory',
+        id: data.id,
+      };
+    }
+    return null;
+  }
+
+  /**
+   * Substitute references from previous step results into current step params.
+   * When a create_order step depends on a create_customer step, we replace
+   * the customer_name lookup with the actual customer ID from the previous step.
+   */
+  function substituteStepReferences(step, stepResults, allSteps) {
+    const params = { ...step.params };
+
+    if (step.type === 'create_order' && step.depends_on?.length) {
+      for (const depId of step.depends_on) {
+        const depResult = stepResults[depId];
+        if (!depResult) continue;
+
+        const depStep = allSteps.find(s => s.step_id === depId);
+        if (!depStep) continue;
+
+        // If dependency was a create_customer, use its ID
+        if (depStep.type === 'create_customer' && depResult.id) {
+          params.customer = depResult.id;
+          delete params.customer_name;
+        }
+
+        // If dependency was a create_chemical, update item references
+        if (depStep.type === 'create_chemical' && depResult.id) {
+          const chemName = depStep.params?.chemical_name?.toLowerCase();
+          const items = params.items || [];
+          params.items = items.map(item => {
+            if (item.chemical_name?.toLowerCase() === chemName || item.chemical === undefined) {
+              return { ...item, chemical: depResult.id, chemical_name: undefined };
+            }
+            return item;
+          });
+        }
+      }
+
+      // For items that still have chemical_name but no ID, try to resolve them
+      if (params.items) {
+        params.items = params.items.map(item => {
+          const { chemical_name, ...rest } = item;
+          if (chemical_name && !rest.chemical) {
+            // Keep chemical_name - the backend should handle it or we let it fail
+            return item;
+          }
+          return rest;
+        });
+      }
+    }
+
+    return params;
+  }
+
+  // ── UI handlers ────────────────────────────────────────────────
+
   function handleNewConversation() {
     setActiveConversation(null);
     setMessages([]);
-    setPendingAction(null);
-    setActionResults({});
+    clearActionState();
     inputRef.current?.focus();
   }
 
@@ -158,8 +378,7 @@ export default function AIAssistant() {
       if (activeConversation === conversationId) {
         setActiveConversation(null);
         setMessages([]);
-        setPendingAction(null);
-        setActionResults({});
+        clearActionState();
       }
       toast.success('Conversation deleted');
     } catch { toast.error('Failed to delete conversation'); }
@@ -242,11 +461,22 @@ export default function AIAssistant() {
                   key={`${msg.id || i}-${msg.timestamp || i}`}
                   msg={msg}
                   index={i}
+                  // Single action props
                   pendingAction={pendingAction}
                   actionResult={actionResults[i]}
                   onConfirm={handleConfirmAction}
                   onCancel={handleCancelAction}
                   executingAction={executingAction}
+                  // Multi-step plan props
+                  pendingPlan={pendingPlan}
+                  planResult={planResults[i]}
+                  onExecutePlan={handleExecutePlan}
+                  onCancelPlan={handleCancelPlan}
+                  executingPlan={executingPlan}
+                  currentPlanStep={currentPlanStep}
+                  planStepStatuses={planStepStatuses}
+                  waitingForApproval={waitingForApproval}
+                  onApproveStep={handleApproveStep}
                 />
               ))}
               {sending && (
