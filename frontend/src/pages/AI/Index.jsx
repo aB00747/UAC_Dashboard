@@ -86,7 +86,6 @@ export default function AIAssistant() {
     setActionResults({});
     setPlanResults({});
     setPlanStepStatuses({});
-    setPlanStepResults({});
     setCurrentPlanStep(null);
     setWaitingForApproval(null);
     setExecutingAction(false);

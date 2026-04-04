@@ -29,6 +29,11 @@ vi.mock('../../api/customers', () => ({
   customersAPI: { create: vi.fn() },
 }));
 
+vi.mock('../../api/inventory', () => ({
+  chemicalsAPI: { create: vi.fn() },
+  stockEntriesAPI: { create: vi.fn() },
+}));
+
 vi.mock('../../contexts/ThemeContext', () => ({
   useTheme: () => ({ isDark: false }),
 }));
@@ -51,6 +56,8 @@ vi.mock('lucide-react', () => {
     Loader2: stub, WifiOff: stub, ChevronDown: stub, Sparkles: stub,
     Database: stub, ShoppingCart: stub, Users: stub, Package: stub,
     Check: stub, X: stub, ExternalLink: stub, AlertTriangle: stub,
+    UserPlus: stub, FlaskConical: stub, ListOrdered: stub,
+    Shield: stub, Zap: stub, ChevronRight: stub,
   };
 });
 
