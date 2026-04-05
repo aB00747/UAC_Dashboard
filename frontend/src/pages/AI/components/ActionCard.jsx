@@ -1,9 +1,13 @@
 import PropTypes from 'prop-types';
-import { ShoppingCart, AlertTriangle, Check, X, Loader2 } from 'lucide-react';
+import { ShoppingCart, UserPlus, FlaskConical, Package, AlertTriangle, Check, X, Loader2 } from 'lucide-react';
 
-const ACTION_LABELS = {
-  create_order: 'Create Order',
-  create_customer: 'Create Customer',
+const ENTRY_TYPE_LABELS = { purchase: 'Adding', sale: 'Removing' };
+
+const ACTION_CONFIG = {
+  create_order: { label: 'Create Order', icon: ShoppingCart },
+  create_customer: { label: 'Create Customer', icon: UserPlus },
+  create_chemical: { label: 'Add Chemical', icon: FlaskConical },
+  update_inventory: { label: 'Update Inventory', icon: Package },
 };
 
 export default function ActionCard({ action, onConfirm, onCancel, executing }) {
@@ -11,16 +15,19 @@ export default function ActionCard({ action, onConfirm, onCancel, executing }) {
 
   const isResolved = action.resolved;
   const hasErrors = action.errors?.length > 0;
+  const config = ACTION_CONFIG[action.type] || { label: action.type, icon: ShoppingCart };
+  const Icon = config.icon;
 
   return (
     <div className="mt-3 rounded-xl border-2 border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-indigo-900/20 p-4">
       <div className="flex items-center gap-2 mb-3">
-        <ShoppingCart className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+        <Icon className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
         <span className="text-sm font-semibold text-indigo-700 dark:text-indigo-300">
-          {ACTION_LABELS[action.type] || action.type}
+          {config.label}
         </span>
       </div>
 
+      {/* Create Order display */}
       {action.type === 'create_order' && action.display && (
         <div className="space-y-2 mb-3 text-sm">
           {action.display.customer && (
@@ -48,6 +55,7 @@ export default function ActionCard({ action, onConfirm, onCancel, executing }) {
         </div>
       )}
 
+      {/* Create Customer display */}
       {action.type === 'create_customer' && action.display && (
         <div className="space-y-1 mb-3 text-sm">
           <div className="flex justify-between">
@@ -57,6 +65,87 @@ export default function ActionCard({ action, onConfirm, onCancel, executing }) {
         </div>
       )}
 
+      {/* Create Chemical display */}
+      {action.type === 'create_chemical' && action.display && (
+        <div className="space-y-1 mb-3 text-sm">
+          {action.display.name && (
+            <div className="flex justify-between">
+              <span className="text-gray-500 dark:text-gray-400">Chemical:</span>
+              <span className="font-medium text-gray-900 dark:text-white">{action.display.name}</span>
+            </div>
+          )}
+          {action.display.code && (
+            <div className="flex justify-between">
+              <span className="text-gray-500 dark:text-gray-400">Code:</span>
+              <span className="font-medium text-gray-900 dark:text-white">{action.display.code}</span>
+            </div>
+          )}
+          {action.display.unit && (
+            <div className="flex justify-between">
+              <span className="text-gray-500 dark:text-gray-400">Unit:</span>
+              <span className="font-medium text-gray-900 dark:text-white">{action.display.unit}</span>
+            </div>
+          )}
+          {action.display.selling_price > 0 && (
+            <div className="flex justify-between">
+              <span className="text-gray-500 dark:text-gray-400">Selling Price:</span>
+              <span className="font-medium text-gray-900 dark:text-white">
+                INR {action.display.selling_price.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+              </span>
+            </div>
+          )}
+          {action.display.gst > 0 && (
+            <div className="flex justify-between">
+              <span className="text-gray-500 dark:text-gray-400">GST:</span>
+              <span className="font-medium text-gray-900 dark:text-white">{action.display.gst}%</span>
+            </div>
+          )}
+          {action.display.category && (
+            <div className="flex justify-between">
+              <span className="text-gray-500 dark:text-gray-400">Category:</span>
+              <span className="font-medium text-gray-900 dark:text-white">{action.display.category}</span>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Update Inventory display */}
+      {action.type === 'update_inventory' && action.display && (
+        <div className="space-y-1 mb-3 text-sm">
+          {action.display.chemical && (
+            <div className="flex justify-between">
+              <span className="text-gray-500 dark:text-gray-400">Chemical:</span>
+              <span className="font-medium text-gray-900 dark:text-white">{action.display.chemical}</span>
+            </div>
+          )}
+          {action.display.current_stock !== undefined && (
+            <div className="flex justify-between">
+              <span className="text-gray-500 dark:text-gray-400">Current Stock:</span>
+              <span className="font-medium text-gray-900 dark:text-white">
+                {action.display.current_stock} {action.display.unit || 'KG'}
+              </span>
+            </div>
+          )}
+          <div className="flex justify-between">
+            <span className="text-gFray-500 dark:text-gray-400">
+              {ENTRY_TYPE_LABELS[action.display.entry_type] || 'Adjusting'}:
+            </span>
+            <span className="font-medium text-gray-900 dark:text-white">
+              {action.display.quantity} {action.display.unit || 'KG'}
+            </span>
+          </div>
+          {action.display.rate > 0 && (
+            <div className="flex justify-between">
+              <span className="text-gray-500 dark:text-gray-400">Rate:</span>
+              <span className="font-medium text-gray-900 dark:text-white">
+                INR {action.display.rate.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+              </span>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Errors */}
       {hasErrors && (
         <div className="mb-3 space-y-1">
           {action.errors.map((err) => (
@@ -68,6 +157,7 @@ export default function ActionCard({ action, onConfirm, onCancel, executing }) {
         </div>
       )}
 
+      {/* Buttons */}
       <div className="flex items-center gap-2">
         {isResolved && !hasErrors ? (
           <>
@@ -96,4 +186,4 @@ ActionCard.propTypes = {
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
   executing: PropTypes.bool,
-}
+};
