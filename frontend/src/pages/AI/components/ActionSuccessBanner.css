@@ -1,0 +1,89 @@
+/* ═══════════════════════════════════════════════════════════════
+   Action Success Banner  (Glass / Cyber)
+   ═══════════════════════════════════════════════════════════════ */
+
+.success-banner {
+  margin-top: 0.875rem;
+  border-radius: var(--ai-r-lg);
+  border: 1px solid var(--ai-success-border);
+  border-left: 3px solid var(--ai-success);
+  background: var(--ai-success-bg);
+  backdrop-filter: var(--ai-blur-sm);
+  -webkit-backdrop-filter: var(--ai-blur-sm);
+  padding: 0.875rem 1rem;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.1);
+  animation: ai-fade-in 0.35s ease forwards;
+}
+
+html.dark .success-banner {
+  background: rgba(16, 185, 129, 0.07);
+  box-shadow: 0 4px 20px rgba(52, 211, 153, 0.08), 0 0 0 1px rgba(52, 211, 153, 0.15);
+}
+
+.success-banner__content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.875rem;
+}
+
+.success-banner__message {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.success-banner__icon {
+  width: 1.125rem;
+  height: 1.125rem;
+  color: var(--ai-success);
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.4));
+}
+
+.success-banner__text {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ai-success-text);
+}
+
+html.dark .success-banner__text {
+  color: var(--ai-success);
+}
+
+/* ── Link Buttons ────────────────────────────────────────────── */
+
+.success-banner__links {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.success-banner__link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.875rem;
+  border: 1px solid var(--ai-success-border);
+  border-radius: var(--ai-r-sm);
+  background: var(--ai-success);
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+}
+
+.success-banner__link-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+}
+
+.success-banner__link-icon { width: 0.75rem; height: 0.75rem; }
+
+@keyframes ai-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

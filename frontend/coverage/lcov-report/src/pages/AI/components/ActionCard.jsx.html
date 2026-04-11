@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">58.27% </span>
+                <span class="strong">57.43% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>88/151</span>
+                <span class='fraction'>85/148</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">58.27% </span>
+                <span class="strong">57.43% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>88/151</span>
+                <span class='fraction'>85/148</span>
             </div>
         
             
@@ -249,10 +249,8 @@
 <a name='L184'></a><a href='#L184'>184</a>
 <a name='L185'></a><a href='#L185'>185</a>
 <a name='L186'></a><a href='#L186'>186</a>
-<a name='L187'></a><a href='#L187'>187</a>
-<a name='L188'></a><a href='#L188'>188</a>
-<a name='L189'></a><a href='#L189'>189</a>
-<a name='L190'></a><a href='#L190'>190</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L187'></a><a href='#L187'>187</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -272,8 +270,6 @@
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-yes">10x</span>
@@ -414,8 +410,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">8x</span>
@@ -443,6 +437,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import PropTypes from 'prop-types';
 import { ShoppingCart, UserPlus, FlaskConical, Package, AlertTriangle, Check, X, Loader2 } from 'lucide-react';
+import './ActionCard.css';
 &nbsp;
 const ENTRY_TYPE_LABELS = { purchase: 'Adding', sale: 'Removing' };
 &nbsp;
@@ -462,37 +457,35 @@ export default function ActionCard({ action, onConfirm, onCancel, executing }) {
   const Icon = config.icon;
 &nbsp;
   return (
-    &lt;div className="mt-3 rounded-xl border-2 border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-indigo-900/20 p-4"&gt;
-      &lt;div className="flex items-center gap-2 mb-3"&gt;
-        &lt;Icon className="h-4 w-4 text-indigo-600 dark:text-indigo-400" /&gt;
-        &lt;span className="text-sm font-semibold text-indigo-700 dark:text-indigo-300"&gt;
-          {config.label}
-        &lt;/span&gt;
+    &lt;div className="action-card"&gt;
+      &lt;div className="action-card__header"&gt;
+        &lt;Icon className="action-card__header-icon" /&gt;
+        &lt;span className="action-card__header-label"&gt;{config.label}&lt;/span&gt;
       &lt;/div&gt;
 &nbsp;
       {/* Create Order display */}
       {action.type === 'create_order' &amp;&amp; action.display &amp;&amp; (
-        &lt;div className="space-y-2 mb-3 text-sm"&gt;
+        &lt;div className="action-card__details"&gt;
           {action.display.customer &amp;&amp; (
-            &lt;div className="flex justify-between"&gt;
-              &lt;span className="text-gray-500 dark:text-gray-400"&gt;Customer:&lt;/span&gt;
-              &lt;span className="font-medium text-gray-900 dark:text-white"&gt;{action.display.customer}&lt;/span&gt;
+            &lt;div className="action-card__row"&gt;
+              &lt;span className="action-card__label"&gt;Customer:&lt;/span&gt;
+              &lt;span className="action-card__value"&gt;{action.display.customer}&lt;/span&gt;
             &lt;/div&gt;
           )}
           {action.display.items?.map((item) =&gt; (
-            &lt;div key={`${item.name}-${item.quantity}`} className="flex justify-between"&gt;
-              &lt;span className="text-gray-500 dark:text-gray-400"&gt;
+            &lt;div key={`${item.name}-${item.quantity}`} className="action-card__row"&gt;
+              &lt;span className="action-card__label"&gt;
                 {item.name} x {item.quantity} {item.unit}
               &lt;/span&gt;
-              &lt;span className="font-medium text-gray-900 dark:text-white"&gt;
+              &lt;span className="action-card__value"&gt;
                 INR {(item.quantity * item.unit_price).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
               &lt;/span&gt;
             &lt;/div&gt;
           ))}
           {action.display.summary &amp;&amp; (
-            &lt;div className="flex justify-between pt-2 border-t border-indigo-200 dark:border-indigo-700"&gt;
-              &lt;span className="font-medium text-gray-700 dark:text-gray-300"&gt;Total:&lt;/span&gt;
-              &lt;span className="font-bold text-gray-900 dark:text-white"&gt;{action.display.summary}&lt;/span&gt;
+            &lt;div className="action-card__total"&gt;
+              &lt;span className="action-card__total-label"&gt;Total:&lt;/span&gt;
+              &lt;span className="action-card__total-value"&gt;{action.display.summary}&lt;/span&gt;
             &lt;/div&gt;
           )}
         &lt;/div&gt;
@@ -500,53 +493,53 @@ export default function ActionCard({ action, onConfirm, onCancel, executing }) {
 &nbsp;
       {/* Create Customer display */}
       {action.type === 'create_customer' &amp;&amp; action.display &amp;&amp; (
-        &lt;div className="space-y-1 mb-3 text-sm"&gt;
-          &lt;div className="flex justify-between"&gt;
-            &lt;span className="text-gray-500 dark:text-gray-400"&gt;Name:&lt;/span&gt;
-            &lt;span className="font-medium text-gray-900 dark:text-white"&gt;{action.display.name}&lt;/span&gt;
+        &lt;div className="action-card__details"&gt;
+          &lt;div className="action-card__row"&gt;
+            &lt;span className="action-card__label"&gt;Name:&lt;/span&gt;
+            &lt;span className="action-card__value"&gt;{action.display.name}&lt;/span&gt;
           &lt;/div&gt;
         &lt;/div&gt;
       )}
 &nbsp;
       {/* Create Chemical display */}
       {action.type === <span class="branch-0 cbranch-no" title="branch not covered" >'create_chemical' &amp;&amp; action.<span class="branch-0 cbranch-no" title="branch not covered" >display &amp;&amp; (</span></span>
-<span class="cstat-no" title="statement not covered" >        &lt;div className="space-y-1 mb-3 text-sm"&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;div className="action-card__details"&gt;</span>
 <span class="cstat-no" title="statement not covered" >          {action.display.name &amp;&amp; (</span>
-<span class="cstat-no" title="statement not covered" >            &lt;div className="flex justify-between"&gt;</span>
-<span class="cstat-no" title="statement not covered" >              &lt;span className="text-gray-500 dark:text-gray-400"&gt;Chemical:&lt;/span&gt;</span>
-<span class="cstat-no" title="statement not covered" >              &lt;span className="font-medium text-gray-900 dark:text-white"&gt;{action.display.name}&lt;/span&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;div className="action-card__row"&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;span className="action-card__label"&gt;Chemical:&lt;/span&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;span className="action-card__value"&gt;{action.display.name}&lt;/span&gt;</span>
 <span class="cstat-no" title="statement not covered" >            &lt;/div&gt;</span>
           )}
 <span class="cstat-no" title="statement not covered" >          {action.display.code &amp;&amp; (</span>
-<span class="cstat-no" title="statement not covered" >            &lt;div className="flex justify-between"&gt;</span>
-<span class="cstat-no" title="statement not covered" >              &lt;span className="text-gray-500 dark:text-gray-400"&gt;Code:&lt;/span&gt;</span>
-<span class="cstat-no" title="statement not covered" >              &lt;span className="font-medium text-gray-900 dark:text-white"&gt;{action.display.code}&lt;/span&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;div className="action-card__row"&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;span className="action-card__label"&gt;Code:&lt;/span&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;span className="action-card__value"&gt;{action.display.code}&lt;/span&gt;</span>
 <span class="cstat-no" title="statement not covered" >            &lt;/div&gt;</span>
           )}
 <span class="cstat-no" title="statement not covered" >          {action.display.unit &amp;&amp; (</span>
-<span class="cstat-no" title="statement not covered" >            &lt;div className="flex justify-between"&gt;</span>
-<span class="cstat-no" title="statement not covered" >              &lt;span className="text-gray-500 dark:text-gray-400"&gt;Unit:&lt;/span&gt;</span>
-<span class="cstat-no" title="statement not covered" >              &lt;span className="font-medium text-gray-900 dark:text-white"&gt;{action.display.unit}&lt;/span&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;div className="action-card__row"&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;span className="action-card__label"&gt;Unit:&lt;/span&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;span className="action-card__value"&gt;{action.display.unit}&lt;/span&gt;</span>
 <span class="cstat-no" title="statement not covered" >            &lt;/div&gt;</span>
           )}
 <span class="cstat-no" title="statement not covered" >          {action.display.selling_price &gt; 0 &amp;&amp; (</span>
-<span class="cstat-no" title="statement not covered" >            &lt;div className="flex justify-between"&gt;</span>
-<span class="cstat-no" title="statement not covered" >              &lt;span className="text-gray-500 dark:text-gray-400"&gt;Selling Price:&lt;/span&gt;</span>
-<span class="cstat-no" title="statement not covered" >              &lt;span className="font-medium text-gray-900 dark:text-white"&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;div className="action-card__row"&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;span className="action-card__label"&gt;Selling Price:&lt;/span&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;span className="action-card__value"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                INR {action.display.selling_price.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
 <span class="cstat-no" title="statement not covered" >              &lt;/span&gt;</span>
 <span class="cstat-no" title="statement not covered" >            &lt;/div&gt;</span>
           )}
 <span class="cstat-no" title="statement not covered" >          {action.display.gst &gt; 0 &amp;&amp; (</span>
-<span class="cstat-no" title="statement not covered" >            &lt;div className="flex justify-between"&gt;</span>
-<span class="cstat-no" title="statement not covered" >              &lt;span className="text-gray-500 dark:text-gray-400"&gt;GST:&lt;/span&gt;</span>
-<span class="cstat-no" title="statement not covered" >              &lt;span className="font-medium text-gray-900 dark:text-white"&gt;{action.display.gst}%&lt;/span&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;div className="action-card__row"&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;span className="action-card__label"&gt;GST:&lt;/span&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;span className="action-card__value"&gt;{action.display.gst}%&lt;/span&gt;</span>
 <span class="cstat-no" title="statement not covered" >            &lt;/div&gt;</span>
           )}
 <span class="cstat-no" title="statement not covered" >          {action.display.category &amp;&amp; (</span>
-<span class="cstat-no" title="statement not covered" >            &lt;div className="flex justify-between"&gt;</span>
-<span class="cstat-no" title="statement not covered" >              &lt;span className="text-gray-500 dark:text-gray-400"&gt;Category:&lt;/span&gt;</span>
-<span class="cstat-no" title="statement not covered" >              &lt;span className="font-medium text-gray-900 dark:text-white"&gt;{action.display.category}&lt;/span&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;div className="action-card__row"&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;span className="action-card__label"&gt;Category:&lt;/span&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;span className="action-card__value"&gt;{action.display.category}&lt;/span&gt;</span>
 <span class="cstat-no" title="statement not covered" >            &lt;/div&gt;</span>
           )}
 <span class="cstat-no" title="statement not covered" >        &lt;/div&gt;</span>
@@ -554,33 +547,33 @@ export default function ActionCard({ action, onConfirm, onCancel, executing }) {
 &nbsp;
       {/* Update Inventory display */}
       {action.type === <span class="branch-0 cbranch-no" title="branch not covered" >'update_inventory' &amp;&amp; action.<span class="branch-0 cbranch-no" title="branch not covered" >display &amp;&amp; (</span></span>
-<span class="cstat-no" title="statement not covered" >        &lt;div className="space-y-1 mb-3 text-sm"&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;div className="action-card__details"&gt;</span>
 <span class="cstat-no" title="statement not covered" >          {action.display.chemical &amp;&amp; (</span>
-<span class="cstat-no" title="statement not covered" >            &lt;div className="flex justify-between"&gt;</span>
-<span class="cstat-no" title="statement not covered" >              &lt;span className="text-gray-500 dark:text-gray-400"&gt;Chemical:&lt;/span&gt;</span>
-<span class="cstat-no" title="statement not covered" >              &lt;span className="font-medium text-gray-900 dark:text-white"&gt;{action.display.chemical}&lt;/span&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;div className="action-card__row"&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;span className="action-card__label"&gt;Chemical:&lt;/span&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;span className="action-card__value"&gt;{action.display.chemical}&lt;/span&gt;</span>
 <span class="cstat-no" title="statement not covered" >            &lt;/div&gt;</span>
           )}
 <span class="cstat-no" title="statement not covered" >          {action.display.current_stock !== undefined &amp;&amp; (</span>
-<span class="cstat-no" title="statement not covered" >            &lt;div className="flex justify-between"&gt;</span>
-<span class="cstat-no" title="statement not covered" >              &lt;span className="text-gray-500 dark:text-gray-400"&gt;Current Stock:&lt;/span&gt;</span>
-<span class="cstat-no" title="statement not covered" >              &lt;span className="font-medium text-gray-900 dark:text-white"&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;div className="action-card__row"&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;span className="action-card__label"&gt;Current Stock:&lt;/span&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;span className="action-card__value"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                {action.display.current_stock} {action.display.unit || 'KG'}</span>
 <span class="cstat-no" title="statement not covered" >              &lt;/span&gt;</span>
 <span class="cstat-no" title="statement not covered" >            &lt;/div&gt;</span>
           )}
-<span class="cstat-no" title="statement not covered" >          &lt;div className="flex justify-between"&gt;</span>
-<span class="cstat-no" title="statement not covered" >            &lt;span className="text-gFray-500 dark:text-gray-400"&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;div className="action-card__row"&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;span className="action-card__label"&gt;</span>
 <span class="cstat-no" title="statement not covered" >              {ENTRY_TYPE_LABELS[action.display.entry_type] || 'Adjusting'}:</span>
 <span class="cstat-no" title="statement not covered" >            &lt;/span&gt;</span>
-<span class="cstat-no" title="statement not covered" >            &lt;span className="font-medium text-gray-900 dark:text-white"&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;span className="action-card__value"&gt;</span>
 <span class="cstat-no" title="statement not covered" >              {action.display.quantity} {action.display.unit || 'KG'}</span>
 <span class="cstat-no" title="statement not covered" >            &lt;/span&gt;</span>
 <span class="cstat-no" title="statement not covered" >          &lt;/div&gt;</span>
 <span class="cstat-no" title="statement not covered" >          {action.display.rate &gt; 0 &amp;&amp; (</span>
-<span class="cstat-no" title="statement not covered" >            &lt;div className="flex justify-between"&gt;</span>
-<span class="cstat-no" title="statement not covered" >              &lt;span className="text-gray-500 dark:text-gray-400"&gt;Rate:&lt;/span&gt;</span>
-<span class="cstat-no" title="statement not covered" >              &lt;span className="font-medium text-gray-900 dark:text-white"&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;div className="action-card__row"&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;span className="action-card__label"&gt;Rate:&lt;/span&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;span className="action-card__value"&gt;</span>
 <span class="cstat-no" title="statement not covered" >                INR {action.display.rate.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
 <span class="cstat-no" title="statement not covered" >              &lt;/span&gt;</span>
 <span class="cstat-no" title="statement not covered" >            &lt;/div&gt;</span>
@@ -590,10 +583,10 @@ export default function ActionCard({ action, onConfirm, onCancel, executing }) {
 &nbsp;
       {/* Errors */}
       {hasErrors &amp;&amp; (
-        &lt;div className="mb-3 space-y-1"&gt;
+        &lt;div className="action-card__errors"&gt;
           {action.errors.map((err) =&gt; (
-            &lt;div key={err} className="flex items-start gap-2 text-xs text-red-600 dark:text-red-400"&gt;
-              &lt;AlertTriangle className="h-3.5 w-3.5 mt-0.5 flex-shrink-0" /&gt;
+            &lt;div key={err} className="action-card__error"&gt;
+              &lt;AlertTriangle className="action-card__error-icon" /&gt;
               &lt;span&gt;{err}&lt;/span&gt;
             &lt;/div&gt;
           ))}
@@ -601,21 +594,19 @@ export default function ActionCard({ action, onConfirm, onCancel, executing }) {
       )}
 &nbsp;
       {/* Buttons */}
-      &lt;div className="flex items-center gap-2"&gt;
+      &lt;div className="action-card__actions"&gt;
         {isResolved &amp;&amp; !hasErrors ? (
           &lt;&gt;
-            &lt;button onClick={onConfirm} disabled={executing}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium transition-colors disabled:opacity-50"&gt;
-              {executing ? &lt;Loader2 className="h-4 w-4 animate-spin" /&gt; : &lt;Check className="h-4 w-4" /&gt;}
+            &lt;button onClick={onConfirm} disabled={executing} className="action-card__btn action-card__btn--confirm"&gt;
+              {executing ? &lt;Loader2 className="action-card__btn-spinner" /&gt; : &lt;Check className="action-card__btn-icon" /&gt;}
               {executing ? 'Processing...' : 'Confirm'}
             &lt;/button&gt;
-            &lt;button onClick={onCancel} disabled={executing}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-700 dark:text-gray-200 text-sm font-medium transition-colors disabled:opacity-50"&gt;
-              &lt;X className="h-4 w-4" /&gt; Cancel
+            &lt;button onClick={onCancel} disabled={executing} className="action-card__btn action-card__btn--cancel"&gt;
+              &lt;X className="action-card__btn-icon" /&gt; Cancel
             &lt;/button&gt;
           &lt;/&gt;
         ) : (
-          &lt;p className="text-xs text-gray-500 dark:text-gray-400"&gt;
+          &lt;p className="action-card__clarify"&gt;
             Please clarify the details above so I can prepare the action.
           &lt;/p&gt;
         )}
@@ -637,7 +628,7 @@ ActionCard.propTypes = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-04-04T20:30:41.571Z
+                at 2026-04-11T14:50:38.544Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

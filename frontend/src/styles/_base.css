@@ -1,0 +1,62 @@
+/* ═══════════════════════════════════════════════════════════════
+   Base / Reset — Body defaults, scrollbars, selection
+   ═══════════════════════════════════════════════════════════════ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-page);
+  color: var(--text);
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+/* ── Custom Scrollbars ──────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--border-strong);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text-4);
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background-color: var(--bg-surface-3);
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text-4);
+}
+
+/* ── Text Selection ─────────────────────────────────────────── */
+
+::selection {
+  background-color: var(--brand-light);
+  color: var(--brand-text);
+}
+
+html.dark ::selection {
+  background-color: rgba(129, 140, 248, 0.3);
+  color: var(--text);
+}
+
+/* ── Focus Ring ─────────────────────────────────────────────── */
+
+:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}

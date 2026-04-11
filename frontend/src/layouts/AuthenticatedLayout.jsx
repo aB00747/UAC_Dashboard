@@ -23,7 +23,7 @@ export default function AuthenticatedLayout() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen flex items-center justify-center u-bg-page">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" />
       </div>
     );
@@ -36,17 +36,17 @@ export default function AuthenticatedLayout() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen u-bg-page">
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <button
             type="button"
-            className="fixed inset-0 w-full h-full bg-gray-600/75 dark:bg-black/75 border-none cursor-default"
+            className="fixed inset-0 w-full h-full u-overlay border-none cursor-default"
             aria-label="Close sidebar"
             onClick={() => setSidebarOpen(false)}
           />
-          <div className="fixed inset-y-0 left-0 w-64 bg-white dark:bg-gray-900 shadow-xl z-50">
+          <div className="fixed inset-y-0 left-0 w-64 u-bg-sidebar shadow-xl z-50">
             <SidebarContent currentPath={location.pathname} onClose={() => setSidebarOpen(false)} systemName={systemName} logoUrl={logoUrl} navItems={filteredNav} />
           </div>
         </div>
@@ -54,7 +54,7 @@ export default function AuthenticatedLayout() {
 
       {/* Desktop sidebar */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
-        <div className="flex flex-col flex-grow bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 overflow-y-auto">
+        <div className="flex flex-col flex-grow u-bg-sidebar u-border-r overflow-y-auto">
           <SidebarContent currentPath={location.pathname} systemName={systemName} logoUrl={logoUrl} navItems={filteredNav} />
         </div>
       </div>

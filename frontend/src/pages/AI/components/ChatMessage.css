@@ -1,0 +1,93 @@
+/* ═══════════════════════════════════════════════════════════════
+   Chat Message — Bubbles  (Glass / Cyber)
+   ═══════════════════════════════════════════════════════════════ */
+
+.chat-msg {
+  display: flex;
+  animation: ai-msg-in 0.3s ease forwards;
+}
+
+.chat-msg--user      { justify-content: flex-end; }
+.chat-msg--assistant { justify-content: flex-start; }
+
+/* ── Bubble ──────────────────────────────────────────────────── */
+
+.chat-msg__bubble {
+  max-width: 78%;
+  border-radius: var(--ai-r-xl);
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.65;
+  word-break: break-word;
+}
+
+/* User bubble — gradient */
+.chat-msg__bubble--user {
+  background: linear-gradient(135deg, var(--ai-user-from) 0%, var(--ai-user-to) 100%);
+  color: #ffffff;
+  border-bottom-right-radius: 0.25rem;
+  box-shadow: 0 4px 16px var(--ai-primary-glow);
+}
+
+html.dark .chat-msg__bubble--user {
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35), 0 0 0 1px rgba(129, 140, 248, 0.2);
+}
+
+/* AI bubble — glass */
+.chat-msg__bubble--assistant {
+  background: var(--ai-ai-bg);
+  color: var(--ai-text);
+  border: 1px solid var(--ai-ai-border);
+  border-bottom-left-radius: 0.25rem;
+  backdrop-filter: var(--ai-blur-sm);
+  -webkit-backdrop-filter: var(--ai-blur-sm);
+  box-shadow: var(--ai-shadow-card);
+}
+
+html.dark .chat-msg__bubble--assistant {
+  background: rgba(14, 22, 42, 0.82);
+  border-color: rgba(56, 78, 130, 0.45);
+}
+
+/* ── AI Badge ────────────────────────────────────────────────── */
+
+.chat-msg__ai-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-bottom: 0.375rem;
+  padding-bottom: 0.375rem;
+  border-bottom: 1px solid var(--ai-border);
+}
+
+html.dark .chat-msg__ai-badge {
+  border-bottom-color: rgba(56, 78, 130, 0.3);
+}
+
+.chat-msg__ai-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+  color: var(--ai-primary);
+  filter: drop-shadow(0 0 4px var(--ai-primary-glow));
+}
+
+.chat-msg__ai-label {
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ai-primary);
+}
+
+/* ── Message Text ────────────────────────────────────────────── */
+
+.chat-msg__content {
+  white-space: pre-wrap;
+}
+
+/* ── Animation ───────────────────────────────────────────────── */
+
+@keyframes ai-msg-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

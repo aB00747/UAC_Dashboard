@@ -294,7 +294,8 @@
 <a name='L229'></a><a href='#L229'>229</a>
 <a name='L230'></a><a href='#L230'>230</a>
 <a name='L231'></a><a href='#L231'>231</a>
-<a name='L232'></a><a href='#L232'>232</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L232'></a><a href='#L232'>232</a>
+<a name='L233'></a><a href='#L233'>233</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -525,7 +526,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">import { useState, useEffect, useRef, useCallback } from 'react';
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useState, useEffect, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -601,12 +603,12 @@ export default function Header({ onOpenSidebar }) {
   const unreadCount = notifications.filter((n) =&gt; !n.is_read).length;
 &nbsp;
   return (
-    &lt;header className="sticky top-0 z-30 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700"&gt;
+    &lt;header className="header sticky top-0 z-30 u-bg-surface u-border-b"&gt;
       &lt;div className="flex items-center justify-between h-16 px-4 sm:px-6"&gt;
         &lt;button
           type="button"
           aria-label="Open sidebar"
-          className="lg:hidden p-2 rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+          className="lg:hidden p-2 rounded-md u-btn u-btn--ghost"
           onClick={onOpenSidebar}
         &gt;
           &lt;Menu className="h-5 w-5" /&gt;
@@ -615,29 +617,29 @@ export default function Header({ onOpenSidebar }) {
         {/* Search */}
         &lt;div className="flex-1 max-w-lg mx-4" ref={searchRef}&gt;
           &lt;div className="relative"&gt;
-            &lt;Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" aria-hidden="true" /&gt;
+            &lt;Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 u-text-4" aria-hidden="true" /&gt;
             &lt;input
               type="search"
               aria-label="Search customers, chemicals, orders"
               placeholder="Search customers, chemicals, orders..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 text-sm rounded-lg u-search-input"
               value={searchQuery}
               onChange={(e) =&gt; handleSearch(e.target.value)}
               onFocus={<span class="fstat-no" title="function not covered" >() =&gt; searchResults.length &gt; 0 &amp;&amp; setShowSearch(true)}</span>
             /&gt;
             {showSearch &amp;&amp; searchResults.length &gt; 0 &amp;&amp; (
               &lt;nav aria-label="Search results"&gt;
-                &lt;ul className="absolute top-full mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-h-80 overflow-y-auto list-none m-0 p-0"&gt;
+                &lt;ul className="absolute top-full mt-1 w-full u-dropdown max-h-80 overflow-y-auto list-none m-0 p-0"&gt;
                   {searchResults.map((r) =&gt; (
                     &lt;li key={`${r.type}-${r.id}`}&gt;
                       &lt;Link
                         to={`/${r.type}s/${r.id}`}
-                        className="flex items-center px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 border-b border-gray-100 dark:border-gray-700 last:border-0"
+                        className="flex items-center px-4 py-3 u-menu-item u-border-b last:border-0"
                         onClick={<span class="fstat-no" title="function not covered" >() =&gt; { setShowSearch(false); setSearchQuery(''); }}</span>
                       &gt;
                         &lt;div&gt;
-                          &lt;p className="text-sm font-medium text-gray-900 dark:text-white"&gt;{r.title}&lt;/p&gt;
-                          &lt;p className="text-xs text-gray-500 dark:text-gray-400"&gt;{r.type} {r.subtitle &amp;&amp; ('- ' + r.subtitle)}&lt;/p&gt;
+                          &lt;p className="text-sm font-medium u-text"&gt;{r.title}&lt;/p&gt;
+                          &lt;p className="text-xs u-text-3"&gt;{r.type} {r.subtitle &amp;&amp; ('- ' + r.subtitle)}&lt;/p&gt;
                         &lt;/div&gt;
                       &lt;/Link&gt;
                     &lt;/li&gt;
@@ -653,7 +655,7 @@ export default function Header({ onOpenSidebar }) {
           &lt;button
             type="button"
             onClick={toggleTheme}
-            className="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+            className="p-2 rounded-lg u-btn u-btn--ghost"
             aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
           &gt;
             {isDark ? &lt;Sun className="h-5 w-5" /&gt; : &lt;Moon className="h-5 w-5" /&gt;}
@@ -666,7 +668,7 @@ export default function Header({ onOpenSidebar }) {
               aria-label={unreadCount &gt; 0 ? 'Notifications (' + unreadCount + ' unread)' : 'Notifications'}
               aria-expanded={showNotifications}
               aria-haspopup="true"
-              className="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 relative"
+              className="p-2 rounded-lg u-btn u-btn--ghost relative"
               onClick={() =&gt; setShowNotifications(!showNotifications)}
             &gt;
               &lt;Bell className="h-5 w-5" /&gt;
@@ -677,30 +679,30 @@ export default function Header({ onOpenSidebar }) {
               )}
             &lt;/button&gt;
             {showNotifications &amp;&amp; (
-              &lt;div role="menu" className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg"&gt;
-                &lt;div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700"&gt;
-                  &lt;h3 className="text-sm font-semibold text-gray-900 dark:text-white"&gt;Notifications&lt;/h3&gt;
+              &lt;div role="menu" className="absolute right-0 mt-2 w-80 u-dropdown"&gt;
+                &lt;div className="flex items-center justify-between px-4 py-3 u-border-b"&gt;
+                  &lt;h3 className="text-sm font-semibold u-text"&gt;Notifications&lt;/h3&gt;
                   {unreadCount &gt; 0 &amp;&amp; (
-                    &lt;button type="button" onClick={markAllRead} className="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300"&gt;
+                    &lt;button type="button" onClick={markAllRead} className="text-xs u-text-brand hover:underline"&gt;
                       Mark all read
                     &lt;/button&gt;
                   )}
                 &lt;/div&gt;
                 &lt;div className="max-h-64 overflow-y-auto"&gt;
                   {notifications.length === 0 ? (
-                    &lt;p className="px-4 py-6 text-sm text-gray-500 dark:text-gray-400 text-center"&gt;No notifications&lt;/p&gt;
+                    &lt;p className="px-4 py-6 text-sm u-text-3 text-center"&gt;No notifications&lt;/p&gt;
                   ) : (
                     notifications.slice(0, 10).map((n) =&gt; (
                       &lt;div
                         key={n.id}
                         role="menuitem"
                         className={classNames(
-                          'px-4 py-3 border-b border-gray-100 dark:border-gray-700 last:border-0',
-                          !n.is_read &amp;&amp; 'bg-indigo-50 dark:bg-indigo-900/30'
+                          'px-4 py-3 u-border-b last:border-0',
+                          !n.is_read &amp;&amp; 'u-bg-brand-light'
                         )}
                       &gt;
-                        &lt;p className="text-sm font-medium text-gray-900 dark:text-white"&gt;{n.title}&lt;/p&gt;
-                        &lt;p className="text-xs text-gray-500 dark:text-gray-400 mt-1"&gt;{n.message}&lt;/p&gt;
+                        &lt;p className="text-sm font-medium u-text"&gt;{n.title}&lt;/p&gt;
+                        &lt;p className="text-xs u-text-3 mt-1"&gt;{n.message}&lt;/p&gt;
                       &lt;/div&gt;
                     ))
                   )}
@@ -716,23 +718,23 @@ export default function Header({ onOpenSidebar }) {
               aria-label="User menu"
               aria-expanded={showUserMenu}
               aria-haspopup="true"
-              className="flex items-center gap-2 p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+              className="flex items-center gap-2 p-2 rounded-lg u-btn u-btn--ghost"
               onClick={() =&gt; setShowUserMenu(!showUserMenu)}
             &gt;
-              &lt;div className="h-8 w-8 bg-indigo-100 dark:bg-indigo-900/50 rounded-full flex items-center justify-center"&gt;
-                &lt;User className="h-4 w-4 text-indigo-600 dark:text-indigo-400" /&gt;
+              &lt;div className="h-8 w-8 u-bg-brand-light rounded-full flex items-center justify-center"&gt;
+                &lt;User className="h-4 w-4 u-text-brand" /&gt;
               &lt;/div&gt;
-              &lt;span className="hidden sm:block text-sm font-medium"&gt;
+              &lt;span className="hidden sm:block text-sm font-medium u-text-2"&gt;
                 {user.<span class="branch-0 cbranch-no" title="branch not covered" >first_name || user.username}</span>
               &lt;/span&gt;
-              &lt;ChevronDown className="h-4 w-4" /&gt;
+              &lt;ChevronDown className="h-4 w-4 u-text-3" /&gt;
             &lt;/button&gt;
             {showUserMenu &amp;&amp; (
-              &lt;div role="menu" className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg"&gt;
+              &lt;div role="menu" className="absolute right-0 mt-2 w-48 u-dropdown"&gt;
                 &lt;Link
                   to="/profile"
                   role="menuitem"
-                  className="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                  className="u-menu-item"
                   onClick={<span class="fstat-no" title="function not covered" >() =&gt; setShowUserMenu(false)}</span>
                 &gt;
                   &lt;User className="h-4 w-4" /&gt; Profile
@@ -741,7 +743,7 @@ export default function Header({ onOpenSidebar }) {
                   type="button"
                   role="menuitem"
                   onClick={() =&gt; { setShowUserMenu(false); logout(); }}
-                  className="flex items-center gap-2 w-full px-4 py-3 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 border-t border-gray-100 dark:border-gray-700"
+                  className="u-menu-item u-menu-item--danger u-border-t w-full"
                 &gt;
                   &lt;LogOut className="h-4 w-4" /&gt; Logout
                 &lt;/button&gt;
@@ -756,14 +758,15 @@ export default function Header({ onOpenSidebar }) {
 &nbsp;
 Header.propTypes = {
   onOpenSidebar: PropTypes.func.isRequired,
-};</pre></td></tr></table></pre>
+};
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-04-04T20:30:41.571Z
+                at 2026-04-11T14:50:38.544Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@import "./styles/_variables.css";
+@import "./styles/_base.css";
+@import "./styles/_utilities.css";
 
 @layer utilities {
   .dark {

@@ -3,6 +3,7 @@ import { Bot } from 'lucide-react';
 import ActionCard from './ActionCard';
 import ActionPlanCard from './ActionPlanCard';
 import ActionSuccessBanner from './ActionSuccessBanner';
+import './ChatMessage.css';
 
 export default function ChatMessage({
   msg, index, pendingAction, pendingPlan, actionResult, planResult,
@@ -14,23 +15,16 @@ export default function ChatMessage({
   const hasPendingPlan = pendingPlan?.messageIndex === index;
 
   return (
-    <div className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-      <div
-        className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
-          msg.role === 'user'
-            ? 'bg-indigo-600 text-white'
-            : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100'
-        }`}
-      >
+    <div className={`chat-msg ${msg.role === 'user' ? 'chat-msg--user' : 'chat-msg--assistant'}`}>
+      <div className={`chat-msg__bubble ${msg.role === 'user' ? 'chat-msg__bubble--user' : 'chat-msg__bubble--assistant'}`}>
         {msg.role === 'assistant' && (
-          <div className="flex items-center gap-1.5 mb-1">
-            <Bot className="h-3.5 w-3.5 text-indigo-600 dark:text-indigo-400" />
-            <span className="text-xs font-medium text-indigo-600 dark:text-indigo-400">AI</span>
+          <div className="chat-msg__ai-badge">
+            <Bot className="chat-msg__ai-icon" />
+            <span className="chat-msg__ai-label">AI</span>
           </div>
         )}
-        <div className="whitespace-pre-wrap">{msg.content}</div>
+        <div className="chat-msg__content">{msg.content}</div>
 
-        {/* Single action card */}
         {hasPendingAction && (
           <ActionCard
             action={pendingAction.action}
@@ -40,7 +34,6 @@ export default function ChatMessage({
           />
         )}
 
-        {/* Multi-step action plan card */}
         {hasPendingPlan && (
           <ActionPlanCard
             plan={pendingPlan.plan}

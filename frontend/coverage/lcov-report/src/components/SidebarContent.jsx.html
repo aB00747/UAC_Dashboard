@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>57/57</span>
+                <span class='fraction'>58/58</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">91.66% </span>
+                <span class="strong">90.9% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>11/12</span>
+                <span class='fraction'>10/11</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>57/57</span>
+                <span class='fraction'>58/58</span>
             </div>
         
             
@@ -129,9 +129,7 @@
 <a name='L64'></a><a href='#L64'>64</a>
 <a name='L65'></a><a href='#L65'>65</a>
 <a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<a name='L67'></a><a href='#L67'>67</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -169,13 +167,14 @@
 <span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-yes">16x</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">8x</span>
@@ -195,9 +194,8 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">&nbsp;
-&nbsp;
-import PropTypes from 'prop-types';
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import PropTypes from 'prop-types';
 import { Link } from "react-router-dom";
 import { X } from 'lucide-react';
 import { classNames } from '../utils/format';
@@ -205,7 +203,7 @@ import { classNames } from '../utils/format';
 export function SidebarContent({ currentPath, onClose, systemName, logoUrl, navItems }) {
   return (
     &lt;&gt;
-      &lt;div className="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700 shrink-0"&gt;
+      &lt;div className="flex items-center justify-between h-16 px-4 u-border-b shrink-0"&gt;
         &lt;Link to="/" className="flex items-center gap-2 min-w-0"&gt;
           {logoUrl ? (
             &lt;img src={logoUrl} alt={systemName} className="h-8 w-8 rounded-lg object-cover" /&gt;
@@ -214,10 +212,10 @@ export function SidebarContent({ currentPath, onClose, systemName, logoUrl, navI
               &lt;span className="text-white font-bold text-sm"&gt;UC&lt;/span&gt;
             &lt;/div&gt;
           )}
-          &lt;span className="font-bold text-gray-900 dark:text-white truncate"&gt;{<span class="branch-0 cbranch-no" title="branch not covered" >systemName || 'Umiya Chemical'}&lt;</span>/span&gt;
+          &lt;span className="font-bold u-text truncate"&gt;{<span class="branch-0 cbranch-no" title="branch not covered" >systemName || 'Umiya Chemical'}&lt;</span>/span&gt;
         &lt;/Link&gt;
         {onClose &amp;&amp; (
-          &lt;button onClick={onClose} className="lg:hidden p-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"&gt;
+          &lt;button onClick={onClose} className="lg:hidden p-1 rounded u-btn u-btn--ghost"&gt;
             &lt;X className="h-5 w-5" /&gt;
           &lt;/button&gt;
         )}
@@ -233,13 +231,14 @@ export function SidebarContent({ currentPath, onClose, systemName, logoUrl, navI
               to={item.href}
               onClick={onClose}
               className={classNames(
-                'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
-                isActive
-                  ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
+                'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium u-sidebar-item',
+                isActive &amp;&amp; 'u-sidebar-item--active'
               )}
             &gt;
-              &lt;item.icon className={classNames('h-5 w-5', isActive ? 'text-indigo-600 dark:text-indigo-400' : 'text-gray-400 dark:text-gray-500')} /&gt;
+              &lt;item.icon className={classNames(
+                'h-5 w-5',
+                isActive ? 'u-text-brand' : 'u-text-4'
+              )} /&gt;
               {item.name}
             &lt;/Link&gt;
           );
@@ -261,14 +260,15 @@ SidebarContent.propTypes = {
       icon: PropTypes.elementType.isRequired,
     })
   ).isRequired,
-};</pre></td></tr></table></pre>
+};
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-04-04T20:30:41.571Z
+                at 2026-04-11T14:50:38.544Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

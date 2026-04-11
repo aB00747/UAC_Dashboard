@@ -1,5 +1,3 @@
-
-
 import PropTypes from 'prop-types';
 import { Link } from "react-router-dom";
 import { X } from 'lucide-react';
@@ -8,7 +6,7 @@ import { classNames } from '../utils/format';
 export function SidebarContent({ currentPath, onClose, systemName, logoUrl, navItems }) {
   return (
     <>
-      <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700 shrink-0">
+      <div className="flex items-center justify-between h-16 px-4 u-border-b shrink-0">
         <Link to="/" className="flex items-center gap-2 min-w-0">
           {logoUrl ? (
             <img src={logoUrl} alt={systemName} className="h-8 w-8 rounded-lg object-cover" />
@@ -17,10 +15,10 @@ export function SidebarContent({ currentPath, onClose, systemName, logoUrl, navI
               <span className="text-white font-bold text-sm">UC</span>
             </div>
           )}
-          <span className="font-bold text-gray-900 dark:text-white truncate">{systemName || 'Umiya Chemical'}</span>
+          <span className="font-bold u-text truncate">{systemName || 'Umiya Chemical'}</span>
         </Link>
         {onClose && (
-          <button onClick={onClose} className="lg:hidden p-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+          <button onClick={onClose} className="lg:hidden p-1 rounded u-btn u-btn--ghost">
             <X className="h-5 w-5" />
           </button>
         )}
@@ -36,13 +34,14 @@ export function SidebarContent({ currentPath, onClose, systemName, logoUrl, navI
               to={item.href}
               onClick={onClose}
               className={classNames(
-                'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
-                isActive
-                  ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
+                'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium u-sidebar-item',
+                isActive && 'u-sidebar-item--active'
               )}
             >
-              <item.icon className={classNames('h-5 w-5', isActive ? 'text-indigo-600 dark:text-indigo-400' : 'text-gray-400 dark:text-gray-500')} />
+              <item.icon className={classNames(
+                'h-5 w-5',
+                isActive ? 'u-text-brand' : 'u-text-4'
+              )} />
               {item.name}
             </Link>
           );

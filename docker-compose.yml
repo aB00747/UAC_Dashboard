@@ -16,6 +16,45 @@ services:
       timeout: 5s
       retries: 5
 
+  ollama:
+    image: ollama/ollama
+    restart: unless-stopped
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - "11434:11434"
+    # Uncomment for NVIDIA GPU support (requires nvidia-container-toolkit):
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+
+  ai:
+    build: ../AI
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      ollama:
+        condition: service_started
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-llama3.1:8b}
+      ERP_DATABASE_URL: postgresql://${DB_USER:-postgres}:${DB_PASSWORD}@db:5432/${DB_NAME:-umiya_dashboard}
+      AI_SERVICE_API_KEY: ${AI_SERVICE_API_KEY:?AI_SERVICE_API_KEY is required}
+      CHROMA_DB_PATH: /app/data/chroma_db
+      CHAT_HISTORY_DB_PATH: /app/data/chat_history.db
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-all-MiniLM-L6-v2}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      HF_HOME: /app/data/hf_cache
+    volumes:
+      - ai_data:/app/data
+    ports:
+      - "8001:8001"
+
   backend:
     build: ./backend
     restart: unless-stopped
@@ -34,6 +73,8 @@ services:
       DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is required}
       DB_HOST: db
       DB_PORT: 5432
+      AI_SERVICE_URL: http://ai:8001
+      AI_SERVICE_API_KEY: ${AI_SERVICE_API_KEY:?AI_SERVICE_API_KEY is required}
     volumes:
       - media_data:/app/media
     ports:
@@ -50,3 +91,5 @@ services:
 volumes:
   postgres_data:
   media_data:
+  ollama_data:
+  ai_data:

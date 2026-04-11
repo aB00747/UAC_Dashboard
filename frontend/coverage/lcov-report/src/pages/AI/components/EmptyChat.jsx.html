@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>34/34</span>
+                <span class='fraction'>42/42</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>34/34</span>
+                <span class='fraction'>42/42</span>
             </div>
         
             
@@ -103,7 +103,18 @@
 <a name='L38'></a><a href='#L38'>38</a>
 <a name='L39'></a><a href='#L39'>39</a>
 <a name='L40'></a><a href='#L40'>40</a>
-<a name='L41'></a><a href='#L41'>41</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -121,10 +132,17 @@
 <span class="cline-any cline-yes">77x</span>
 <span class="cline-any cline-yes">77x</span>
 <span class="cline-any cline-yes">77x</span>
+<span class="cline-any cline-yes">77x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">77x</span>
 <span class="cline-any cline-yes">77x</span>
 <span class="cline-any cline-yes">77x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">77x</span>
+<span class="cline-any cline-yes">77x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">77x</span>
+<span class="cline-any cline-yes">77x</span>
 <span class="cline-any cline-yes">462x</span>
 <span class="cline-any cline-yes">462x</span>
 <span class="cline-any cline-yes">462x</span>
@@ -133,6 +151,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">462x</span>
 <span class="cline-any cline-yes">462x</span>
+<span class="cline-any cline-yes">462x</span>
+<span class="cline-any cline-yes">77x</span>
 <span class="cline-any cline-yes">77x</span>
 <span class="cline-any cline-yes">77x</span>
 <span class="cline-any cline-yes">77x</span>
@@ -144,36 +164,46 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import PropTypes from 'prop-types';
-import { Bot } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
+import './EmptyChat.css';
 &nbsp;
 const SUGGESTED_QUESTIONS = [
-  'What is our current revenue summary?',
-  'Which chemicals are running low on stock?',
-  'What is the current market price of Sulfuric Acid in India?',
-  'Place an order for 100kg HCL for new customer Rajesh from Mumbai',
-  'Add Sodium Hydroxide to inventory and place an order for it',
-  'Who are our top 5 customers by revenue?',
+  { tag: 'Revenue', text: 'What is our current revenue summary?' },
+  { tag: 'Inventory', text: 'Which chemicals are running low on stock?' },
+  { tag: 'Market', text: 'What is the current market price of Sulfuric Acid in India?' },
+  { tag: 'Order', text: 'Place an order for 100kg HCL for new customer Rajesh from Mumbai' },
+  { tag: 'Multi-step', text: 'Add Sodium Hydroxide to inventory and place an order for it' },
+  { tag: 'Analytics', text: 'Who are our top 5 customers by revenue?' },
 ];
 &nbsp;
 export default function EmptyChat({ onSend, disabled }) {
   return (
-    &lt;div className="flex flex-col items-center justify-center h-full text-center"&gt;
-      &lt;Bot className="h-16 w-16 text-indigo-200 dark:text-indigo-800 mb-4" /&gt;
-      &lt;h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2"&gt;Umiya AI Assistant&lt;/h2&gt;
-      &lt;p className="text-sm text-gray-500 dark:text-gray-400 mb-8 max-w-md"&gt;
-        I can autonomously handle your business tasks - place orders, create customers, add chemicals, check market prices, and chain multiple actions together. Just tell me what you need.
-      &lt;/p&gt;
-      &lt;div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-w-lg w-full"&gt;
-        {SUGGESTED_QUESTIONS.map((q) =&gt; (
-          &lt;button
-            key={q}
-            onClick={() =&gt; onSend(q)}
-            disabled={disabled}
-            className="text-left px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 text-sm text-gray-700 dark:text-gray-300 transition-colors disabled:opacity-50"
-          &gt;
-            {q}
-          &lt;/button&gt;
-        ))}
+    &lt;div className="empty-chat"&gt;
+      &lt;div className="empty-chat__inner"&gt;
+        &lt;div className="empty-chat__icon-wrap"&gt;
+          &lt;Sparkles className="empty-chat__icon" /&gt;
+        &lt;/div&gt;
+&nbsp;
+        &lt;div className="empty-chat__text"&gt;
+          &lt;h2 className="empty-chat__title"&gt;Umiya AI Assistant&lt;/h2&gt;
+          &lt;p className="empty-chat__desc"&gt;
+            I can autonomously handle your business tasks - place orders, create customers, add chemicals, check market prices, and chain multiple actions together.
+          &lt;/p&gt;
+        &lt;/div&gt;
+&nbsp;
+        &lt;div className="empty-chat__suggestions"&gt;
+          {SUGGESTED_QUESTIONS.map((q) =&gt; (
+            &lt;button
+              key={q.text}
+              onClick={() =&gt; onSend(q.text)}
+              disabled={disabled}
+              className="empty-chat__card"
+            &gt;
+              &lt;span className="empty-chat__card-tag"&gt;{q.tag}&lt;/span&gt;
+              &lt;span className="empty-chat__card-text"&gt;{q.text}&lt;/span&gt;
+            &lt;/button&gt;
+          ))}
+        &lt;/div&gt;
       &lt;/div&gt;
     &lt;/div&gt;
   );
@@ -190,7 +220,7 @@ EmptyChat.propTypes = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-04-04T20:30:41.571Z
+                at 2026-04-11T14:50:38.544Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
