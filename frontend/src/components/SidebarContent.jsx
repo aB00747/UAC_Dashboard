@@ -11,11 +11,14 @@ export function SidebarContent({ currentPath, onClose, systemName, logoUrl, navI
           {logoUrl ? (
             <img src={logoUrl} alt={systemName} className="h-8 w-8 rounded-lg object-cover" />
           ) : (
-            <div className="h-8 w-8 bg-indigo-600 rounded-lg flex items-center justify-center shrink-0">
-              <span className="text-white font-bold text-sm">UC</span>
+            <div
+              className="h-8 w-8 rounded-lg flex items-center justify-center shrink-0"
+              style={{ backgroundColor: 'var(--brand)' }}
+            >
+              <span className="font-bold text-sm" style={{ color: 'var(--brand-fg)' }}>UC</span>
             </div>
           )}
-          <span className="font-bold u-text truncate">{systemName || 'Umiya Chemical'}</span>
+          <span className="u-heading truncate" style={{ fontSize: '1.1rem', color: 'var(--text-inverse)' }}>{systemName || 'Umiya Chemical'}</span>
         </Link>
         {onClose && (
           <button onClick={onClose} className="lg:hidden p-1 rounded u-btn u-btn--ghost">
