@@ -12,6 +12,13 @@
 .u-bg-brand     { background-color: var(--brand); }
 .u-bg-brand-light { background-color: var(--brand-light); }
 .u-bg-hover     { background-color: var(--bg-hover); }
+.u-bg-active    { background-color: var(--bg-active); }
+
+/* ── Headings ──────────────────────────────────────────────── */
+.u-heading    { font-family: var(--font-serif); font-weight: 500; line-height: 1.20; }
+.u-heading-lg { font-size: 2rem; }    /* 32px — page titles */
+.u-heading-md { font-size: 1.5rem; }  /* 24px — section headings */
+.u-heading-sm { font-size: 1.3rem; }  /* ~21px — card headings */
 
 /* ── Text ──────────────────────────────────────────────────── */
 .u-text         { color: var(--text); }
@@ -37,11 +44,13 @@
 }
 .u-sidebar-item:hover {
   background-color: var(--bg-sidebar-hover);
-  color: var(--text);
+  color: var(--text-inverse);
 }
 .u-sidebar-item--active {
   background-color: var(--bg-sidebar-active);
-  color: var(--brand-text);
+  color: var(--text-inverse);
+  border-left: 3px solid var(--brand);
+  padding-left: calc(0.75rem - 3px);
 }
 
 /* ── Input / Form Elements ─────────────────────────────────── */
@@ -56,10 +65,10 @@
 .u-input:focus {
   outline: none;
   border-color: var(--border-focus);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  box-shadow: 0 0 0 3px rgba(56, 152, 236, 0.15);
 }
 html.dark .u-input:focus {
-  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
+  box-shadow: 0 0 0 3px rgba(56, 152, 236, 0.2);
 }
 
 /* ── Buttons ───────────────────────────────────────────────── */
@@ -83,10 +92,12 @@ html.dark .u-input:focus {
   background-color: var(--brand);
   color: var(--brand-fg);
   border-color: var(--brand);
+  border-radius: var(--r-lg);
 }
 .u-btn--primary:hover:not(:disabled) {
   background-color: var(--brand-hover);
   border-color: var(--brand-hover);
+  box-shadow: 0px 0px 0px 1px var(--brand-hover);
 }
 
 .u-btn--secondary {
@@ -113,13 +124,13 @@ html.dark .u-btn--secondary:hover:not(:disabled) {
 }
 
 .u-btn--danger {
-  background-color: #dc2626;
+  background-color: var(--red-solid);
   color: #ffffff;
-  border-color: #dc2626;
+  border-color: var(--red-solid);
 }
 .u-btn--danger:hover:not(:disabled) {
-  background-color: #b91c1c;
-  border-color: #b91c1c;
+  background-color: #9a2c2c;
+  border-color: #9a2c2c;
 }
 
 /* ── Badges ────────────────────────────────────────────────── */
@@ -238,10 +249,10 @@ html.dark .u-overlay { background-color: rgba(0, 0, 0, 0.7); }
 .u-search-input:focus {
   outline: none;
   border-color: var(--border-focus);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+  box-shadow: 0 0 0 3px rgba(56, 152, 236, 0.12);
 }
 html.dark .u-search-input:focus {
-  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.18);
+  box-shadow: 0 0 0 3px rgba(56, 152, 236, 0.18);
 }
 
 /* ── Pagination ────────────────────────────────────────────── */

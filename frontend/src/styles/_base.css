@@ -45,12 +45,12 @@ html.dark ::-webkit-scrollbar-thumb:hover {
 /* ── Text Selection ─────────────────────────────────────────── */
 
 ::selection {
-  background-color: var(--brand-light);
+  background-color: rgba(201, 100, 66, 0.15);
   color: var(--brand-text);
 }
 
 html.dark ::selection {
-  background-color: rgba(129, 140, 248, 0.3);
+  background-color: rgba(217, 119, 87, 0.3);
   color: var(--text);
 }
 
