@@ -4,6 +4,9 @@
    ═══════════════════════════════════════════════════════════════ */
 
 :root {
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: system-ui, -apple-system, 'Inter', sans-serif;
+
   /* ── Page / Layout ─────────────────────────────────────────── */
   --bg-page:        #f9fafb;   /* gray-50  */
   --bg-surface:     #ffffff;   /* white    */
