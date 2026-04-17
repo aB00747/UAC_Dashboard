@@ -35,3 +35,6 @@ backend/media/
 
 # Commit message
 commitmsg.txt
+
+# graphify
+graphify-out/

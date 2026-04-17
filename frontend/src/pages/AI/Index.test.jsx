@@ -223,8 +223,8 @@ describe('AIAssistant', () => {
     await waitFor(() => screen.getByText('To Delete'));
 
     // The delete button is a nested button inside the conversation item's outer button
-    const convItem = screen.getByText('To Delete').closest('.w-full.text-left');
-    const deleteBtn = convItem.querySelector('button');
+    const convItem = screen.getByText('To Delete').closest('.chat-sidebar__item');
+    const deleteBtn = convItem.querySelector('.chat-sidebar__delete-btn');
     fireEvent.click(deleteBtn);
 
     await waitFor(() => expect(aiAPI.deleteConversation).toHaveBeenCalledWith('c1'));
@@ -239,8 +239,8 @@ describe('AIAssistant', () => {
     renderPage();
     await waitFor(() => screen.getByText('To Delete'));
 
-    const convItem = screen.getByText('To Delete').closest('.w-full.text-left');
-    const deleteBtn = convItem.querySelector('button');
+    const convItem = screen.getByText('To Delete').closest('.chat-sidebar__item');
+    const deleteBtn = convItem.querySelector('.chat-sidebar__delete-btn');
     fireEvent.click(deleteBtn);
 
     await waitFor(() => expect(toast.error).toHaveBeenCalledWith('Failed to delete conversation'));
@@ -268,7 +268,7 @@ describe('AIAssistant', () => {
     renderPage();
     // 5 context type buttons exist
     await waitFor(() => {
-      const contextBar = document.querySelector('.flex.items-center.gap-1.bg-gray-100');
+      const contextBar = document.querySelector('.ai-context-switcher');
       expect(contextBar).toBeInTheDocument();
       expect(contextBar.querySelectorAll('button').length).toBe(5);
     });
@@ -444,12 +444,12 @@ describe('AIAssistant', () => {
     renderPage();
     await waitFor(() => screen.getByText('New Chat'));
 
-    // The sidebar toggle button is the ChevronDown button
-    const toggleBtn = document.querySelector('.flex.items-center.gap-3 button');
+    // The sidebar toggle button
+    const toggleBtn = document.querySelector('.ai-header__toggle');
     fireEvent.click(toggleBtn);
-    // After click, sidebar should have w-0 class
-    const sidebar = document.querySelector('.transition-all.duration-200');
-    expect(sidebar.className).toContain('w-0');
+    // After click, sidebar should have closed class
+    const sidebar = document.querySelector('.ai-page__sidebar');
+    expect(sidebar.className).toContain('ai-page__sidebar--closed');
   });
 
   // --- Conversation title display ---
@@ -497,13 +497,13 @@ describe('AIAssistant', () => {
       expect(screen.getByText('Bot says hello')).toBeInTheDocument();
     });
 
-    // User message has indigo bg
-    const userBubble = screen.getByText('User says hi').closest('.rounded-2xl');
-    expect(userBubble.className).toContain('bg-indigo-600');
+    // User message has user bubble class
+    const userBubble = screen.getByText('User says hi').closest('.chat-msg__bubble');
+    expect(userBubble.className).toContain('chat-msg__bubble--user');
 
-    // Assistant message has gray bg
-    const botBubble = screen.getByText('Bot says hello').closest('.rounded-2xl');
-    expect(botBubble.className).toContain('bg-gray-100');
+    // Assistant message has assistant bubble class
+    const botBubble = screen.getByText('Bot says hello').closest('.chat-msg__bubble');
+    expect(botBubble.className).toContain('chat-msg__bubble--assistant');
   });
 
   // --- Disabled state when offline ---

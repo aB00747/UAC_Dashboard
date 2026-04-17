@@ -1,0 +1,285 @@
+/* ═══════════════════════════════════════════════════════════════
+   Global Utility Classes — .u-* prefix
+   Semantic helpers built on CSS variables from _variables.css.
+   All dark-mode support is automatic via the variable system.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Backgrounds ────────────────────────────────────────────── */
+.u-bg-page      { background-color: var(--bg-page); }
+.u-bg-surface   { background-color: var(--bg-surface); }
+.u-bg-surface-2 { background-color: var(--bg-surface-2); }
+.u-bg-surface-3 { background-color: var(--bg-surface-3); }
+.u-bg-brand     { background-color: var(--brand); }
+.u-bg-brand-light { background-color: var(--brand-light); }
+.u-bg-hover     { background-color: var(--bg-hover); }
+.u-bg-active    { background-color: var(--bg-active); }
+
+/* ── Headings ──────────────────────────────────────────────── */
+.u-heading    { font-family: var(--font-serif); font-weight: 500; line-height: 1.20; }
+.u-heading-lg { font-size: 2rem; }    /* 32px — page titles */
+.u-heading-md { font-size: 1.5rem; }  /* 24px — section headings */
+.u-heading-sm { font-size: 1.3rem; }  /* ~21px — card headings */
+
+/* ── Text ──────────────────────────────────────────────────── */
+.u-text         { color: var(--text); }
+.u-text-2       { color: var(--text-2); }
+.u-text-3       { color: var(--text-3); }
+.u-text-4       { color: var(--text-4); }
+.u-text-brand   { color: var(--brand-text); }
+.u-text-inverse { color: var(--text-inverse); }
+
+/* ── Borders ───────────────────────────────────────────────── */
+.u-border     { border: 1px solid var(--border); }
+.u-border-t   { border-top: 1px solid var(--border); }
+.u-border-b   { border-bottom: 1px solid var(--border); }
+.u-border-l   { border-left: 1px solid var(--border); }
+.u-border-r   { border-right: 1px solid var(--border); }
+.u-border-strong { border: 1px solid var(--border-strong); }
+
+/* ── Sidebar ───────────────────────────────────────────────── */
+.u-bg-sidebar        { background-color: var(--bg-sidebar); }
+.u-sidebar-item {
+  color: var(--text-3);
+  transition: background-color var(--transition), color var(--transition);
+}
+.u-sidebar-item:hover {
+  background-color: var(--bg-sidebar-hover);
+  color: var(--text-inverse);
+}
+.u-sidebar-item--active {
+  background-color: var(--bg-sidebar-active);
+  color: var(--text-inverse);
+  border-left: 3px solid var(--brand);
+  padding-left: calc(0.75rem - 3px);
+}
+
+/* ── Input / Form Elements ─────────────────────────────────── */
+.u-input {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-input);
+  color: var(--text);
+  border-radius: var(--r);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.u-input::placeholder { color: var(--text-placeholder); }
+.u-input:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(56, 152, 236, 0.15);
+}
+html.dark .u-input:focus {
+  box-shadow: 0 0 0 3px rgba(56, 152, 236, 0.2);
+}
+
+/* ── Buttons ───────────────────────────────────────────────── */
+.u-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: var(--r);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--transition), color var(--transition),
+              border-color var(--transition), box-shadow var(--transition),
+              opacity var(--transition);
+  border: 1px solid transparent;
+}
+.u-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.u-btn--primary {
+  background-color: var(--brand);
+  color: var(--brand-fg);
+  border-color: var(--brand);
+  border-radius: var(--r-lg);
+}
+.u-btn--primary:hover:not(:disabled) {
+  background-color: var(--brand-hover);
+  border-color: var(--brand-hover);
+  box-shadow: 0px 0px 0px 1px var(--brand-hover);
+}
+
+.u-btn--secondary {
+  background-color: transparent;
+  color: var(--text-2);
+  border-color: var(--border-strong);
+}
+.u-btn--secondary:hover:not(:disabled) {
+  background-color: var(--bg-surface-2);
+}
+html.dark .u-btn--secondary:hover:not(:disabled) {
+  background-color: var(--bg-surface-2);
+  color: var(--text);
+}
+
+.u-btn--ghost {
+  background-color: transparent;
+  color: var(--text-3);
+  border-color: transparent;
+}
+.u-btn--ghost:hover:not(:disabled) {
+  background-color: var(--bg-surface-2);
+  color: var(--text-2);
+}
+
+.u-btn--danger {
+  background-color: var(--red-solid);
+  color: #ffffff;
+  border-color: var(--red-solid);
+}
+.u-btn--danger:hover:not(:disabled) {
+  background-color: #9a2c2c;
+  border-color: #9a2c2c;
+}
+
+/* ── Badges ────────────────────────────────────────────────── */
+.u-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.125rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid transparent;
+}
+
+.u-badge--green  { background-color: var(--green-bg);  color: var(--green-text);  border-color: var(--green-border); }
+.u-badge--red    { background-color: var(--red-bg);    color: var(--red-text);    border-color: var(--red-border); }
+.u-badge--yellow { background-color: var(--yellow-bg); color: var(--yellow-text); border-color: var(--yellow-border); }
+.u-badge--blue   { background-color: var(--blue-bg);   color: var(--blue-text);   border-color: var(--blue-border); }
+.u-badge--purple { background-color: var(--purple-bg); color: var(--purple-text); border-color: var(--purple-border); }
+.u-badge--orange { background-color: var(--orange-bg); color: var(--orange-text); border-color: var(--orange-border); }
+.u-badge--gray   { background-color: var(--bg-surface-2); color: var(--text-3);   border-color: var(--border); }
+.u-badge--brand  { background-color: var(--brand-light); color: var(--brand-text); border-color: var(--brand-border); }
+
+/* ── Cards / Panels ────────────────────────────────────────── */
+.u-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+}
+
+.u-panel {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-md);
+}
+
+/* ── Dividers ──────────────────────────────────────────────── */
+.u-divider   { border: none; border-top: 1px solid var(--border); }
+.u-divider-b { border-bottom: 1px solid var(--border); }
+
+/* ── Stat Tiles ────────────────────────────────────────────── */
+.u-stat-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow);
+  transition: box-shadow var(--transition-md);
+}
+.u-stat-card:hover { box-shadow: var(--shadow-md); }
+
+/* ── Dropdown / Menu ───────────────────────────────────────── */
+.u-dropdown {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.u-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: var(--text-2);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--transition), color var(--transition);
+  text-align: left;
+}
+.u-menu-item:hover {
+  background-color: var(--bg-surface-2);
+  color: var(--text);
+}
+.u-menu-item--danger { color: var(--red-text); }
+.u-menu-item--danger:hover { background-color: var(--red-bg); color: var(--red-text); }
+
+/* ── Tables ────────────────────────────────────────────────── */
+.u-table-header {
+  background-color: var(--bg-surface-2);
+  color: var(--text-3);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.u-table-row {
+  border-top: 1px solid var(--border);
+  color: var(--text);
+  transition: background-color var(--transition);
+}
+.u-table-row:hover { background-color: var(--bg-surface-2); }
+
+/* ── Page Header ───────────────────────────────────────────── */
+.u-page-header { border-bottom: 1px solid var(--border); }
+.u-page-title  { color: var(--text); font-weight: 700; }
+.u-page-desc   { color: var(--text-3); font-size: 0.875rem; }
+
+/* ── Slide Panel / Modal overlay ───────────────────────────── */
+.u-overlay { background-color: rgba(0, 0, 0, 0.5); }
+html.dark .u-overlay { background-color: rgba(0, 0, 0, 0.7); }
+
+/* ── Search / Filter Bar ───────────────────────────────────── */
+.u-search-input {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: var(--r);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.u-search-input::placeholder { color: var(--text-placeholder); }
+.u-search-input:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(56, 152, 236, 0.12);
+}
+html.dark .u-search-input:focus {
+  box-shadow: 0 0 0 3px rgba(56, 152, 236, 0.18);
+}
+
+/* ── Pagination ────────────────────────────────────────────── */
+.u-page-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.5rem;
+  border-radius: var(--r);
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  background-color: var(--bg-surface);
+  color: var(--text-2);
+  cursor: pointer;
+  transition: background-color var(--transition), color var(--transition),
+              border-color var(--transition);
+}
+.u-page-btn:hover:not(:disabled) {
+  background-color: var(--bg-surface-2);
+  color: var(--text);
+}
+.u-page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.u-page-btn--active {
+  background-color: var(--brand);
+  color: var(--brand-fg);
+  border-color: var(--brand);
+}

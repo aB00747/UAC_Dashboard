@@ -99,17 +99,17 @@ export default function Inventory() {
         </Button>
       </PageHeader>
 
-      <div className="flex gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg w-fit">
+      <div className="flex gap-1 u-bg-subtle p-1 rounded-lg w-fit">
         {TABS.map((t) => (
           <button key={t.key} onClick={() => setTab(t.key)}
             className={classNames('flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-md transition-colors',
-              tab === t.key ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300')}>
+              tab === t.key ? 'u-card shadow-sm u-text' : 'u-text-3 hover:u-text-2')}>
             <t.icon className="h-4 w-4" /> {t.label}
           </button>
         ))}
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div className="u-card overflow-hidden">
         {tab === 'chemicals' && <ChemicalsTable chemicals={chemicals} onEdit={openDialog} onDelete={handleDelete} />}
         {tab === 'categories' && <CategoriesTable categories={categories} onEdit={openDialog} onDelete={handleDelete} />}
         {tab === 'vendors' && <VendorsTable vendors={vendors} onEdit={openDialog} onDelete={handleDelete} />}

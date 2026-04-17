@@ -26,9 +26,9 @@ export default function CustomerForm({ form, setForm, customerTypes, saving, dia
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Customer Type</label>
+          <label className="block text-sm font-medium u-text-2 mb-1">Customer Type</label>
           <select
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="u-input w-full px-3 py-2 rounded-lg text-sm"
             value={form.customer_type || ''}
             onChange={(e) => setForm({ ...form, customer_type: e.target.value ? Number(e.target.value) : '' })}
           >
@@ -43,9 +43,10 @@ export default function CustomerForm({ form, setForm, customerTypes, saving, dia
             type="checkbox"
             checked={form.is_active}
             onChange={(e) => setForm({ ...form, is_active: e.target.checked })}
-            className="rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500"
+            className="rounded"
+          style={{ accentColor: 'var(--brand)' }}
           />
-          <label className="text-sm text-gray-700 dark:text-gray-300">Active</label>
+          <label className="text-sm u-text-2">Active</label>
         </div>
       </div>
       <div className="flex justify-end gap-3 pt-2">

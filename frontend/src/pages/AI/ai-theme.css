@@ -1,0 +1,135 @@
+/* ═══════════════════════════════════════════════════════════════
+   Umiya AI — Warm Parchment Theme
+   Variables scoped to .ai-page to avoid global dark-mode conflicts
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Light Mode ──────────────────────────────────────────────── */
+.ai-page {
+  /* Backgrounds */
+  --ai-bg:              #f5f4ed;
+  --ai-bg-secondary:    #f0eee6;
+  --ai-bg-glass:        rgba(250, 249, 245, 0.85);
+  --ai-bg-glass-hover:  rgba(250, 249, 245, 0.97);
+  --ai-bg-input:        rgba(255, 253, 250, 0.9);
+
+  /* Primary accent — terracotta */
+  --ai-primary:         #c96442;
+  --ai-primary-hover:   #b5593b;
+  --ai-primary-glow:    rgba(201, 100, 66, 0.25);
+  --ai-primary-subtle:  rgba(201, 100, 66, 0.08);
+  --ai-primary-fg:      #ffffff;
+
+  /* Text */
+  --ai-text:            #141413;
+  --ai-text-secondary:  #4d4c48;
+  --ai-text-muted:      #87867f;
+  --ai-text-faint:      rgba(135, 134, 127, 0.55);
+
+  /* Borders */
+  --ai-border:          rgba(208, 206, 196, 0.6);
+  --ai-border-active:   rgba(201, 100, 66, 0.45);
+
+  /* Sidebar */
+  --ai-sidebar-bg:      rgba(244, 242, 234, 0.97);
+  --ai-sidebar-border:  rgba(208, 206, 196, 0.4);
+  --ai-active-bg:       rgba(201, 100, 66, 0.09);
+  --ai-active-text:     #b5593b;
+
+  /* Messages */
+  --ai-user-from:       #c96442;
+  --ai-user-to:         #a04830;
+  --ai-ai-bg:           rgba(250, 249, 245, 0.9);
+  --ai-ai-border:       rgba(208, 206, 196, 0.5);
+
+  /* Status */
+  --ai-success:         #10b981;
+  --ai-success-bg:      rgba(16, 185, 129, 0.08);
+  --ai-success-border:  rgba(16, 185, 129, 0.3);
+  --ai-success-text:    #065f46;
+  --ai-danger:          #b53333;
+  --ai-danger-bg:       rgba(181, 51, 51, 0.08);
+  --ai-danger-border:   rgba(181, 51, 51, 0.3);
+  --ai-danger-text:     #7f1d1d;
+  --ai-warning:         #f59e0b;
+  --ai-warning-bg:      rgba(245, 158, 11, 0.08);
+  --ai-warning-text:    #92400e;
+  --ai-info:            #3898ec;
+  --ai-info-bg:         rgba(56, 152, 236, 0.08);
+
+  /* Shadows */
+  --ai-shadow-sm:       0 1px 3px rgba(20, 20, 19, 0.06), 0 1px 2px rgba(20, 20, 19, 0.04);
+  --ai-shadow-md:       0 4px 12px rgba(20, 20, 19, 0.08), 0 2px 4px rgba(20, 20, 19, 0.04);
+  --ai-shadow-glow:     0 0 0 3px rgba(201, 100, 66, 0.18);
+  --ai-shadow-card:     0 2px 12px rgba(201, 100, 66, 0.06), 0 1px 3px rgba(20, 20, 19, 0.08);
+
+  /* Radius */
+  --ai-r-sm: 0.5rem;
+  --ai-r-md: 0.75rem;
+  --ai-r-lg: 1rem;
+  --ai-r-xl: 1.25rem;
+  --ai-r-2xl: 1.5rem;
+
+  /* Backdrop blur */
+  --ai-blur: blur(16px);
+  --ai-blur-sm: blur(8px);
+}
+
+/* ── Dark Mode ───────────────────────────────────────────────── */
+html.dark .ai-page {
+  /* Backgrounds — warm near-black */
+  --ai-bg:              #141413;
+  --ai-bg-secondary:    #1e1e1c;
+  --ai-bg-glass:        rgba(30, 30, 28, 0.75);
+  --ai-bg-glass-hover:  rgba(40, 39, 36, 0.88);
+  --ai-bg-input:        rgba(30, 30, 28, 0.85);
+
+  /* Primary accent — warm terracotta glow */
+  --ai-primary:         #d97757;
+  --ai-primary-hover:   #e8896a;
+  --ai-primary-glow:    rgba(217, 119, 87, 0.35);
+  --ai-primary-subtle:  rgba(217, 119, 87, 0.1);
+  --ai-primary-fg:      #141413;
+
+  /* Text */
+  --ai-text:            #faf9f5;
+  --ai-text-secondary:  #b0aea5;
+  --ai-text-muted:      #87867f;
+  --ai-text-faint:      rgba(135, 134, 127, 0.6);
+
+  /* Borders — warm dark */
+  --ai-border:          rgba(77, 76, 72, 0.55);
+  --ai-border-active:   rgba(217, 119, 87, 0.55);
+
+  /* Sidebar */
+  --ai-sidebar-bg:      rgba(10, 10, 9, 0.92);
+  --ai-sidebar-border:  rgba(61, 61, 58, 0.35);
+  --ai-active-bg:       rgba(217, 119, 87, 0.12);
+  --ai-active-text:     #e89b7a;
+
+  /* Messages */
+  --ai-user-from:       #c96442;
+  --ai-user-to:         #a04830;
+  --ai-ai-bg:           rgba(30, 30, 28, 0.85);
+  --ai-ai-border:       rgba(61, 61, 58, 0.55);
+
+  /* Status */
+  --ai-success:         #34d399;
+  --ai-success-bg:      rgba(52, 211, 153, 0.08);
+  --ai-success-border:  rgba(52, 211, 153, 0.3);
+  --ai-success-text:    #6ee7b7;
+  --ai-danger:          #f87171;
+  --ai-danger-bg:       rgba(248, 113, 113, 0.08);
+  --ai-danger-border:   rgba(248, 113, 113, 0.3);
+  --ai-danger-text:     #fca5a5;
+  --ai-warning:         #fbbf24;
+  --ai-warning-bg:      rgba(251, 191, 36, 0.08);
+  --ai-warning-text:    #fde68a;
+  --ai-info:            #60a5fa;
+  --ai-info-bg:         rgba(96, 165, 250, 0.08);
+
+  /* Shadows — warm glowing */
+  --ai-shadow-sm:       0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(61, 61, 58, 0.15);
+  --ai-shadow-md:       0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(61, 61, 58, 0.2);
+  --ai-shadow-glow:     0 0 0 3px rgba(217, 119, 87, 0.22), 0 0 20px rgba(217, 119, 87, 0.08);
+  --ai-shadow-card:     0 4px 24px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(61, 61, 58, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}

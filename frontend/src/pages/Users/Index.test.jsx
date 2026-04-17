@@ -162,7 +162,7 @@ describe('UsersPage', () => {
     setup();
     render(<UsersPage />);
     await waitFor(() => screen.getByText('alice@ex.com'));
-    const editBtns = document.querySelectorAll('button[class*="hover:text-indigo"]');
+    const editBtns = document.querySelectorAll('[data-testid="edit-user-btn"]');
     fireEvent.click(editBtns[0]);
     expect(screen.getByText('Edit User')).toBeInTheDocument();
     expect(screen.getByText('Update')).toBeInTheDocument();
@@ -173,7 +173,7 @@ describe('UsersPage', () => {
     usersAPI.update.mockResolvedValue({ data: {} });
     render(<UsersPage />);
     await waitFor(() => screen.getByText('alice@ex.com'));
-    const editBtns = document.querySelectorAll('button[class*="hover:text-indigo"]');
+    const editBtns = document.querySelectorAll('[data-testid="edit-user-btn"]');
     fireEvent.click(editBtns[0]);
     fireEvent.click(screen.getByText('Update'));
     await waitFor(() => expect(usersAPI.update).toHaveBeenCalledWith(1, expect.any(Object)));

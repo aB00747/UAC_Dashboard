@@ -4,25 +4,25 @@ import { Edit2, Trash2 } from 'lucide-react';
 export default function CategoriesTable({ categories, onEdit, onDelete }) {
   return (
     <table className="w-full text-sm">
-      <thead className="bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
+      <thead className="u-bg-subtle border-b u-border-b">
         <tr>
-          <th className="text-left py-3 px-4 font-medium text-gray-500 dark:text-gray-400">Name</th>
-          <th className="text-left py-3 px-4 font-medium text-gray-500 dark:text-gray-400">Description</th>
-          <th className="text-right py-3 px-4 font-medium text-gray-500 dark:text-gray-400">Actions</th>
+          <th className="text-left py-3 px-4 font-medium u-text-3">Name</th>
+          <th className="text-left py-3 px-4 font-medium u-text-3">Description</th>
+          <th className="text-right py-3 px-4 font-medium u-text-3">Actions</th>
         </tr>
       </thead>
       <tbody>
         {categories.map((c) => (
-          <tr key={c.id} className="border-b border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/30">
-            <td className="py-3 px-4 font-medium text-gray-900 dark:text-white">{c.name}</td>
-            <td className="py-3 px-4 text-gray-600 dark:text-gray-400">{c.description || '-'}</td>
+          <tr key={c.id} className="border-b u-border-b hover:u-bg-subtle">
+            <td className="py-3 px-4 font-medium u-text">{c.name}</td>
+            <td className="py-3 px-4 u-text-2">{c.description || '-'}</td>
             <td className="py-3 px-4 text-right">
-              <button onClick={() => onEdit('category', c)} className="p-1.5 text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 rounded"><Edit2 className="h-4 w-4" /></button>
-              <button onClick={() => onDelete('categories', c.id)} className="p-1.5 text-gray-400 hover:text-red-600 dark:hover:text-red-400 rounded"><Trash2 className="h-4 w-4" /></button>
+              <button onClick={() => onEdit('category', c)} className="p-1.5 u-text-3 hover:u-text-brand rounded"><Edit2 className="h-4 w-4" /></button>
+              <button onClick={() => onDelete('categories', c.id)} className="p-1.5 u-text-3 hover:text-red-600 rounded"><Trash2 className="h-4 w-4" /></button>
             </td>
           </tr>
         ))}
-        {categories.length === 0 && <tr><td colSpan={3} className="py-10 text-center text-gray-500 dark:text-gray-400">No categories</td></tr>}
+        {categories.length === 0 && <tr><td colSpan={3} className="py-10 text-center u-text-3">No categories</td></tr>}
       </tbody>
     </table>
   );

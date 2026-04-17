@@ -18,9 +18,9 @@ export default function UserForm({ form, setForm, editingUser, allowedRoles, sav
         <FormField label="Phone" value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} />
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label htmlFor='role' className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Role</label>
+            <label htmlFor='role' className="block text-sm font-medium u-text-2 mb-1">Role</label>
             <select
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="u-input w-full px-3 py-2 rounded-lg text-sm"
               value={form.role}
               onChange={(e) => setForm({ ...form, role: Number(e.target.value) })}
             >
@@ -30,22 +30,22 @@ export default function UserForm({ form, setForm, editingUser, allowedRoles, sav
           <div className="flex items-end">
             <label className="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" checked={form.is_active} onChange={(e) => setForm({ ...form, is_active: e.target.checked })}
-                className="h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500" />
-              <span className="text-sm text-gray-700 dark:text-gray-300">Active</span>
+                className="h-4 w-4 rounded" style={{ accentColor: 'var(--brand)' }} />
+              <span className="text-sm u-text-2">Active</span>
             </label>
           </div>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium u-text-2 mb-1">
             Password {editingUser ? '(leave blank to keep current)' : '*'}
           </label>
           <input type="password"
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="u-input w-full px-3 py-2 rounded-lg text-sm"
             value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })}
             placeholder={editingUser ? 'Leave blank to keep current' : 'Min 8 characters'} />
         </div>
       </div>
-      <div className="flex justify-end gap-3 px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+      <div className="flex justify-end gap-3 px-6 py-4 border-t" style={{ borderColor: 'var(--border)' }}>
         <Button variant="secondary" onClick={onClose}>Cancel</Button>
         <Button onClick={onSave} loading={saving}>{saving ? 'Saving...' : buttonLabel}</Button>
       </div>

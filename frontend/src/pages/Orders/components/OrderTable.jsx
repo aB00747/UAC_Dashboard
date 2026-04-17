@@ -7,40 +7,40 @@ import { orderStatusColors, paymentStatusColors } from '../../../constants/statu
 
 export default function OrderTable({ orders, loading, page, totalPages, onPageChange, onView }) {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div className="u-card overflow-hidden">
       <table className="w-full text-sm">
-        <thead className="bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
+        <thead className="u-bg-subtle border-b u-border-b">
           <tr>
-            <th className="text-left py-3 px-4 font-medium text-gray-500 dark:text-gray-400">Order #</th>
-            <th className="text-left py-3 px-4 font-medium text-gray-500 dark:text-gray-400">Customer</th>
-            <th className="text-left py-3 px-4 font-medium text-gray-500 dark:text-gray-400">Date</th>
-            <th className="text-right py-3 px-4 font-medium text-gray-500 dark:text-gray-400">Amount</th>
-            <th className="text-left py-3 px-4 font-medium text-gray-500 dark:text-gray-400">Status</th>
-            <th className="text-left py-3 px-4 font-medium text-gray-500 dark:text-gray-400">Payment</th>
-            <th className="text-right py-3 px-4 font-medium text-gray-500 dark:text-gray-400">Actions</th>
+            <th className="text-left py-3 px-4 font-medium u-text-3">Order #</th>
+            <th className="text-left py-3 px-4 font-medium u-text-3">Customer</th>
+            <th className="text-left py-3 px-4 font-medium u-text-3">Date</th>
+            <th className="text-right py-3 px-4 font-medium u-text-3">Amount</th>
+            <th className="text-left py-3 px-4 font-medium u-text-3">Status</th>
+            <th className="text-left py-3 px-4 font-medium u-text-3">Payment</th>
+            <th className="text-right py-3 px-4 font-medium u-text-3">Actions</th>
           </tr>
         </thead>
         <tbody>
           {loading && (
-            <tr><td colSpan={7} className="py-10 text-center"><div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-600" /></td></tr>
+            <tr><td colSpan={7} className="py-10 text-center"><div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2" style={{ borderBottomColor: 'var(--brand)' }} /></td></tr>
           )}
           {!loading && orders.length === 0 && (
             <tr>
-              <td colSpan={7} className="py-10 text-center text-gray-500 dark:text-gray-400">
+              <td colSpan={7} className="py-10 text-center u-text-3">
                 No orders found
               </td>
             </tr>
           )}
           {!loading && orders.length > 0 && orders.map((o) => (
-            <tr key={o.id} className="border-b border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/30">
-              <td className="py-3 px-4 font-medium text-gray-900 dark:text-white">{o.order_number}</td>
-              <td className="py-3 px-4 text-gray-600 dark:text-gray-400">{o.customer_name}</td>
-              <td className="py-3 px-4 text-gray-600 dark:text-gray-400">{formatDate(o.order_date)}</td>
-              <td className="py-3 px-4 text-right font-medium text-gray-900 dark:text-white">{formatCurrency(o.total_amount)}</td>
+            <tr key={o.id} className="border-b u-border-b hover:u-bg-subtle">
+              <td className="py-3 px-4 font-medium u-text">{o.order_number}</td>
+              <td className="py-3 px-4 u-text-2">{o.customer_name}</td>
+              <td className="py-3 px-4 u-text-2">{formatDate(o.order_date)}</td>
+              <td className="py-3 px-4 text-right font-medium u-text">{formatCurrency(o.total_amount)}</td>
               <td className="py-3 px-4"><Badge colorMap={orderStatusColors} value={o.status}>{o.status}</Badge></td>
               <td className="py-3 px-4"><Badge colorMap={paymentStatusColors} value={o.payment_status}>{o.payment_status}</Badge></td>
               <td className="py-3 px-4 text-right">
-                <button onClick={() => onView(o.id)} className="p-1.5 text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 rounded"><Eye className="h-4 w-4" /></button>
+                <button onClick={() => onView(o.id)} className="p-1.5 u-text-3 hover:u-text-brand rounded"><Eye className="h-4 w-4" /></button>
               </td>
             </tr>
           ))}

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { ShoppingCart, UserPlus, FlaskConical, Package, AlertTriangle, Check, X, Loader2 } from 'lucide-react';
+import './ActionCard.css';
 
 const ENTRY_TYPE_LABELS = { purchase: 'Adding', sale: 'Removing' };
 
@@ -19,37 +20,35 @@ export default function ActionCard({ action, onConfirm, onCancel, executing }) {
   const Icon = config.icon;
 
   return (
-    <div className="mt-3 rounded-xl border-2 border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-indigo-900/20 p-4">
-      <div className="flex items-center gap-2 mb-3">
-        <Icon className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
-        <span className="text-sm font-semibold text-indigo-700 dark:text-indigo-300">
-          {config.label}
-        </span>
+    <div className="action-card">
+      <div className="action-card__header">
+        <Icon className="action-card__header-icon" />
+        <span className="action-card__header-label">{config.label}</span>
       </div>
 
       {/* Create Order display */}
       {action.type === 'create_order' && action.display && (
-        <div className="space-y-2 mb-3 text-sm">
+        <div className="action-card__details">
           {action.display.customer && (
-            <div className="flex justify-between">
-              <span className="text-gray-500 dark:text-gray-400">Customer:</span>
-              <span className="font-medium text-gray-900 dark:text-white">{action.display.customer}</span>
+            <div className="action-card__row">
+              <span className="action-card__label">Customer:</span>
+              <span className="action-card__value">{action.display.customer}</span>
             </div>
           )}
           {action.display.items?.map((item) => (
-            <div key={`${item.name}-${item.quantity}`} className="flex justify-between">
-              <span className="text-gray-500 dark:text-gray-400">
+            <div key={`${item.name}-${item.quantity}`} className="action-card__row">
+              <span className="action-card__label">
                 {item.name} x {item.quantity} {item.unit}
               </span>
-              <span className="font-medium text-gray-900 dark:text-white">
+              <span className="action-card__value">
                 INR {(item.quantity * item.unit_price).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
               </span>
             </div>
           ))}
           {action.display.summary && (
-            <div className="flex justify-between pt-2 border-t border-indigo-200 dark:border-indigo-700">
-              <span className="font-medium text-gray-700 dark:text-gray-300">Total:</span>
-              <span className="font-bold text-gray-900 dark:text-white">{action.display.summary}</span>
+            <div className="action-card__total">
+              <span className="action-card__total-label">Total:</span>
+              <span className="action-card__total-value">{action.display.summary}</span>
             </div>
           )}
         </div>
@@ -57,53 +56,53 @@ export default function ActionCard({ action, onConfirm, onCancel, executing }) {
 
       {/* Create Customer display */}
       {action.type === 'create_customer' && action.display && (
-        <div className="space-y-1 mb-3 text-sm">
-          <div className="flex justify-between">
-            <span className="text-gray-500 dark:text-gray-400">Name:</span>
-            <span className="font-medium text-gray-900 dark:text-white">{action.display.name}</span>
+        <div className="action-card__details">
+          <div className="action-card__row">
+            <span className="action-card__label">Name:</span>
+            <span className="action-card__value">{action.display.name}</span>
           </div>
         </div>
       )}
 
       {/* Create Chemical display */}
       {action.type === 'create_chemical' && action.display && (
-        <div className="space-y-1 mb-3 text-sm">
+        <div className="action-card__details">
           {action.display.name && (
-            <div className="flex justify-between">
-              <span className="text-gray-500 dark:text-gray-400">Chemical:</span>
-              <span className="font-medium text-gray-900 dark:text-white">{action.display.name}</span>
+            <div className="action-card__row">
+              <span className="action-card__label">Chemical:</span>
+              <span className="action-card__value">{action.display.name}</span>
             </div>
           )}
           {action.display.code && (
-            <div className="flex justify-between">
-              <span className="text-gray-500 dark:text-gray-400">Code:</span>
-              <span className="font-medium text-gray-900 dark:text-white">{action.display.code}</span>
+            <div className="action-card__row">
+              <span className="action-card__label">Code:</span>
+              <span className="action-card__value">{action.display.code}</span>
             </div>
           )}
           {action.display.unit && (
-            <div className="flex justify-between">
-              <span className="text-gray-500 dark:text-gray-400">Unit:</span>
-              <span className="font-medium text-gray-900 dark:text-white">{action.display.unit}</span>
+            <div className="action-card__row">
+              <span className="action-card__label">Unit:</span>
+              <span className="action-card__value">{action.display.unit}</span>
             </div>
           )}
           {action.display.selling_price > 0 && (
-            <div className="flex justify-between">
-              <span className="text-gray-500 dark:text-gray-400">Selling Price:</span>
-              <span className="font-medium text-gray-900 dark:text-white">
+            <div className="action-card__row">
+              <span className="action-card__label">Selling Price:</span>
+              <span className="action-card__value">
                 INR {action.display.selling_price.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
               </span>
             </div>
           )}
           {action.display.gst > 0 && (
-            <div className="flex justify-between">
-              <span className="text-gray-500 dark:text-gray-400">GST:</span>
-              <span className="font-medium text-gray-900 dark:text-white">{action.display.gst}%</span>
+            <div className="action-card__row">
+              <span className="action-card__label">GST:</span>
+              <span className="action-card__value">{action.display.gst}%</span>
             </div>
           )}
           {action.display.category && (
-            <div className="flex justify-between">
-              <span className="text-gray-500 dark:text-gray-400">Category:</span>
-              <span className="font-medium text-gray-900 dark:text-white">{action.display.category}</span>
+            <div className="action-card__row">
+              <span className="action-card__label">Category:</span>
+              <span className="action-card__value">{action.display.category}</span>
             </div>
           )}
         </div>
@@ -111,33 +110,33 @@ export default function ActionCard({ action, onConfirm, onCancel, executing }) {
 
       {/* Update Inventory display */}
       {action.type === 'update_inventory' && action.display && (
-        <div className="space-y-1 mb-3 text-sm">
+        <div className="action-card__details">
           {action.display.chemical && (
-            <div className="flex justify-between">
-              <span className="text-gray-500 dark:text-gray-400">Chemical:</span>
-              <span className="font-medium text-gray-900 dark:text-white">{action.display.chemical}</span>
+            <div className="action-card__row">
+              <span className="action-card__label">Chemical:</span>
+              <span className="action-card__value">{action.display.chemical}</span>
             </div>
           )}
           {action.display.current_stock !== undefined && (
-            <div className="flex justify-between">
-              <span className="text-gray-500 dark:text-gray-400">Current Stock:</span>
-              <span className="font-medium text-gray-900 dark:text-white">
+            <div className="action-card__row">
+              <span className="action-card__label">Current Stock:</span>
+              <span className="action-card__value">
                 {action.display.current_stock} {action.display.unit || 'KG'}
               </span>
             </div>
           )}
-          <div className="flex justify-between">
-            <span className="text-gFray-500 dark:text-gray-400">
+          <div className="action-card__row">
+            <span className="action-card__label">
               {ENTRY_TYPE_LABELS[action.display.entry_type] || 'Adjusting'}:
             </span>
-            <span className="font-medium text-gray-900 dark:text-white">
+            <span className="action-card__value">
               {action.display.quantity} {action.display.unit || 'KG'}
             </span>
           </div>
           {action.display.rate > 0 && (
-            <div className="flex justify-between">
-              <span className="text-gray-500 dark:text-gray-400">Rate:</span>
-              <span className="font-medium text-gray-900 dark:text-white">
+            <div className="action-card__row">
+              <span className="action-card__label">Rate:</span>
+              <span className="action-card__value">
                 INR {action.display.rate.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
               </span>
             </div>
@@ -147,10 +146,10 @@ export default function ActionCard({ action, onConfirm, onCancel, executing }) {
 
       {/* Errors */}
       {hasErrors && (
-        <div className="mb-3 space-y-1">
+        <div className="action-card__errors">
           {action.errors.map((err) => (
-            <div key={err} className="flex items-start gap-2 text-xs text-red-600 dark:text-red-400">
-              <AlertTriangle className="h-3.5 w-3.5 mt-0.5 flex-shrink-0" />
+            <div key={err} className="action-card__error">
+              <AlertTriangle className="action-card__error-icon" />
               <span>{err}</span>
             </div>
           ))}
@@ -158,21 +157,19 @@ export default function ActionCard({ action, onConfirm, onCancel, executing }) {
       )}
 
       {/* Buttons */}
-      <div className="flex items-center gap-2">
+      <div className="action-card__actions">
         {isResolved && !hasErrors ? (
           <>
-            <button onClick={onConfirm} disabled={executing}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium transition-colors disabled:opacity-50">
-              {executing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
+            <button onClick={onConfirm} disabled={executing} className="action-card__btn action-card__btn--confirm">
+              {executing ? <Loader2 className="action-card__btn-spinner" /> : <Check className="action-card__btn-icon" />}
               {executing ? 'Processing...' : 'Confirm'}
             </button>
-            <button onClick={onCancel} disabled={executing}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-700 dark:text-gray-200 text-sm font-medium transition-colors disabled:opacity-50">
-              <X className="h-4 w-4" /> Cancel
+            <button onClick={onCancel} disabled={executing} className="action-card__btn action-card__btn--cancel">
+              <X className="action-card__btn-icon" /> Cancel
             </button>
           </>
         ) : (
-          <p className="text-xs text-gray-500 dark:text-gray-400">
+          <p className="action-card__clarify">
             Please clarify the details above so I can prepare the action.
           </p>
         )}

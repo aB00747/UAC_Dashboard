@@ -90,43 +90,43 @@ export default function SettingsPage() {
       <PageHeader title="Settings" />
 
       {isAdmin && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Branding</h2>
+        <div className="u-card p-6">
+          <h2 className="u-heading u-heading-sm u-text mb-4">Branding</h2>
           <div className="space-y-4">
             <div>
-              <label htmlFor='systemName' className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">System Name</label>
+              <label htmlFor='systemName' className="block text-sm font-medium u-text-2 mb-1">System Name</label>
               <input type="text"
-                className="w-full max-w-md px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="u-input w-full max-w-md px-3 py-2 rounded-lg text-sm"
                 value={brandingName} onChange={(e) => setBrandingName(e.target.value)} />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label htmlFor='logo' className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Logo</label>
+                <label htmlFor='logo' className="block text-sm font-medium u-text-2 mb-2">Logo</label>
                 <div className="flex items-center gap-4">
                   {logoPreview ? (
-                    <img src={logoPreview} alt="Logo" className="h-16 w-16 rounded-lg object-cover border border-gray-200 dark:border-gray-600" />
+                    <img src={logoPreview} alt="Logo" className="h-16 w-16 rounded-lg object-cover border" style={{ borderColor: 'var(--border)' }} />
                   ) : (
-                    <div className="h-16 w-16 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                      <Image className="h-6 w-6 text-gray-400" />
+                    <div className="h-16 w-16 rounded-lg u-bg-subtle flex items-center justify-center">
+                      <Image className="h-6 w-6 u-text-3" />
                     </div>
                   )}
-                  <label className="cursor-pointer flex items-center gap-1.5 px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600">
+                  <label className="cursor-pointer flex items-center gap-1.5 px-3 py-2 u-bg-subtle u-text-2 text-sm rounded-lg hover:opacity-90">
                     <Upload className="h-4 w-4" /> Upload Logo
                     <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileSelect(e, setLogoFile, setLogoPreview)} />
                   </label>
                 </div>
               </div>
               <div>
-                <label htmlFor='favicon' className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Favicon</label>
+                <label htmlFor='favicon' className="block text-sm font-medium u-text-2 mb-2">Favicon</label>
                 <div className="flex items-center gap-4">
                   {faviconPreview ? (
-                    <img src={faviconPreview} alt="Favicon" className="h-16 w-16 rounded-lg object-cover border border-gray-200 dark:border-gray-600" />
+                    <img src={faviconPreview} alt="Favicon" className="h-16 w-16 rounded-lg object-cover border" style={{ borderColor: 'var(--border)' }} />
                   ) : (
-                    <div className="h-16 w-16 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                      <Image className="h-6 w-6 text-gray-400" />
+                    <div className="h-16 w-16 rounded-lg u-bg-subtle flex items-center justify-center">
+                      <Image className="h-6 w-6 u-text-3" />
                     </div>
                   )}
-                  <label className="cursor-pointer flex items-center gap-1.5 px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600">
+                  <label className="cursor-pointer flex items-center gap-1.5 px-3 py-2 u-bg-subtle u-text-2 text-sm rounded-lg hover:opacity-90">
                     <Upload className="h-4 w-4" /> Upload Favicon
                     <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileSelect(e, setFaviconFile, setFaviconPreview)} />
                   </label>
@@ -140,29 +140,29 @@ export default function SettingsPage() {
         </div>
       )}
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Application Settings</h2>
+      <div className="u-card p-6">
+        <h2 className="u-heading u-heading-sm u-text mb-4">Application Settings</h2>
         <div className="space-y-4">
           {settings.map((s) => (
-            <div key={s.key} className="flex items-end gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+            <div key={s.key} className="flex items-end gap-4 p-4 u-bg-subtle rounded-lg">
               <div className="flex-1">
-                <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{s.key}</label>
+                <label className="block text-xs font-medium u-text-3 mb-1">{s.key}</label>
                 <input type="text"
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="u-input w-full px-3 py-2 rounded-lg text-sm"
                   value={s.value} onChange={(e) => updateSetting(s.key, 'value', e.target.value)} />
-                {s.description && <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{s.description}</p>}
+                {s.description && <p className="text-xs u-text-3 opacity-75 mt-1">{s.description}</p>}
               </div>
               <Button icon={Save} size="sm" onClick={() => handleUpdate(s)}>Save</Button>
             </div>
           ))}
           {settings.length === 0 && (
-            <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-4">No settings configured</p>
+            <p className="text-sm u-text-3 text-center py-4">No settings configured</p>
           )}
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Add New Setting</h2>
+      <div className="u-card p-6">
+        <h2 className="u-heading u-heading-sm u-text mb-4">Add New Setting</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <FormField label="Key" value={newKey} onChange={setNewKey} placeholder="e.g., company_name" />
           <FormField label="Value" value={newValue} onChange={setNewValue} placeholder="e.g., Umiya Chemical" />
@@ -171,8 +171,8 @@ export default function SettingsPage() {
         <Button icon={Plus} className="mt-4" onClick={handleAdd}>Add Setting</Button>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">System Information</h2>
+      <div className="u-card p-6">
+        <h2 className="u-heading u-heading-sm u-text mb-4">System Information</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           {[
             ['Backend', 'Django REST Framework'],
@@ -180,9 +180,9 @@ export default function SettingsPage() {
             ['Database', 'SQLite'],
             ['Authentication', 'JWT (SimpleJWT)'],
           ].map(([label, value]) => (
-            <div key={label} className="flex justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-              <span className="text-gray-500 dark:text-gray-400">{label}</span>
-              <span className="font-medium text-gray-900 dark:text-white">{value}</span>
+            <div key={label} className="flex justify-between p-3 u-bg-subtle rounded-lg">
+              <span className="u-text-3">{label}</span>
+              <span className="font-medium u-text">{value}</span>
             </div>
           ))}
         </div>

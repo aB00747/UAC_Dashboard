@@ -41,16 +41,17 @@ describe('SidebarContent', () => {
     expect(screen.getByText('Customers')).toBeInTheDocument();
   });
 
-  it('active link has indigo styling', () => {
+  it('active link has active styling', () => {
     render$({ currentPath: '/' });
     const link = screen.getByText('Dashboard').closest('a');
-    expect(link.className).toContain('text-indigo-700');
+    expect(link.className).toContain('u-sidebar-item--active');
   });
 
-  it('inactive link has gray styling', () => {
+  it('inactive link has base sidebar-item styling', () => {
     render$({ currentPath: '/' });
     const link = screen.getByText('Customers').closest('a');
-    expect(link.className).toContain('text-gray-600');
+    expect(link.className).toContain('u-sidebar-item');
+    expect(link.className).not.toContain('u-sidebar-item--active');
   });
 
   it('calls onClose when nav link clicked', () => {

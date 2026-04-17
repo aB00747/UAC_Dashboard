@@ -42,11 +42,11 @@ export default function Register() {
 
   const field = (label, name, type = 'text') => (
     <div>
-      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{label}</label>
+      <label className="block text-sm font-medium u-text-2 mb-1">{label}</label>
       <input
         type={type}
         required
-        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        className="u-input w-full px-3 py-2 text-sm rounded-lg"
         value={form[name]}
         onChange={(e) => setForm({ ...form, [name]: e.target.value })}
       />
@@ -54,8 +54,8 @@ export default function Register() {
   );
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 space-y-4">
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white text-center">Create an account</h2>
+    <form onSubmit={handleSubmit} className="u-card p-8 space-y-4" style={{ borderRadius: 'var(--r-xl)' }}>
+      <h2 className="u-heading u-heading-md u-text text-center">Create an account</h2>
       <div className="grid grid-cols-2 gap-4">
         {field('First Name', 'first_name')}
         {field('Last Name', 'last_name')}
@@ -67,13 +67,13 @@ export default function Register() {
       <button
         type="submit"
         disabled={loading}
-        className="w-full py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+        className="u-btn u-btn--primary w-full py-2.5 text-sm"
       >
         {loading ? 'Creating account...' : 'Register'}
       </button>
-      <p className="text-center text-sm text-gray-500 dark:text-gray-400">
+      <p className="text-center text-sm u-text-3">
         Already have an account?{' '}
-        <Link to="/login" className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-medium">
+        <Link to="/login" className="u-text-brand font-medium hover:underline">
           Sign in
         </Link>
       </p>

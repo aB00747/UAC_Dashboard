@@ -4,7 +4,7 @@ import Input from '../ui/Input';
 export default function FormField({ label, value, onChange, type = 'text', required = false, ...props }) {
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{label}</label>
+      <label className="block text-sm font-medium u-text mb-1">{label}</label>
       <Input
         type={type}
         required={required}

@@ -11,6 +11,8 @@ import ChatSidebar from './components/ChatSidebar';
 import ChatMessage from './components/ChatMessage';
 import ChatInput from './components/ChatInput';
 import EmptyChat from './components/EmptyChat';
+import './ai-theme.css';
+import './Index.css';
 
 const CONTEXT_TYPES = [
   { value: 'general', label: 'General', icon: Sparkles },
@@ -115,12 +117,9 @@ export default function AIAssistant() {
         const updated = [...prev, assistantMsg];
         const msgIndex = updated.length - 1;
 
-        // Check for action plan (multi-step)
         if (data.action_plan?.steps?.length) {
           setPendingPlan({ messageIndex: msgIndex, plan: data.action_plan });
-        }
-        // Check for single action
-        else if (data.action?.type) {
+        } else if (data.action?.type) {
           setPendingAction({ messageIndex: msgIndex, action: data.action });
         }
 
@@ -142,7 +141,7 @@ export default function AIAssistant() {
     }
   }
 
-  // ── Single action execution (backward compatible) ──────────────
+  // ── Single action execution ──────────────────────
 
   async function handleConfirmAction() {
     if (!pendingAction) return;
@@ -170,7 +169,7 @@ export default function AIAssistant() {
     toast('Action cancelled', { icon: 'x' });
   }
 
-  // ── Multi-step plan execution ──────────────────────────────────
+  // ── Multi-step plan execution ────────────────────
 
   const handleExecutePlan = useCallback(async () => {
     if (!pendingPlan) return;
@@ -185,13 +184,11 @@ export default function AIAssistant() {
       const step = steps[i];
       setCurrentPlanStep(i);
 
-      // For high-risk steps, wait for user approval
       if (!step.auto_execute && step.risk_level === 'high') {
         statuses[i] = 'waiting';
         setPlanStepStatuses({ ...statuses });
         setWaitingForApproval(i);
 
-        // Wait for user to approve this step
         const approved = await new Promise((resolve) => {
           approvalResolverRef.current = resolve;
         });
@@ -208,9 +205,7 @@ export default function AIAssistant() {
       setPlanStepStatuses({ ...statuses });
 
       try {
-        // Substitute IDs from previous steps
         const params = substituteStepReferences(step, stepResults, steps);
-
         const result = await executeAction(step.type, params);
         stepResults[step.step_id] = result;
 
@@ -228,7 +223,7 @@ export default function AIAssistant() {
         const detail = err.response?.data?.detail || err.response?.data || 'Step failed';
         const errorMsg = typeof detail === 'object' ? JSON.stringify(detail) : String(detail);
         toast.error(`Step ${i + 1} failed: ${errorMsg}`);
-        break; // Stop on failure
+        break;
       }
     }
 
@@ -268,7 +263,7 @@ export default function AIAssistant() {
     toast('Plan cancelled', { icon: 'x' });
   }
 
-  // ── Shared action executor ─────────────────────────────────────
+  // ── Shared action executor ───────────────────────
 
   async function executeAction(type, params) {
     if (type === 'create_order') {
@@ -310,11 +305,6 @@ export default function AIAssistant() {
     return null;
   }
 
-  /**
-   * Substitute references from previous step results into current step params.
-   * When a create_order step depends on a create_customer step, we replace
-   * the customer_name lookup with the actual customer ID from the previous step.
-   */
   function substituteStepReferences(step, stepResults, allSteps) {
     const params = { ...step.params };
 
@@ -326,13 +316,11 @@ export default function AIAssistant() {
         const depStep = allSteps.find(s => s.step_id === depId);
         if (!depStep) continue;
 
-        // If dependency was a create_customer, use its ID
         if (depStep.type === 'create_customer' && depResult.id) {
           params.customer = depResult.id;
           delete params.customer_name;
         }
 
-        // If dependency was a create_chemical, update item references
         if (depStep.type === 'create_chemical' && depResult.id) {
           const chemName = depStep.params?.chemical_name?.toLowerCase();
           const items = params.items || [];
@@ -345,12 +333,10 @@ export default function AIAssistant() {
         }
       }
 
-      // For items that still have chemical_name but no ID, try to resolve them
       if (params.items) {
         params.items = params.items.map(item => {
           const { chemical_name, ...rest } = item;
           if (chemical_name && !rest.chemical) {
-            // Keep chemical_name - the backend should handle it or we let it fail
             return item;
           }
           return rest;
@@ -361,7 +347,7 @@ export default function AIAssistant() {
     return params;
   }
 
-  // ── UI handlers ────────────────────────────────────────────────
+  // ── UI handlers ──────────────────────────────────
 
   function handleNewConversation() {
     setActiveConversation(null);
@@ -386,9 +372,9 @@ export default function AIAssistant() {
   const activeTitle = conversations.find((c) => c.conversation_id === activeConversation)?.title || 'New Conversation';
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] overflow-hidden">
+    <div className="ai-page">
       {/* Sidebar */}
-      <div className={`${sidebarOpen ? 'w-72' : 'w-0'} transition-all duration-200 flex-shrink-0 overflow-hidden`}>
+      <div className={`ai-page__sidebar ${sidebarOpen ? 'ai-page__sidebar--open' : 'ai-page__sidebar--closed'}`}>
         <ChatSidebar
           conversations={conversations}
           activeConversation={activeConversation}
@@ -399,38 +385,37 @@ export default function AIAssistant() {
       </div>
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="ai-page__main">
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
-          <div className="flex items-center gap-3">
-            <button onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500">
-              <ChevronDown className={`h-5 w-5 transition-transform ${sidebarOpen ? 'rotate-90' : '-rotate-90'}`} />
+        <div className="ai-header">
+          <div className="ai-header__left">
+            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="ai-header__toggle">
+              <ChevronDown className={`ai-header__toggle-icon ${sidebarOpen ? 'ai-header__toggle-icon--open' : 'ai-header__toggle-icon--closed'}`} />
             </button>
-            <div className="flex items-center gap-2">
-              <Bot className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-              <h1 className="text-lg font-semibold text-gray-900 dark:text-white">{activeTitle}</h1>
+            <div className="ai-header__title-group">
+              <Bot className="ai-header__bot-icon" />
+              <h1 className="ai-header__title">{activeTitle}</h1>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+          <div className="ai-header__right">
+            <div className="ai-context-switcher">
               {CONTEXT_TYPES.map((ct) => (
-                <button key={ct.value} onClick={() => setContextType(ct.value)} title={ct.label}
-                  className={`p-1.5 rounded-md transition-colors ${
-                    contextType === ct.value
-                      ? 'bg-white dark:bg-gray-600 text-indigo-600 dark:text-indigo-400 shadow-sm'
-                      : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
-                  }`}>
-                  <ct.icon className="h-4 w-4" />
+                <button
+                  key={ct.value}
+                  onClick={() => setContextType(ct.value)}
+                  title={ct.label}
+                  className={`ai-context-switcher__btn ${contextType === ct.value ? 'ai-context-switcher__btn--active' : ''}`}
+                >
+                  <ct.icon className="ai-context-switcher__btn-icon" />
                 </button>
               ))}
             </div>
             {isOnline !== null && (
-              <div className={`flex items-center gap-1.5 text-xs font-medium ${isOnline ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'}`}>
+              <div className={`ai-status ${isOnline ? 'ai-status--online' : 'ai-status--offline'}`}>
                 {isOnline ? (
-                  <><span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" /> Online</>
+                  <><span className="ai-status__dot" /> Online</>
                 ) : (
-                  <><WifiOff className="h-3.5 w-3.5" /> Offline</>
+                  <><WifiOff className="ai-status__icon" /> Offline</>
                 )}
               </div>
             )}
@@ -438,35 +423,33 @@ export default function AIAssistant() {
         </div>
 
         {isOnline === false && (
-          <div className="px-4 py-2 bg-red-50 dark:bg-red-900/20 border-b border-red-100 dark:border-red-800/30 text-red-700 dark:text-red-400 text-sm text-center">
+          <div className="ai-offline-banner">
             AI service is offline. Please ensure Ollama and the AI service are running.
           </div>
         )}
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-4 py-4">
+        <div className="ai-messages">
           {loading && (
-            <div className="flex justify-center py-20">
-              <Loader2 className="h-6 w-6 animate-spin text-indigo-600" />
+            <div className="ai-messages__loader">
+              <Loader2 className="ai-messages__loader-icon" />
             </div>
           )}
           {!loading && messages.length === 0 && (
             <EmptyChat onSend={handleSend} disabled={sending || isOnline === false} />
           )}
           {!loading && messages.length > 0 && (
-            <div className="space-y-4 max-w-3xl mx-auto">
+            <div className="ai-messages__list">
               {messages.map((msg, i) => (
                 <ChatMessage
                   key={`${msg.id || i}-${msg.timestamp || i}`}
                   msg={msg}
                   index={i}
-                  // Single action props
                   pendingAction={pendingAction}
                   actionResult={actionResults[i]}
                   onConfirm={handleConfirmAction}
                   onCancel={handleCancelAction}
                   executingAction={executingAction}
-                  // Multi-step plan props
                   pendingPlan={pendingPlan}
                   planResult={planResults[i]}
                   onExecutePlan={handleExecutePlan}
@@ -479,12 +462,12 @@ export default function AIAssistant() {
                 />
               ))}
               {sending && (
-                <div className="flex justify-start">
-                  <div className="bg-gray-100 dark:bg-gray-700 rounded-2xl px-4 py-3">
-                    <div className="flex items-center gap-2">
-                      <Loader2 className="h-4 w-4 animate-spin text-indigo-600 dark:text-indigo-400" />
-                      <span className="text-sm text-gray-500 dark:text-gray-400">Thinking...</span>
+                <div className="ai-thinking">
+                  <div className="ai-thinking__bubble">
+                    <div className="ai-thinking__dots">
+                      <span /><span /><span />
                     </div>
+                    <span className="ai-thinking__text">Thinking...</span>
                   </div>
                 </div>
               )}

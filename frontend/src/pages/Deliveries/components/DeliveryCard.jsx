@@ -6,11 +6,11 @@ import { deliveryStatusColors } from '../../../constants/statusColors';
 
 export default function DeliveryCard({ delivery, onEdit }) {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 space-y-3">
+    <div className="u-card p-4 space-y-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Truck className="h-5 w-5 text-indigo-500 dark:text-indigo-400" />
-          <span className="font-semibold text-gray-900 dark:text-white">
+          <Truck className="h-5 w-5 u-text-brand" />
+          <span className="font-semibold u-text">
             {delivery.order_number || `Order #${delivery.order}`}
           </span>
         </div>
@@ -19,9 +19,9 @@ export default function DeliveryCard({ delivery, onEdit }) {
         </Badge>
       </div>
 
-      <div className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+      <div className="text-sm u-text-2 space-y-1">
         {delivery.tracking_number && (
-          <p>Tracking: <span className="font-medium text-gray-900 dark:text-white">{delivery.tracking_number}</span></p>
+          <p>Tracking: <span className="font-medium u-text">{delivery.tracking_number}</span></p>
         )}
         {delivery.driver_name && (
           <p>Driver: {delivery.driver_name} {delivery.driver_phone && `(${delivery.driver_phone})`}</p>
@@ -32,7 +32,7 @@ export default function DeliveryCard({ delivery, onEdit }) {
 
       <button
         onClick={onEdit}
-        className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 flex items-center gap-1"
+        className="text-sm u-text-brand hover:opacity-80 flex items-center gap-1"
       >
         <Edit2 className="h-3.5 w-3.5" /> Edit
       </button>

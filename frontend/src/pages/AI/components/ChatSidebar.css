@@ -1,0 +1,197 @@
+/* ═══════════════════════════════════════════════════════════════
+   Chat Sidebar — Conversation History  (Glass / Cyber)
+   ═══════════════════════════════════════════════════════════════ */
+
+.chat-sidebar {
+  width: 280px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--ai-sidebar-bg);
+  backdrop-filter: var(--ai-blur);
+  -webkit-backdrop-filter: var(--ai-blur);
+  border-right: 1px solid var(--ai-sidebar-border);
+}
+
+html.dark .chat-sidebar {
+  /* Extra tint in dark mode */
+  background: rgba(8, 12, 24, 0.92);
+}
+
+/* ── Header / New Chat ───────────────────────────────────────── */
+
+.chat-sidebar__header {
+  padding: 1rem 0.875rem;
+  flex-shrink: 0;
+}
+
+.chat-sidebar__new-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.625rem 1rem;
+  border: 1px solid var(--ai-primary);
+  border-radius: var(--ai-r-md);
+  background: var(--ai-primary-subtle);
+  color: var(--ai-primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.01em;
+}
+
+.chat-sidebar__new-btn:hover {
+  background: var(--ai-primary);
+  color: var(--ai-primary-fg);
+  box-shadow: 0 4px 16px var(--ai-primary-glow);
+  transform: translateY(-1px);
+}
+
+html.dark .chat-sidebar__new-btn:hover {
+  box-shadow: 0 4px 20px var(--ai-primary-glow), 0 0 0 1px rgba(129, 140, 248, 0.3);
+}
+
+.chat-sidebar__new-btn-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+/* ── Section Label ───────────────────────────────────────────── */
+
+.chat-sidebar__label {
+  padding: 0.5rem 1.25rem 0.375rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ai-text-faint);
+}
+
+/* ── Conversation List ───────────────────────────────────────── */
+
+.chat-sidebar__list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 0.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ai-border) transparent;
+}
+
+.chat-sidebar__list::-webkit-scrollbar       { width: 3px; }
+.chat-sidebar__list::-webkit-scrollbar-track { background: transparent; }
+.chat-sidebar__list::-webkit-scrollbar-thumb { background: var(--ai-border); border-radius: 9999px; }
+
+/* ── Conversation Item ───────────────────────────────────────── */
+
+.chat-sidebar__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.625rem;
+  border-radius: var(--ai-r-sm);
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+  cursor: default;
+}
+
+.chat-sidebar__item:hover {
+  background: var(--ai-primary-subtle);
+  border-color: var(--ai-border);
+}
+
+.chat-sidebar__item--active {
+  background: var(--ai-active-bg);
+  border-color: var(--ai-border-active);
+}
+
+html.dark .chat-sidebar__item--active {
+  box-shadow: inset 2px 0 0 var(--ai-primary), 0 0 12px rgba(217, 119, 87, 0.08);
+}
+
+/* Conversation select button */
+.chat-sidebar__item-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  flex: 1;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.chat-sidebar__item-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+  flex-shrink: 0;
+  color: var(--ai-text-muted);
+  transition: color 0.15s;
+}
+
+.chat-sidebar__item--active .chat-sidebar__item-icon {
+  color: var(--ai-active-text);
+}
+
+.chat-sidebar__item-title {
+  font-size: 0.8125rem;
+  color: var(--ai-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color 0.15s;
+}
+
+.chat-sidebar__item--active .chat-sidebar__item-title {
+  color: var(--ai-active-text);
+  font-weight: 500;
+}
+
+/* ── Delete Button ───────────────────────────────────────────── */
+
+.chat-sidebar__delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 0.25rem;
+  background: none;
+  color: var(--ai-text-muted);
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.15s ease;
+}
+
+.chat-sidebar__item:hover .chat-sidebar__delete-btn {
+  opacity: 1;
+}
+
+.chat-sidebar__delete-btn:hover {
+  color: var(--ai-danger);
+  background: var(--ai-danger-bg);
+}
+
+.chat-sidebar__delete-icon {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+/* ── Empty State ─────────────────────────────────────────────── */
+
+.chat-sidebar__empty {
+  padding: 2.5rem 1rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--ai-text-faint);
+  line-height: 1.5;
+}
