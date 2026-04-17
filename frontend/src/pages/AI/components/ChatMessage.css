@@ -30,7 +30,7 @@
 }
 
 html.dark .chat-msg__bubble--user {
-  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35), 0 0 0 1px rgba(129, 140, 248, 0.2);
+  box-shadow: 0 4px 20px rgba(201, 100, 66, 0.35), 0 0 0 1px rgba(217, 119, 87, 0.2);
 }
 
 /* AI bubble — glass */
@@ -45,8 +45,8 @@ html.dark .chat-msg__bubble--user {
 }
 
 html.dark .chat-msg__bubble--assistant {
-  background: rgba(14, 22, 42, 0.82);
-  border-color: rgba(56, 78, 130, 0.45);
+  background: rgba(30, 30, 28, 0.85);
+  border-color: rgba(61, 61, 58, 0.5);
 }
 
 /* ── AI Badge ────────────────────────────────────────────────── */
@@ -61,7 +61,7 @@ html.dark .chat-msg__bubble--assistant {
 }
 
 html.dark .chat-msg__ai-badge {
-  border-bottom-color: rgba(56, 78, 130, 0.3);
+  border-bottom-color: rgba(61, 61, 58, 0.4);
 }
 
 .chat-msg__ai-icon {

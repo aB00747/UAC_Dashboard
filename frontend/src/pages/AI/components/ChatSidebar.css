@@ -111,7 +111,7 @@ html.dark .chat-sidebar__new-btn:hover {
 }
 
 html.dark .chat-sidebar__item--active {
-  box-shadow: inset 2px 0 0 var(--ai-primary), 0 0 12px rgba(129, 140, 248, 0.06);
+  box-shadow: inset 2px 0 0 var(--ai-primary), 0 0 12px rgba(217, 119, 87, 0.08);
 }
 
 /* Conversation select button */

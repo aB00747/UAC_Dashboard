@@ -38,8 +38,8 @@
 }
 
 html.dark .empty-chat__icon-wrap {
-  background: rgba(99, 102, 241, 0.12);
-  box-shadow: 0 0 40px rgba(129, 140, 248, 0.2), 0 0 80px rgba(129, 140, 248, 0.06), var(--ai-shadow-card);
+  background: rgba(201, 100, 66, 0.12);
+  box-shadow: 0 0 40px rgba(217, 119, 87, 0.2), 0 0 80px rgba(217, 119, 87, 0.06), var(--ai-shadow-card);
   animation: ai-icon-pulse 3s ease-in-out infinite;
 }
 
@@ -62,7 +62,7 @@ html.dark .empty-chat__icon-wrap {
 }
 
 html.dark .empty-chat__title {
-  background: linear-gradient(135deg, #e2e8f0 30%, #a5b4fc 100%);
+  background: linear-gradient(135deg, #faf9f5 30%, #d97757 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -116,7 +116,7 @@ html.dark .empty-chat__title {
 }
 
 html.dark .empty-chat__card:hover:not(:disabled) {
-  box-shadow: var(--ai-shadow-card), 0 0 16px rgba(129, 140, 248, 0.08);
+  box-shadow: var(--ai-shadow-card), 0 0 16px rgba(217, 119, 87, 0.1);
 }
 
 .empty-chat__card:disabled {
@@ -144,8 +144,8 @@ html.dark .empty-chat__card:hover:not(:disabled) {
 }
 
 @keyframes ai-icon-pulse {
-  0%, 100% { box-shadow: 0 0 40px rgba(129, 140, 248, 0.2), 0 0 80px rgba(129, 140, 248, 0.06), var(--ai-shadow-card); }
-  50%       { box-shadow: 0 0 60px rgba(129, 140, 248, 0.3), 0 0 100px rgba(129, 140, 248, 0.1), var(--ai-shadow-card); }
+  0%, 100% { box-shadow: 0 0 40px rgba(217, 119, 87, 0.2), 0 0 80px rgba(217, 119, 87, 0.06), var(--ai-shadow-card); }
+  50%       { box-shadow: 0 0 60px rgba(217, 119, 87, 0.3), 0 0 100px rgba(217, 119, 87, 0.1), var(--ai-shadow-card); }
 }
 
 @keyframes ai-fade-in {
