@@ -141,7 +141,7 @@ export default function Customers() {
         <SearchInput placeholder="Search customers..." value={search} onChange={(e) => { setSearch(e.target.value); setFilters({ ...filters, page: 1 }); }} />
         <Select value={filters.is_active} onChange={(e) => setFilters({ ...filters, is_active: e.target.value, page: 1 })} options={[{ value: 'true', label: 'Active' }, { value: 'false', label: 'Inactive' }]} placeholder="All Status" className="w-auto" />
         <Select value={filters.customer_type} onChange={(e) => setFilters({ ...filters, customer_type: e.target.value, page: 1 })} options={customerTypes.map((ct) => ({ value: ct.id, label: ct.name }))} placeholder="All Types" className="w-auto" />
-        <button onClick={loadCustomers} className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+        <button onClick={loadCustomers} className="p-2 u-text-3 hover:u-text hover:u-bg-subtle rounded-lg">
           <RefreshCw className="h-4 w-4" />
         </button>
       </FilterBar>
@@ -157,11 +157,12 @@ export default function Customers() {
             {dialogMode === 'create' ? 'Add Customer' : 'Edit Customer'}
           </Modal.Header>
           {dialogMode === 'create' && (
-            <div className="flex border-b border-gray-200 dark:border-gray-700 px-5">
+            <div className="flex border-b px-5" style={{ borderColor: 'var(--border)' }}>
               {['manual', 'excel'].map((tab) => (
                 <button key={tab} onClick={() => setActiveTab(tab)}
                   className={classNames('px-4 py-3 text-sm font-medium border-b-2 -mb-px capitalize',
-                    activeTab === tab ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400 dark:border-indigo-400' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300')}>
+                    activeTab === tab ? 'u-text-brand' : 'border-transparent u-text-3 hover:u-text-2')}
+                  style={activeTab === tab ? { borderBottomColor: 'var(--brand)' } : {}}>
                   {tab === 'excel' ? 'Excel Import' : 'Manual Entry'}
                 </button>
               ))}

@@ -57,21 +57,21 @@ export default function Pricing() {
     <div className="space-y-4">
       <PageHeader title="Pricing Management" />
 
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+      <div className="u-card p-4">
         <SearchInput placeholder="Search chemicals..." value={search} onChange={(e) => setSearch(e.target.value)} className="max-w-md" />
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div className="u-card overflow-hidden">
         <table className="w-full text-sm">
-          <thead className="bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
+          <thead className="u-bg-subtle border-b u-border-b">
             <tr>
-              <th className="text-left py-3 px-4 font-medium text-gray-500 dark:text-gray-400">Chemical</th>
-              <th className="text-left py-3 px-4 font-medium text-gray-500 dark:text-gray-400">Code</th>
-              <th className="text-right py-3 px-4 font-medium text-gray-500 dark:text-gray-400">Purchase Price</th>
-              <th className="text-right py-3 px-4 font-medium text-gray-500 dark:text-gray-400">Selling Price</th>
-              <th className="text-right py-3 px-4 font-medium text-gray-500 dark:text-gray-400">GST %</th>
-              <th className="text-right py-3 px-4 font-medium text-gray-500 dark:text-gray-400">Margin</th>
-              <th className="text-right py-3 px-4 font-medium text-gray-500 dark:text-gray-400">Action</th>
+              <th className="text-left py-3 px-4 font-medium u-text-3">Chemical</th>
+              <th className="text-left py-3 px-4 font-medium u-text-3">Code</th>
+              <th className="text-right py-3 px-4 font-medium u-text-3">Purchase Price</th>
+              <th className="text-right py-3 px-4 font-medium u-text-3">Selling Price</th>
+              <th className="text-right py-3 px-4 font-medium u-text-3">GST %</th>
+              <th className="text-right py-3 px-4 font-medium u-text-3">Margin</th>
+              <th className="text-right py-3 px-4 font-medium u-text-3">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -81,31 +81,31 @@ export default function Pricing() {
               const sp = Number.parseFloat(e.selling_price ?? c.selling_price) || 0;
               const margin = pp > 0 ? (((sp - pp) / pp) * 100).toFixed(1) : '-';
               const isEdited = !!edited[c.id];
-              const marginColor = (margin) => {
-                if (margin > 0) return 'text-green-500';
-                if (margin < 0) return 'text-red-500';
-                return 'text-gray-500';
-              }
+              const marginColor = (m) => {
+                if (m > 0) return 'text-green-500';
+                if (m < 0) return 'text-red-500';
+                return 'u-text-3';
+              };
 
               return (
-                <tr key={c.id} className="border-b border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/30">
-                  <td className="py-3 px-4 font-medium text-gray-900 dark:text-white">{c.chemical_name}</td>
-                  <td className="py-3 px-4 text-gray-600 dark:text-gray-400">{c.chemical_code}</td>
+                <tr key={c.id} className="border-b u-border-b hover:u-bg-subtle">
+                  <td className="py-3 px-4 font-medium u-text">{c.chemical_name}</td>
+                  <td className="py-3 px-4 u-text-2">{c.chemical_code}</td>
                   <td className="py-3 px-4 text-right">
                     <input type="number" step="any"
-                      className="w-28 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm text-right bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      className="u-input w-28 px-2 py-1 rounded text-sm text-right"
                       value={e.purchase_price ?? c.purchase_price}
                       onChange={(ev) => handleChange(c.id, 'purchase_price', ev.target.value)} />
                   </td>
                   <td className="py-3 px-4 text-right">
                     <input type="number" step="any"
-                      className="w-28 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm text-right bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      className="u-input w-28 px-2 py-1 rounded text-sm text-right"
                       value={e.selling_price ?? c.selling_price}
                       onChange={(ev) => handleChange(c.id, 'selling_price', ev.target.value)} />
                   </td>
                   <td className="py-3 px-4 text-right">
                     <input type="number" step="any"
-                      className="w-20 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm text-right bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      className="u-input w-20 px-2 py-1 rounded text-sm text-right"
                       value={e.gst_percentage ?? c.gst_percentage}
                       onChange={(ev) => handleChange(c.id, 'gst_percentage', ev.target.value)} />
                   </td>
@@ -116,7 +116,7 @@ export default function Pricing() {
                   </td>
                   <td className="py-3 px-4 text-right">
                     {isEdited && (
-                      <button onClick={() => handleSave(c)} className="p-1.5 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded">
+                      <button onClick={() => handleSave(c)} className="p-1.5 u-text-brand hover:u-bg-brand-light rounded">
                         <Save className="h-4 w-4" />
                       </button>
                     )}
@@ -125,7 +125,7 @@ export default function Pricing() {
               );
             })}
             {filtered.length === 0 && (
-              <tr><td colSpan={7} className="py-10 text-center text-gray-500 dark:text-gray-400">No chemicals found</td></tr>
+              <tr><td colSpan={7} className="py-10 text-center u-text-3">No chemicals found</td></tr>
             )}
           </tbody>
         </table>

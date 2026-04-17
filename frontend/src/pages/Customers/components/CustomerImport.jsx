@@ -17,7 +17,7 @@ export default function CustomerImport({ importFile, setImportFile, saving, onIm
       </div>
       <button
         onClick={onTemplateDownload}
-        className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 underline"
+        className="text-sm u-text-brand hover:opacity-80 underline"
       >
         Download template file
       </button>

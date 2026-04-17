@@ -25,7 +25,7 @@ const priorityIcons = {
 const priorityIconColors = {
   critical: 'text-red-500 dark:text-red-400',
   warning: 'text-yellow-500 dark:text-yellow-400',
-  info: 'text-indigo-500 dark:text-indigo-400',
+  info: 'u-text-brand',
 };
 
 export default function AIInsightsWidget() {
@@ -55,7 +55,7 @@ export default function AIInsightsWidget() {
       <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-indigo-500" />
+            <Sparkles className="h-5 w-5 u-text-brand" />
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">AI Insights</h2>
           </div>
           <button onClick={fetchInsights} className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400">
@@ -73,7 +73,7 @@ export default function AIInsightsWidget() {
     <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-indigo-500" />
+          <Sparkles className="h-5 w-5 u-text-brand" />
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">AI Insights</h2>
         </div>
         <button

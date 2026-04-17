@@ -7,6 +7,7 @@ const builtInVariants = {
   yellow: 'u-badge--yellow',
   blue:   'u-badge--blue',
   indigo: 'u-badge--brand',
+  brand:  'u-badge--brand',
   purple: 'u-badge--purple',
   gray:   'u-badge--gray',
 };
@@ -28,7 +29,7 @@ export default function Badge({ children, variant = 'gray', colorMap, value, cla
 
 Badge.propTypes = {
   children: PropTypes.node,
-  variant: PropTypes.oneOf(['green', 'red', 'yellow', 'blue', 'indigo', 'purple', 'gray']),
+  variant: PropTypes.oneOf(['green', 'red', 'yellow', 'blue', 'indigo', 'brand', 'purple', 'gray']),
   colorMap: PropTypes.object,
   value: PropTypes.any,
   className: PropTypes.string,

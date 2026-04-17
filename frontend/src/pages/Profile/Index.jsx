@@ -46,18 +46,18 @@ export default function Profile() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Profile</h1>
+      <h1 className="u-heading u-heading-lg u-text">Profile</h1>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+      <div className="u-card p-6">
         <div className="flex items-center gap-4 mb-6">
-          <div className="h-16 w-16 bg-indigo-100 dark:bg-indigo-900/50 rounded-full flex items-center justify-center">
-            <User className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
+          <div className="h-16 w-16 u-bg-brand-light rounded-full flex items-center justify-center">
+            <User className="h-8 w-8 u-text-brand" />
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <h2 className="u-heading u-heading-sm u-text">
               {user?.first_name} {user?.last_name}
             </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400">@{user?.username} - {user?.role?.label}</p>
+            <p className="text-sm u-text-3">@{user?.username} - {user?.role?.label}</p>
           </div>
         </div>
 
@@ -69,10 +69,14 @@ export default function Profile() {
           <FormField label="Email" type="email" value={form.email} onChange={(v) => setForm({ ...form, email: v })} />
           <FormField label="Phone" value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} />
           <div>
-            <label htmlFor='address' className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Address</label>
-            <textarea rows={3}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} />
+            <label htmlFor="address" className="block text-sm font-medium u-text-2 mb-1">Address</label>
+            <textarea
+              id="address"
+              rows={3}
+              className="u-input w-full px-3 py-2 text-sm rounded-lg"
+              value={form.address}
+              onChange={(e) => setForm({ ...form, address: e.target.value })}
+            />
           </div>
           <div className="flex justify-end">
             <Button type="submit" icon={Save} loading={saving}>
@@ -82,9 +86,9 @@ export default function Profile() {
         </form>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-red-200 dark:border-red-800/50 p-6">
-        <h2 className="text-lg font-semibold text-red-700 dark:text-red-400 mb-2">Danger Zone</h2>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+      <div className="u-card p-6" style={{ borderColor: 'var(--red-border)' }}>
+        <h2 className="u-heading u-heading-sm mb-2" style={{ color: 'var(--red-text)' }}>Danger Zone</h2>
+        <p className="text-sm u-text-3 mb-4">
           Once you delete your account, there is no going back. Please be certain.
         </p>
         <Button variant="danger" icon={Trash2} onClick={handleDelete} loading={deleting}>

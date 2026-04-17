@@ -29,8 +29,8 @@ export default function OrderForm({ form, setForm, customers, chemicals, saving,
     <form onSubmit={onSave} className="p-5 space-y-4">
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label htmlFor='customer' className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Customer *</label>
-          <select required className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white" value={form.customer} onChange={(e) => setForm({ ...form, customer: e.target.value })}>
+          <label htmlFor='customer' className="block text-sm font-medium u-text-2 mb-1">Customer *</label>
+          <select required className="u-input w-full px-3 py-2 rounded-lg text-sm" value={form.customer} onChange={(e) => setForm({ ...form, customer: e.target.value })}>
             <option value="">Select Customer</option>
             {customers.map((c) => <option key={c.id} value={c.id}>{c.full_name} {c.company_name ? `(${c.company_name})` : ''}</option>)}
           </select>
@@ -41,19 +41,19 @@ export default function OrderForm({ form, setForm, customers, chemicals, saving,
 
       <div>
         <div className="flex items-center justify-between mb-2">
-          <h4 className="text-sm font-semibold text-gray-900 dark:text-white">Order Items</h4>
-          <button type="button" onClick={addItem} className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300">+ Add Item</button>
+          <h4 className="text-sm font-semibold u-text">Order Items</h4>
+          <button type="button" onClick={addItem} className="text-sm u-text-brand hover:opacity-80">+ Add Item</button>
         </div>
         <div className="space-y-2">
           {form.items.map((item, i) => (
-            <div key={i} className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-              <select className="flex-1 px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white" value={item.chemical} onChange={(e) => updateItem(i, 'chemical', e.target.value)}>
+            <div key={i} className="flex items-center gap-3 p-3 u-bg-subtle rounded-lg">
+              <select className="u-input flex-1 px-2 py-1.5 rounded text-sm" value={item.chemical} onChange={(e) => updateItem(i, 'chemical', e.target.value)}>
                 <option value="">Select Chemical</option>
                 {chemicals.map((c) => <option key={c.id} value={c.id}>{c.chemical_name} ({formatCurrency(c.selling_price)})</option>)}
               </select>
-              <input type="number" min="0.01" step="any" placeholder="Qty" className="w-20 px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white" value={item.quantity} onChange={(e) => updateItem(i, 'quantity', e.target.value)} />
-              <input type="number" min="0" step="any" placeholder="Price" className="w-28 px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white" value={item.unit_price} onChange={(e) => updateItem(i, 'unit_price', e.target.value)} />
-              <span className="w-28 text-sm font-medium text-right text-gray-900 dark:text-white">{formatCurrency((Number.parseFloat(item.quantity) || 0) * (Number.parseFloat(item.unit_price) || 0))}</span>
+              <input type="number" min="0.01" step="any" placeholder="Qty" className="u-input w-20 px-2 py-1.5 rounded text-sm" value={item.quantity} onChange={(e) => updateItem(i, 'quantity', e.target.value)} />
+              <input type="number" min="0" step="any" placeholder="Price" className="u-input w-28 px-2 py-1.5 rounded text-sm" value={item.unit_price} onChange={(e) => updateItem(i, 'unit_price', e.target.value)} />
+              <span className="w-28 text-sm font-medium text-right u-text">{formatCurrency((Number.parseFloat(item.quantity) || 0) * (Number.parseFloat(item.unit_price) || 0))}</span>
               {form.items.length > 1 && (
                 <button type="button" onClick={() => removeItem(i)} className="p-1 text-red-400 hover:text-red-600"><Trash2 className="h-4 w-4" /></button>
               )}
@@ -61,14 +61,14 @@ export default function OrderForm({ form, setForm, customers, chemicals, saving,
           ))}
         </div>
         <div className="text-right mt-2">
-          <span className="text-sm text-gray-500 dark:text-gray-400">Subtotal: </span>
-          <span className="text-lg font-bold text-gray-900 dark:text-white">{formatCurrency(subtotal)}</span>
+          <span className="text-sm u-text-3">Subtotal: </span>
+          <span className="text-lg font-bold u-text">{formatCurrency(subtotal)}</span>
         </div>
       </div>
 
       <div>
-        <label htmlFor='notes' className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notes</label>
-        <textarea className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white" rows={2} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} />
+        <label htmlFor='notes' className="block text-sm font-medium u-text-2 mb-1">Notes</label>
+        <textarea className="u-input w-full px-3 py-2 rounded-lg text-sm" rows={2} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} />
       </div>
 
       <div className="flex justify-end gap-3 pt-2">
