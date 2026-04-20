@@ -19,6 +19,8 @@ const SettingsPage = lazy(() => import('./pages/Settings/Index'));
 const UsersPage = lazy(() => import('./pages/Users/Index'));
 const Profile = lazy(() => import('./pages/Profile/Index'));
 const AIAssistant = lazy(() => import('./pages/AI/Index'));
+const InvoiceHistory = lazy(() => import('./pages/Invoices/Index'));
+const InvoiceBuilder = lazy(() => import('./pages/Invoices/Builder'));
 
 export default function App() {
   return (
@@ -42,6 +44,9 @@ export default function App() {
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/users" element={<UsersPage />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/invoices" element={<InvoiceHistory />} />
+          <Route path="/invoices/new" element={<InvoiceBuilder />} />
+          <Route path="/invoices/:id/edit" element={<InvoiceBuilder />} />
         </Route>
       </Routes>
     </Suspense>

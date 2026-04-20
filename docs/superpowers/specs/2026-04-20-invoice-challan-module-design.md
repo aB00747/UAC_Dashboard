@@ -1,7 +1,7 @@
 # Invoice & Challan Generation Module — Design Spec
 **Date:** 2026-04-20  
 **Status:** Approved  
-**Branch:** fix/ui
+**Branch:** feature/invoices
 
 ---
 
