@@ -20,9 +20,24 @@ class CountryModelTest(TestCase):
 
 
 class StateModelTest(TestCase):
+    def setUp(self):
+        self.country = Country.objects.create(country_name='India', country_code='IN')
+
     def test_str(self):
-        country = Country.objects.create(country_name='India', country_code='IN')
-        self.assertEqual(str(State(state_name='Maharashtra', country=country)), 'Maharashtra')
+        self.assertEqual(str(State(state_name='Maharashtra', country=self.country)), 'Maharashtra')
+
+    def test_fields_exist(self):
+        state = State.objects.create(
+            country=self.country,
+            state_name='Maharashtra',
+            alpha_code='MH',
+            iso_code='IN-MH',
+            state_code='27',
+        )
+        state.refresh_from_db()
+        self.assertEqual(state.alpha_code, 'MH')
+        self.assertEqual(state.iso_code, 'IN-MH')
+        self.assertEqual(state.state_code, '27')
 
 
 class NotificationModelTest(TestCase):
