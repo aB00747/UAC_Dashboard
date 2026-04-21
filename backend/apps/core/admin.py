@@ -10,9 +10,9 @@ class CountryAdmin(admin.ModelAdmin):
 
 @admin.register(State)
 class StateAdmin(admin.ModelAdmin):
-    list_display = ['state_name', 'state_code', 'country']
+    list_display = ['state_name', 'alpha_code', 'iso_code', 'state_code', 'country']
     list_filter = ['country']
-    search_fields = ['state_name', 'state_code']
+    search_fields = ['state_name', 'alpha_code', 'state_code']
 
 
 @admin.register(Notification)
