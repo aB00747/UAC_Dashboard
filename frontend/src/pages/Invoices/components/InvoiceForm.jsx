@@ -3,6 +3,7 @@ import { Plus, Trash2, ChevronRight, ChevronLeft } from 'lucide-react';
 import { Button } from '../../../components/ui';
 import { FormField } from '../../../components/common';
 import { invoicesAPI } from '../../../api/invoices';
+import { chemicalsAPI } from '../../../api/inventory';
 import { calcTotals } from '../../../utils/invoiceUtils';
 import toast from 'react-hot-toast';
 
@@ -20,6 +21,15 @@ function emptyItem() {
 
 export function InvoiceForm({ value, onChange, profiles }) {
   const [step, setStep] = useState(1);
+  const [chemicals, setChemicals] = useState([]);
+
+  useEffect(() => {
+    if (step === 4 && chemicals.length === 0) {
+      chemicalsAPI.list({ page_size: 1000 }).then((res) => {
+        setChemicals(res.data.results ?? res.data);
+      });
+    }
+  }, [step]);
 
   function update(field, val) {
     const next = { ...value, [field]: val };
@@ -49,6 +59,25 @@ export function InvoiceForm({ value, onChange, profiles }) {
       const rate = parseFloat(field === 'rate' ? val : items[index].rate) || 0;
       items[index].amount = (qty * rate).toFixed(2);
     }
+    update('line_items', items);
+  }
+
+  function pickChemical(index, chemId) {
+    if (!chemId) return;
+    const chem = chemicals.find((c) => String(c.id) === String(chemId));
+    if (!chem) return;
+    const UNITS_LIST = ['kgs', 'ltr', 'nos', 'pcs', 'mtr', 'box'];
+    const normUnit = chem.unit.trim().toLowerCase();
+    const unit = UNITS_LIST.includes(normUnit) ? normUnit : 'kgs';
+    const items = [...(value.line_items || [])];
+    items[index] = {
+      ...items[index],
+      description: chem.chemical_name,
+      hsn: chem.hsn_code || '',
+      unit,
+      rate: String(chem.selling_price),
+      amount: '',
+    };
     update('line_items', items);
   }
 
@@ -160,6 +189,23 @@ export function InvoiceForm({ value, onChange, profiles }) {
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>
                 </div>
+                {chemicals.length > 0 && (
+                  <div>
+                    <label className="block text-xs font-medium u-text-2 mb-1">Select from inventory</label>
+                    <select
+                      className="u-input w-full px-2 py-1.5 rounded text-xs"
+                      value=""
+                      onChange={(e) => pickChemical(i, e.target.value)}
+                    >
+                      <option value="">— select from inventory —</option>
+                      {chemicals.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.chemical_name} ({c.chemical_code})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
                 <FormField label="Description" value={item.description} onChange={(v) => updateItem(i, 'description', v)} />
                 <div className="grid grid-cols-2 gap-2">
                   <FormField label="HSN Code" value={item.hsn} onChange={(v) => updateItem(i, 'hsn', v)} />
