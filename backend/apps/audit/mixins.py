@@ -1,3 +1,6 @@
+import json
+from datetime import date, datetime
+from decimal import Decimal
 from django.forms.models import model_to_dict
 
 
@@ -61,6 +64,15 @@ class AuditLogMixin:
 
     def _safe_dict(self, instance):
         try:
-            return model_to_dict(instance)
+            raw = model_to_dict(instance)
+            return json.loads(json.dumps(raw, default=self._json_default))
         except Exception:
             return {}
+
+    @staticmethod
+    def _json_default(obj):
+        if isinstance(obj, (date, datetime)):
+            return obj.isoformat()
+        if isinstance(obj, Decimal):
+            return str(obj)
+        return str(obj)

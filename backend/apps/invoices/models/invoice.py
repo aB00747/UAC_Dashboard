@@ -36,6 +36,7 @@ class Invoice(models.Model):
     vehicle_no = models.CharField(max_length=20, blank=True, default='')
     buyer_order_no = models.CharField(max_length=50, blank=True, default='')
     delivery_note_no = models.CharField(max_length=50, blank=True, default='')
+    challan_no = models.CharField(max_length=50, blank=True, default='')
 
     # e-Invoice placeholders (nullable until user fills from portal)
     irn = models.CharField(max_length=100, blank=True, default='')
