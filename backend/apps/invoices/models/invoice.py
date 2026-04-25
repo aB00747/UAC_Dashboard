@@ -38,6 +38,14 @@ class Invoice(models.Model):
     delivery_note_no = models.CharField(max_length=50, blank=True, default='')
     challan_no = models.CharField(max_length=50, blank=True, default='')
 
+    # invoice template
+    template = models.ForeignKey(
+        'invoices.InvoiceTemplate',
+        on_delete=models.SET_NULL,
+        null=True, blank=True,
+        related_name='invoices',
+    )
+
     # e-Invoice placeholders (nullable until user fills from portal)
     irn = models.CharField(max_length=100, blank=True, default='')
     ack_no = models.CharField(max_length=50, blank=True, default='')
