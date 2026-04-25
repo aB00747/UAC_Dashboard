@@ -148,6 +148,7 @@ export function InvoiceForm({ value, onChange, profiles }) {
             <FormField label="Invoice Number" value={value.invoice_number || ''} onChange={(v) => update('invoice_number', v)} />
             <FormField label="Invoice Date" type="date" value={value.invoice_date || ''} onChange={(v) => update('invoice_date', v)} />
             <FormField label="Vehicle Number" value={value.vehicle_no || ''} onChange={(v) => update('vehicle_no', v)} />
+            <FormField label="Challan No" value={value.challan_no || ''} onChange={(v) => update('challan_no', v)} placeholder="e.g. CH-2024-001" />
             <FormField label="Buyer's Order No" value={value.buyer_order_no || ''} onChange={(v) => update('buyer_order_no', v)} />
             <FormField label="Delivery Note No" value={value.delivery_note_no || ''} onChange={(v) => update('delivery_note_no', v)} />
             {value.invoice_type === 'gst_einvoice' && (

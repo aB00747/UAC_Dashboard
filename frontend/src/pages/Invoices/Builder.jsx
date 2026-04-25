@@ -28,6 +28,7 @@ function defaultForm() {
     vehicle_no: '',
     buyer_order_no: '',
     delivery_note_no: '',
+    challan_no: '',
     irn: '', ack_no: '', ack_date: '',
     line_items: [{ description: '', hsn: '', qty: '', unit: 'kgs', rate: '', amount: '' }],
     cgst_rate: 2.5,
@@ -93,7 +94,12 @@ export default function InvoiceBuilder() {
   async function handleSave(status = 'draft') {
     setSaving(true);
     try {
-      const payload = { ...form, status, company_profile: form.company_profile || null };
+      const payload = {
+        ...form,
+        status,
+        company_profile: form.company_profile || null,
+        ack_date: form.ack_date || null,
+      };
       if (id) {
         await invoicesAPI.update(id, payload);
       } else {

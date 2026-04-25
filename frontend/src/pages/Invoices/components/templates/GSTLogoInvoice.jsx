@@ -1,20 +1,21 @@
 import { Document, Page, View, Text, Image, StyleSheet } from '@react-pdf/renderer';
 import { amountToWords } from '../../../../utils/invoiceUtils';
+import './pdfFonts';
 
 const MAROON = '#8b0000';
 const CREAM = '#fff8f0';
 const BORDER = '#c0392b';
 
 const s = StyleSheet.create({
-  page: { fontSize: 8, fontFamily: 'Helvetica', padding: 20, backgroundColor: '#fff' },
+  page: { fontSize: 8, fontFamily: 'Roboto', padding: 20, backgroundColor: '#fff' },
   // Header
   header: { flexDirection: 'row', borderBottom: `2pt solid ${MAROON}`, marginBottom: 4, alignItems: 'stretch' },
   logoBox: { width: '22%', padding: 6, justifyContent: 'center', alignItems: 'center', borderRight: `1pt solid ${BORDER}` },
   logo: { width: 70, height: 36, objectFit: 'contain' },
   titleBox: { width: '30%', justifyContent: 'center', alignItems: 'center', padding: 6 },
-  titleText: { fontSize: 11, fontFamily: 'Helvetica-Bold', color: MAROON },
+  titleText: { fontSize: 11, fontFamily: 'Roboto-Bold', color: MAROON },
   companyBox: { flex: 1, backgroundColor: CREAM, padding: 6, borderLeft: `1pt solid ${BORDER}` },
-  companyName: { fontSize: 10, fontFamily: 'Helvetica-Bold', color: MAROON },
+  companyName: { fontSize: 10, fontFamily: 'Roboto-Bold', color: MAROON },
   companyTagline: { fontSize: 7, color: '#555', marginBottom: 2 },
   companyDetail: { fontSize: 7, color: '#333', lineHeight: 1.4 },
   // Reference block
@@ -22,14 +23,14 @@ const s = StyleSheet.create({
   refLeft: { flex: 1, padding: '4 6', borderRight: `1pt solid #ccc` },
   refRight: { width: '40%', padding: 4 },
   refGrid: { flexDirection: 'row', marginBottom: 2 },
-  refLabel: { width: 70, fontFamily: 'Helvetica-Bold', color: '#333' },
+  refLabel: { width: 70, fontFamily: 'Roboto-Bold', color: '#333' },
   refValue: { flex: 1, borderBottom: `0.5pt solid #999`, paddingBottom: 1 },
   // Fields
   fieldRow: { flexDirection: 'row', marginBottom: 2 },
-  fieldLabel: { fontFamily: 'Helvetica-Bold', marginRight: 3, color: '#333' },
+  fieldLabel: { fontFamily: 'Roboto-Bold', marginRight: 3, color: '#333' },
   fieldValue: { flex: 1, borderBottom: `0.5pt solid #999` },
   // Table
-  tableHeader: { flexDirection: 'row', backgroundColor: MAROON, color: '#fff', fontFamily: 'Helvetica-Bold', fontSize: 7.5 },
+  tableHeader: { flexDirection: 'row', backgroundColor: MAROON, color: '#fff', fontFamily: 'Roboto-Bold', fontSize: 7.5 },
   tableRow: { flexDirection: 'row', borderBottom: `0.5pt solid #ddd` },
   tableRowAlt: { flexDirection: 'row', borderBottom: `0.5pt solid #ddd`, backgroundColor: '#fff5f5' },
   cellSr: { width: '6%', padding: '3 2', textAlign: 'center' },
@@ -45,15 +46,15 @@ const s = StyleSheet.create({
   footerLeft: { flex: 1 },
   footerRight: { width: '45%' },
   totalLine: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 1.5 },
-  totalLabel: { fontFamily: 'Helvetica-Bold', fontSize: 7.5 },
-  totalValue: { fontFamily: 'Helvetica-Bold', fontSize: 7.5, textAlign: 'right', minWidth: 70 },
+  totalLabel: { fontFamily: 'Roboto-Bold', fontSize: 7.5 },
+  totalValue: { fontFamily: 'Roboto-Bold', fontSize: 7.5, textAlign: 'right', minWidth: 70 },
   grandTotalRow: { flexDirection: 'row', justifyContent: 'space-between', backgroundColor: MAROON, color: '#fff', padding: '3 4', marginTop: 2, borderRadius: 2 },
   bankBox: { marginTop: 6, padding: '4 6', border: `1pt solid #dcc`, backgroundColor: CREAM },
-  bankLabel: { fontFamily: 'Helvetica-Bold', marginBottom: 2, color: MAROON },
+  bankLabel: { fontFamily: 'Roboto-Bold', marginBottom: 2, color: MAROON },
   bottomBar: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 8, borderTop: `1pt solid ${MAROON}`, paddingTop: 4 },
   gstinBox: { flex: 1, fontSize: 7, color: '#333' },
   signBox: { width: '35%', alignItems: 'center' },
-  signLabel: { fontFamily: 'Helvetica-Bold', fontSize: 8, color: MAROON },
+  signLabel: { fontFamily: 'Roboto-Bold', fontSize: 8, color: MAROON },
   signLine: { borderTop: `0.5pt solid #888`, width: 80, marginTop: 18, marginBottom: 2 },
   declarationText: { fontSize: 6, color: '#555', marginTop: 4, lineHeight: 1.4 },
 });
@@ -97,7 +98,7 @@ export function GSTLogoInvoice({ invoice, profile }) {
           <View style={s.refLeft}>
             <View style={s.fieldRow}>
               <Text style={s.fieldLabel}>To:</Text>
-              <Text style={[s.fieldValue, { fontFamily: 'Helvetica-Bold' }]}>{invoice.buyer_name}</Text>
+              <Text style={[s.fieldValue, { fontFamily: 'Roboto-Bold' }]}>{invoice.buyer_name}</Text>
             </View>
             <Text style={{ marginTop: 2, fontSize: 7.5 }}>{invoice.buyer_address}</Text>
             <View style={[s.fieldRow, { marginTop: 4 }]}>
@@ -161,8 +162,8 @@ export function GSTLogoInvoice({ invoice, profile }) {
         {/* ── Footer ── */}
         <View style={s.footerRow}>
           <View style={s.footerLeft}>
-            <Text style={{ fontSize: 7.5, fontFamily: 'Helvetica-Bold', marginBottom: 2 }}>Rupees:</Text>
-            <Text style={{ fontSize: 7.5, fontFamily: 'Helvetica-Bold', color: MAROON }}>{amountToWords(grand)}</Text>
+            <Text style={{ fontSize: 7.5, fontFamily: 'Roboto-Bold', marginBottom: 2 }}>Rupees:</Text>
+            <Text style={{ fontSize: 7.5, fontFamily: 'Roboto-Bold', color: MAROON }}>{amountToWords(grand)}</Text>
           </View>
           <View style={s.footerRight}>
             {[
@@ -196,7 +197,7 @@ export function GSTLogoInvoice({ invoice, profile }) {
         {/* Bottom bar */}
         <View style={s.bottomBar}>
           <View style={s.gstinBox}>
-            <Text style={{ fontFamily: 'Helvetica-Bold' }}>
+            <Text style={{ fontFamily: 'Roboto-Bold' }}>
               GSTIN No.: {profile?.gstin}{'   '}STATE: {profile?.state?.toUpperCase()}{'   '}STATE CODE: {profile?.state_code}
             </Text>
             <Text>PAN No.: {profile?.pan}</Text>
