@@ -21,6 +21,8 @@ const Profile = lazy(() => import('./pages/Profile/Index'));
 const AIAssistant = lazy(() => import('./pages/AI/Index'));
 const InvoiceHistory = lazy(() => import('./pages/Invoices/Index'));
 const InvoiceBuilder = lazy(() => import('./pages/Invoices/Builder'));
+const TemplateManager = lazy(() => import('./pages/Invoices/TemplateManager'));
+const TemplateBuilder = lazy(() => import('./pages/Invoices/TemplateBuilder'));
 
 export default function App() {
   return (
@@ -47,6 +49,9 @@ export default function App() {
           <Route path="/invoices" element={<InvoiceHistory />} />
           <Route path="/invoices/new" element={<InvoiceBuilder />} />
           <Route path="/invoices/:id/edit" element={<InvoiceBuilder />} />
+          <Route path="/invoices/templates" element={<TemplateManager />} />
+          <Route path="/invoices/templates/new" element={<TemplateBuilder />} />
+          <Route path="/invoices/templates/:id" element={<TemplateBuilder />} />
         </Route>
       </Routes>
     </Suspense>
