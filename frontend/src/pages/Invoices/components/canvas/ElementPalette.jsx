@@ -34,12 +34,12 @@ const STARTER_TEMPLATES = [
 
 export default function ElementPalette({ onAddElement, onLoadStarter }) {
   return (
-    <div style={{ background: '#141413', borderRight: '1px solid #30302e', padding: 10, overflowY: 'auto', height: '100%', width: 175, flexShrink: 0 }}>
-      <div style={{ color: '#5e5d59', fontSize: 9, fontWeight: 700, letterSpacing: 1.5, marginBottom: 10, textTransform: 'uppercase' }}>Elements</div>
+    <div style={{ background: '#141413', borderRight: '1px solid #30302e', padding: '12px 10px', overflowY: 'auto', height: '100%', width: 200, flexShrink: 0 }}>
+      <div style={{ color: '#5e5d59', fontSize: 10, fontWeight: 700, letterSpacing: 1.5, marginBottom: 12, textTransform: 'uppercase' }}>Elements</div>
 
       {GROUPS.map(group => (
-        <div key={group.label} style={{ marginBottom: 10 }}>
-          <div style={{ color: '#87867f', fontSize: 9, fontWeight: 600, marginBottom: 4 }}>{group.label}</div>
+        <div key={group.label} style={{ marginBottom: 14 }}>
+          <div style={{ color: '#87867f', fontSize: 11, fontWeight: 600, marginBottom: 6 }}>{group.label}</div>
           {group.items.map(item => (
             <div key={item.type}
               draggable
@@ -48,25 +48,32 @@ export default function ElementPalette({ onAddElement, onLoadStarter }) {
               style={{
                 background: item.highlight ? 'rgba(201,100,66,0.15)' : '#1e1e1c',
                 border: item.highlight ? '1px solid rgba(201,100,66,0.4)' : '1px solid #30302e',
-                borderRadius: 6, padding: '5px 8px', marginBottom: 3,
-                fontSize: 10, color: item.highlight ? '#d97757' : '#e8e6dc',
-                cursor: 'grab', display: 'flex', alignItems: 'center', gap: 7,
+                borderRadius: 7, padding: '8px 10px', marginBottom: 5,
+                fontSize: 13, color: item.highlight ? '#d97757' : '#e8e6dc',
+                cursor: 'grab', display: 'flex', alignItems: 'center', gap: 9,
                 fontWeight: item.highlight ? 600 : 400,
                 userSelect: 'none',
-              }}>
-              <span style={{ color: item.highlight ? '#d97757' : '#5e5d59', fontSize: 11 }}>{item.icon}</span>
+                transition: 'background .12s',
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = item.highlight ? 'rgba(201,100,66,0.25)' : '#2a2a28'}
+              onMouseLeave={e => e.currentTarget.style.background = item.highlight ? 'rgba(201,100,66,0.15)' : '#1e1e1c'}
+            >
+              <span style={{ color: item.highlight ? '#d97757' : '#87867f', fontSize: 15, lineHeight: 1 }}>{item.icon}</span>
               {item.label}
             </div>
           ))}
         </div>
       ))}
 
-      <div style={{ borderTop: '1px solid #30302e', paddingTop: 10 }}>
-        <div style={{ color: '#87867f', fontSize: 9, fontWeight: 600, marginBottom: 4 }}>Start From</div>
+      <div style={{ borderTop: '1px solid #30302e', paddingTop: 12 }}>
+        <div style={{ color: '#87867f', fontSize: 11, fontWeight: 600, marginBottom: 6 }}>Start From</div>
         {STARTER_TEMPLATES.map(t => (
           <div key={t.key} onClick={() => onLoadStarter(t.key)}
-            style={{ border: '1px dashed #3d3d3a', borderRadius: 6, padding: '5px 8px', marginBottom: 3, fontSize: 10, color: '#87867f', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span style={{ color: '#c96442' }}>📋</span> {t.label}
+            style={{ border: '1px dashed #3d3d3a', borderRadius: 7, padding: '8px 10px', marginBottom: 5, fontSize: 13, color: '#87867f', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}
+            onMouseEnter={e => e.currentTarget.style.background = '#1e1e1c'}
+            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+          >
+            <span style={{ color: '#c96442', fontSize: 15 }}>📋</span> {t.label}
           </div>
         ))}
       </div>
