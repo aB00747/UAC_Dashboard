@@ -29,7 +29,12 @@ export default function OCRUploadModal({ onResult, onClose }) {
       const { data } = await worker.recognize(file);
       await worker.terminate();
 
-      const blocks = data.words.map(w => ({
+      // tesseract.js v5+ may nest words inside lines; flatten all sources
+      const rawWords = data.words?.length
+        ? data.words
+        : (data.lines ?? []).flatMap(l => l.words ?? []);
+
+      const blocks = rawWords.map(w => ({
         text: w.text,
         x: w.bbox.x0,
         y: w.bbox.y0,
@@ -37,6 +42,8 @@ export default function OCRUploadModal({ onResult, onClose }) {
         height: w.bbox.y1 - w.bbox.y0,
         confidence: w.confidence,
       })).filter(b => b.text.trim().length > 0 && b.confidence > 40);
+
+      if (blocks.length === 0) throw new Error('No text detected in the image. Try a clearer scan.');
 
       setStatus('ai');
       setProgress(65);
