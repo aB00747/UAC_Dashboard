@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import TemplateRenderer from './components/TemplateRenderer';
+import TemplatePickerModal from './components/TemplatePickerModal';
 import { pdf } from '@react-pdf/renderer';
 import { ArrowLeft, Eye, Download, Printer, Save, ChevronDown, Building2 } from 'lucide-react';
 import { Button } from '../../components/ui';
@@ -45,6 +47,7 @@ function defaultForm() {
 export default function InvoiceBuilder() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [form, setForm] = useState(defaultForm());
   const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(!!id);
@@ -52,6 +55,8 @@ export default function InvoiceBuilder() {
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [showProfiles, setShowProfiles] = useState(false);
   const [showDownloadMenu, setShowDownloadMenu] = useState(false);
+  const [activeTemplate, setActiveTemplate] = useState(location.state?.template || null);
+  const [showTemplatePicker, setShowTemplatePicker] = useState(false);
 
   const activeProfile = profiles.find((p) => p.id === parseInt(form.company_profile));
 
@@ -118,17 +123,30 @@ export default function InvoiceBuilder() {
     setShowDownloadMenu(false);
     try {
       toast.loading('Generating PDF…', { id: 'pdf' });
-      const blob = await pdf(<InvoiceDocument invoice={form} profile={activeProfile} />).toBlob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `invoice-${form.invoice_number || 'draft'}.pdf`;
-      a.click();
-      URL.revokeObjectURL(url);
+      if (activeTemplate?.schema) {
+        const rendererEl = document.querySelector('[data-template-renderer="true"]');
+        if (!rendererEl) throw new Error('Template renderer not found — ensure template is visible');
+        const { default: html2canvas } = await import('html2canvas');
+        const { default: jsPDF } = await import('jspdf');
+        const canvas = await html2canvas(rendererEl, { scale: 3, useCORS: true, logging: false });
+        const imgData = canvas.toDataURL('image/jpeg', 0.95);
+        const docPdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+        docPdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+        docPdf.save(`invoice-${form.invoice_number || 'draft'}.pdf`);
+      } else {
+        const blob = await pdf(<InvoiceDocument invoice={form} profile={activeProfile} />).toBlob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `invoice-${form.invoice_number || 'draft'}.pdf`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
       toast.success('PDF downloaded', { id: 'pdf' });
       await handleSave('final');
       if (id) await invoicesAPI.finalise(id);
-    } catch {
+    } catch (err) {
+      console.error(err);
       toast.error('PDF generation failed', { id: 'pdf' });
     }
   }
@@ -215,8 +233,19 @@ export default function InvoiceBuilder() {
           <InvoiceForm value={form} onChange={setForm} profiles={profiles} />
         </div>
         {/* Preview — 60% */}
-        <div className="flex-1 overflow-hidden rounded-lg" style={{ backgroundColor: 'var(--surface)' }}>
-          <InvoicePreview invoice={form} profile={activeProfile} />
+        <div className="flex-1 overflow-hidden rounded-lg flex flex-col" style={{ backgroundColor: 'var(--surface)' }}>
+          <div style={{ padding: '6px 10px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+            <span className="u-text-3" style={{ fontSize: 11 }}>{activeTemplate ? activeTemplate.name : 'Default Preview'}</span>
+            <button onClick={() => setShowTemplatePicker(true)} style={{ background: 'none', border: 'none', fontSize: 11, color: 'var(--brand)', cursor: 'pointer' }}>
+              {activeTemplate ? 'Change Template' : 'Pick Template'}
+            </button>
+          </div>
+          <div style={{ flex: 1, overflow: 'auto', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: 12 }}>
+            {activeTemplate?.schema
+              ? <TemplateRenderer schema={activeTemplate.schema} invoiceData={form} profile={activeProfile} scale={0.6} />
+              : <InvoicePreview invoice={form} profile={activeProfile} />
+            }
+          </div>
         </div>
       </div>
 
@@ -230,6 +259,13 @@ export default function InvoiceBuilder() {
           profiles={profiles}
           onClose={() => setShowProfiles(false)}
           onSaved={() => { loadProfiles(); setShowProfiles(false); }}
+        />
+      )}
+      {showTemplatePicker && (
+        <TemplatePickerModal
+          currentId={activeTemplate?.id}
+          onSelect={tmpl => { setActiveTemplate(tmpl); setShowTemplatePicker(false); }}
+          onClose={() => setShowTemplatePicker(false)}
         />
       )}
     </div>

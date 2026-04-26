@@ -10,6 +10,7 @@ import { InvoiceDocument } from './components/InvoicePreview';
 import { invoicesAPI } from '../../api/invoices';
 import { formatDateTime } from '../../utils/format';
 import toast from 'react-hot-toast';
+import TemplatePickerModal from './components/TemplatePickerModal';
 
 const TYPE_LABELS = {
   gst_logo: 'GST Logo',
@@ -34,6 +35,7 @@ export default function InvoiceHistory() {
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({ search: '', invoice_type: '', status: '' });
   const [previewInvoice, setPreviewInvoice] = useState(null);
+  const [showTemplatePicker, setShowTemplatePicker] = useState(false);
 
   useEffect(() => { loadInvoices(); }, [filters]);
 
@@ -92,8 +94,18 @@ export default function InvoiceHistory() {
   return (
     <div className="space-y-4">
       <PageHeader title="Invoices">
-        <Button icon={Plus} onClick={() => navigate('/invoices/new')}>New Invoice</Button>
+        <button onClick={() => navigate('/invoices/templates')}
+          style={{ background: 'none', border: '1px solid var(--border)', color: 'var(--text-3)', padding: '6px 14px', borderRadius: 8, fontSize: 12, cursor: 'pointer', marginRight: 8 }}>
+          Templates
+        </button>
+        <Button icon={Plus} onClick={() => setShowTemplatePicker(true)}>New Invoice</Button>
       </PageHeader>
+      {showTemplatePicker && (
+        <TemplatePickerModal
+          onSelect={tmpl => { setShowTemplatePicker(false); navigate('/invoices/new', { state: { template: tmpl } }); }}
+          onClose={() => setShowTemplatePicker(false)}
+        />
+      )}
 
       <FilterBar>
         <input
