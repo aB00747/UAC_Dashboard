@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import AuthenticatedLayout from './layouts/AuthenticatedLayout';
 import GuestLayout from './layouts/GuestLayout';
+import FullPageLayout from './layouts/FullPageLayout';
 import { PageSpinner } from './components/ui/Spinner';
 
 const Login = lazy(() => import('./pages/Auth/Login'));
@@ -50,6 +51,9 @@ export default function App() {
           <Route path="/invoices/new" element={<InvoiceBuilder />} />
           <Route path="/invoices/:id/edit" element={<InvoiceBuilder />} />
           <Route path="/invoices/templates" element={<TemplateManager />} />
+        </Route>
+        {/* Full-screen editor — no sidebar or header */}
+        <Route element={<FullPageLayout />}>
           <Route path="/invoices/templates/new" element={<TemplateBuilder />} />
           <Route path="/invoices/templates/:id" element={<TemplateBuilder />} />
         </Route>
