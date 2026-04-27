@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'apps.documents',
     'apps.reports',
     'apps.ai',
+    'apps.invoices',
+    'apps.audit',
 ]
 
 MIDDLEWARE = [

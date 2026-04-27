@@ -5,6 +5,7 @@ from .category import Category
 class Chemical(models.Model):
     chemical_name = models.CharField(max_length=200)
     chemical_code = models.CharField(max_length=50, unique=True)
+    hsn_code = models.CharField(max_length=20, blank=True, default='')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='chemicals')
     description = models.TextField(blank=True, default='')
     unit = models.CharField(max_length=20, default='KG')
