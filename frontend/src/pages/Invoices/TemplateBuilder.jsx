@@ -56,6 +56,7 @@ export default function TemplateBuilder() {
   const [snapGrid, setSnapGrid] = useState(true);
   const [gridSize, setGridSize] = useState(8);
   const [showOCR, setShowOCR] = useState(false);
+  const [liveData, setLiveData] = useState(null);
 
   const { elements, selectedId, selected, setSelectedId, addElement, updateElement, deleteElement, bringForward, sendBackward, updateElements, undo, redo } = useCanvasState([]);
 
@@ -115,11 +116,81 @@ export default function TemplateBuilder() {
     finally { setSaving(false); }
   }
 
-  function handleOCRResult({ elements: ocrElements }) {
-    if (ocrElements?.length) {
-      updateElements(() => ocrElements);
-      toast.success(`${ocrElements.length} elements detected from image`);
+  function handleOCRResult(parsed) {
+    const fields = parsed?.fields ?? {};
+    const filled = Object.entries(fields).filter(([, v]) => v);
+    if (!filled.length) {
+      toast.error('No fields could be extracted from the image');
+      setShowOCR(false);
+      return;
     }
+
+    // Map field key → label
+    const LABELS = {
+      company_name: 'Company Name', company_gstin: 'GSTIN',
+      invoice_number: 'Invoice No.', invoice_date: 'Date',
+      buyer_name: 'Buyer Name', buyer_gstin: 'Buyer GSTIN',
+      buyer_address: 'Buyer Address', grand_total: 'Grand Total',
+    };
+
+    // Build canvas elements: heading + one field element per extracted field
+    const newElements = [];
+    let yOffset = 12;
+
+    // Company name as a bold text heading
+    const companyName = fields.company_name;
+    if (companyName) {
+      newElements.push({
+        id: `ocr-heading-${Date.now()}`,
+        type: 'text', x: 12, y: yOffset, width: 400, height: 22, zIndex: newElements.length + 1,
+        props: { content: companyName, fontSize: 13, fontWeight: 'bold', fontFamily: 'Georgia, serif', color: '#141413', backgroundColor: 'transparent', textAlign: 'left', padding: 2 },
+      });
+      yOffset += 28;
+    }
+
+    // Divider line
+    newElements.push({
+      id: `ocr-line-${Date.now()}`,
+      type: 'line', x: 8, y: yOffset, width: 778, height: 2, zIndex: newElements.length + 1,
+      props: { color: '#c96442', thickness: 2, style: 'solid', orientation: 'horizontal' },
+    });
+    yOffset += 10;
+
+    // Field elements in a 2-column layout
+    const fieldKeys = ['invoice_number', 'invoice_date', 'buyer_name', 'buyer_gstin', 'buyer_address', 'grand_total', 'company_gstin'];
+    let col = 0;
+    fieldKeys.forEach(key => {
+      if (!fields[key]) return;
+      const x = col === 0 ? 8 : 400;
+      newElements.push({
+        id: `ocr-${key}-${Date.now()}-${col}`,
+        type: 'field', x, y: yOffset, width: 380, height: 18, zIndex: newElements.length + 1,
+        props: { field: key, label: LABELS[key] ?? key, fontSize: 9, fontWeight: 'normal', color: '#141413', backgroundColor: 'transparent', textAlign: 'left' },
+      });
+      if (col === 1) yOffset += 22;
+      col = col === 0 ? 1 : 0;
+    });
+    if (col === 1) yOffset += 22;
+
+    // Line items table
+    yOffset += 12;
+    newElements.push({
+      id: `ocr-table-${Date.now()}`,
+      type: 'table', x: 8, y: yOffset, width: 778, height: 180, zIndex: newElements.length + 1,
+      props: { headerBg: '#141413', headerColor: '#ffffff', oddRowBg: '#ffffff', evenRowBg: '#f5f4ed', borderColor: '#e8e6dc', borderWidth: 0.5, fontSize: 8, columns: ['description', 'hsn', 'qty', 'rate', 'amount'] },
+    });
+    yOffset += 192;
+
+    // Totals block
+    newElements.push({
+      id: `ocr-totals-${Date.now()}`,
+      type: 'totals', x: 558, y: yOffset, width: 228, height: 90, zIndex: newElements.length + 1,
+      props: { showCgst: true, showSgst: true, showIgst: false, grandTotalBg: '#141413', grandTotalColor: '#ffffff', rowColor: '#141413', fontSize: 9 },
+    });
+
+    updateElements(() => newElements);
+    setLiveData(fields);
+    toast.success(`${filled.length} fields extracted and placed on canvas`);
     setShowOCR(false);
   }
 
@@ -160,7 +231,7 @@ export default function TemplateBuilder() {
             onSelect={setSelectedId} onUpdate={updateElement}
             onDelete={deleteElement} onBringForward={bringForward} onSendBackward={sendBackward}
             snapGrid={snapGrid} gridSize={gridSize}
-            liveData={null} profile={null}
+            liveData={liveData} profile={null}
             zoom={zoom}
           />
         </div>

@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { createWorker } from 'tesseract.js';
+import Tesseract from 'tesseract.js';
 import { X } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -23,25 +23,33 @@ export default function OCRUploadModal({ onResult, onClose }) {
     setStatus('ocr');
     setProgress(0);
     try {
-      const worker = await createWorker('eng', 1, {
+      const { data } = await Tesseract.recognize(file, 'eng', {
         logger: m => { if (m.status === 'recognizing text') setProgress(Math.round(m.progress * 60)); },
       });
-      const { data } = await worker.recognize(file);
-      await worker.terminate();
 
-      // tesseract.js v5+ may nest words inside lines; flatten all sources
-      const rawWords = data.words?.length
-        ? data.words
-        : (data.lines ?? []).flatMap(l => l.words ?? []);
+      // tesseract.js v7: only data.text is reliably populated (tsv/hocr/words are null).
+      // Build synthetic word blocks from the plain text with approximate line/word positions.
+      const rawText = (data.text ?? '').trim();
+      if (!rawText) throw new Error('No text detected in the image. Try a clearer scan.');
 
-      const blocks = rawWords.map(w => ({
-        text: w.text,
-        x: w.bbox.x0,
-        y: w.bbox.y0,
-        width: w.bbox.x1 - w.bbox.x0,
-        height: w.bbox.y1 - w.bbox.y0,
-        confidence: w.confidence,
-      })).filter(b => b.text.trim().length > 0 && b.confidence > 40);
+      const blocks = [];
+      const lineHeight = 20;
+      const charWidth = 8;
+      rawText.split('\n').forEach((line, lineIdx) => {
+        const words = line.trim().split(/\s+/).filter(Boolean);
+        let xCursor = 10;
+        words.forEach(word => {
+          blocks.push({
+            text: word,
+            x: xCursor,
+            y: 10 + lineIdx * lineHeight,
+            width: word.length * charWidth,
+            height: lineHeight - 2,
+            confidence: data.confidence ?? 90,
+          });
+          xCursor += word.length * charWidth + 6;
+        });
+      });
 
       if (blocks.length === 0) throw new Error('No text detected in the image. Try a clearer scan.');
 
@@ -57,7 +65,10 @@ export default function OCRUploadModal({ onResult, onClose }) {
           page_height: 1123,
         }),
       });
-      if (!res.ok) throw new Error('AI parsing failed');
+      if (!res.ok) {
+        const errBody = await res.json().catch(() => ({}));
+        throw new Error(`AI parsing failed: ${errBody.detail || res.status}`);
+      }
       const parsed = await res.json();
       setProgress(100);
       setStatus('done');
