@@ -1,6 +1,25 @@
 from rest_framework import serializers
 from ..models import BrandingSetting
 
+ALLOWED_IMAGE_TYPES = {
+    'image/jpeg', 'image/png', 'image/webp',
+    'image/gif', 'image/svg+xml',
+}
+MAX_IMAGE_SIZE = 5 * 1024 * 1024  # 5 MB
+
+
+def validate_image_file(file):
+    if file is None:
+        return file
+    mime = getattr(file, 'content_type', '')
+    if mime not in ALLOWED_IMAGE_TYPES:
+        raise serializers.ValidationError(
+            f'Unsupported file type "{mime}". Allowed: JPEG, PNG, WebP, GIF, SVG.'
+        )
+    if file.size > MAX_IMAGE_SIZE:
+        raise serializers.ValidationError('File too large. Maximum size is 5 MB.')
+    return file
+
 
 class BrandingSettingSerializer(serializers.ModelSerializer):
     logo_url = serializers.SerializerMethodField()
@@ -41,3 +60,12 @@ class BrandingSettingSerializer(serializers.ModelSerializer):
             if request:
                 return request.build_absolute_uri(obj.login_bg.url)
         return ''
+
+    def validate_logo(self, value):
+        return validate_image_file(value)
+
+    def validate_favicon(self, value):
+        return validate_image_file(value)
+
+    def validate_login_bg(self, value):
+        return validate_image_file(value)

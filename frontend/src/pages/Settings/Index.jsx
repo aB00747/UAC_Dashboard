@@ -1,14 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { settingsAPI, brandingAPI } from '../../api/core';
 import { businessProfileAPI } from '../../api/businessProfile';
 import { invoicesAPI } from '../../api/invoices';
 import { useAuth } from '../../contexts/AuthContext';
 import { useBranding } from '../../contexts/BrandingContext';
 import toast from 'react-hot-toast';
-import { Save, Plus, Upload, Image, Palette, Building2, FileText, Settings2, AlertCircle } from 'lucide-react';
+import { Save, Plus, Upload, Image, Palette, Building2, FileText, Settings2, AlertCircle, Crop } from 'lucide-react';
 import { Button } from '../../components/ui';
 import { PageHeader, FormField } from '../../components/common';
 import { PageSpinner } from '../../components/ui/Spinner';
+import ImageCropModal from '../../components/common/ImageCropModal';
 
 const PRESET_COLORS = [
   '#6366f1', '#3b82f6', '#10b981', '#f59e0b',
@@ -54,24 +55,87 @@ function ColorPicker({ label, value, onChange }) {
   );
 }
 
-function FileUploadField({ label, preview, onFileSelect, accept = 'image/*' }) {
+function FileUploadField({ label, preview, onFileCommit, accept = 'image/*', aspect = 1, cropTitle }) {
+  const inputRef = useRef(null);
+  const [cropSrc, setCropSrc] = useState(null);   // raw data-URL for crop modal
+  const [rawFile, setRawFile] = useState(null);    // original File object
+
+  function handleChange(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    // Reset input so same file can be re-selected
+    e.target.value = '';
+
+    const isSvg = file.type === 'image/svg+xml';
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (isSvg) {
+        // SVG: skip crop, commit immediately with a blob URL as preview
+        const blob = new Blob([reader.result], { type: 'image/svg+xml' });
+        const url = URL.createObjectURL(blob);
+        onFileCommit(file, url);
+      } else {
+        // Raster: open crop modal
+        setRawFile(file);
+        setCropSrc(reader.result);
+      }
+    };
+    isSvg ? reader.readAsText(file) : reader.readAsDataURL(file);
+  }
+
+  function handleCropConfirm(blob, previewUrl) {
+    // Convert blob back to a File so FormData upload works
+    const croppedFile = new File([blob], rawFile?.name || 'image.png', { type: 'image/png' });
+    onFileCommit(croppedFile, previewUrl);
+    setCropSrc(null);
+    setRawFile(null);
+  }
+
   return (
-    <div>
-      <label className="block text-sm font-medium u-text-2 mb-2">{label}</label>
-      <div className="flex items-center gap-4">
-        {preview ? (
-          <img src={preview} alt={label} className="h-16 w-16 rounded-lg object-cover border" style={{ borderColor: 'var(--border)' }} />
-        ) : (
-          <div className="h-16 w-16 rounded-lg u-bg-subtle flex items-center justify-center">
-            <Image className="h-6 w-6 u-text-3" />
+    <>
+      <div>
+        <label className="block text-sm font-medium u-text-2 mb-2">{label}</label>
+        <div className="flex flex-col items-start gap-3">
+          {/* Preview */}
+          <div
+            className="h-20 w-20 rounded-xl border-2 flex items-center justify-center overflow-hidden u-bg-subtle"
+            style={{ borderColor: preview ? 'var(--brand-primary)' : 'var(--border)' }}
+          >
+            {preview
+              ? <img src={preview} alt={label} className="h-full w-full object-cover" />
+              : <Image className="h-7 w-7 u-text-3" />
+            }
           </div>
-        )}
-        <label className="cursor-pointer flex items-center gap-1.5 px-3 py-2 u-bg-subtle u-text-2 text-sm rounded-lg hover:opacity-90">
-          <Upload className="h-4 w-4" /> Upload
-          <input type="file" accept={accept} className="hidden" onChange={onFileSelect} />
-        </label>
+          {/* Buttons */}
+          <div className="flex gap-2">
+            <label className="flex items-center gap-1.5 px-3 py-1.5 u-bg-subtle u-text-2 text-xs rounded-lg hover:opacity-80 cursor-pointer">
+              <Upload className="h-3.5 w-3.5" /> Upload
+              <input ref={inputRef} type="file" accept={accept} className="hidden" onChange={handleChange} />
+            </label>
+            {preview && (
+              <button
+                type="button"
+                onClick={() => inputRef.current?.click()}
+                className="flex items-center gap-1.5 px-3 py-1.5 u-bg-subtle u-text-2 text-xs rounded-lg hover:opacity-80"
+              >
+                <Crop className="h-3.5 w-3.5" /> Re-crop
+              </button>
+            )}
+          </div>
+        </div>
       </div>
-    </div>
+
+      {/* Crop modal */}
+      {cropSrc && (
+        <ImageCropModal
+          imageSrc={cropSrc}
+          aspect={aspect}
+          title={cropTitle || `Crop ${label}`}
+          onConfirm={handleCropConfirm}
+          onCancel={() => { setCropSrc(null); setRawFile(null); }}
+        />
+      )}
+    </>
   );
 }
 
@@ -109,9 +173,8 @@ function BrandingTab({ isAdmin }) {
     setDarkMode(currentDarkMode);
   }, [currentSystemName, currentLogoUrl, currentFaviconUrl, currentLoginBgUrl, currentPrimary, currentSecondary, currentDarkMode]);
 
-  function handleFile(e, setFile, setPreview) {
-    const file = e.target.files?.[0];
-    if (file) { setFile(file); setPreview(URL.createObjectURL(file)); }
+  function handleFile(setFile, setPreview) {
+    return (file, previewUrl) => { setFile(file); setPreview(previewUrl); };
   }
 
   async function handleSave() {
@@ -150,9 +213,9 @@ function BrandingTab({ isAdmin }) {
           />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <FileUploadField label="Logo" preview={logoPreview} onFileSelect={(e) => handleFile(e, setLogoFile, setLogoPreview)} />
-          <FileUploadField label="Favicon" preview={faviconPreview} onFileSelect={(e) => handleFile(e, setFaviconFile, setFaviconPreview)} />
-          <FileUploadField label="Login Background" preview={loginBgPreview} onFileSelect={(e) => handleFile(e, setLoginBgFile, setLoginBgPreview)} />
+          <FileUploadField label="Logo" preview={logoPreview} onFileCommit={handleFile(setLogoFile, setLogoPreview)} aspect={1} cropTitle="Crop Logo" />
+          <FileUploadField label="Favicon" preview={faviconPreview} onFileCommit={handleFile(setFaviconFile, setFaviconPreview)} aspect={1} cropTitle="Crop Favicon" />
+          <FileUploadField label="Login Background" preview={loginBgPreview} onFileCommit={handleFile(setLoginBgFile, setLoginBgPreview)} aspect={16/9} cropTitle="Crop Login Background" />
         </div>
         <ColorPicker label="Primary Color" value={primaryColor} onChange={setPrimaryColor} />
         <ColorPicker label="Secondary Color" value={secondaryColor} onChange={setSecondaryColor} />
@@ -275,20 +338,38 @@ function BusinessTab({ isAdmin }) {
     setErrors((prev) => ({ ...prev, [field]: e[field] }));
   }
 
+  const [logoCropSrc, setLogoCropSrc] = useState(null);
+
   function handleLogoUpload(e) {
     const file = e.target.files[0];
     if (!file) return;
+    e.target.value = '';
     if (file.size > 500_000) {
       setErrors((prev) => ({ ...prev, logo_base64: 'Logo is too large. Maximum size is 500 KB.' }));
       setTouched((prev) => ({ ...prev, logo_base64: true }));
       return;
     }
+    const isSvg = file.type === 'image/svg+xml';
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (isSvg) {
+        set('logo_base64', `data:image/svg+xml;base64,${btoa(reader.result)}`);
+        setErrors((prev) => ({ ...prev, logo_base64: undefined }));
+      } else {
+        setLogoCropSrc(reader.result);
+      }
+    };
+    isSvg ? reader.readAsText(file) : reader.readAsDataURL(file);
+  }
+
+  function handleLogoCropConfirm(blob) {
     const reader = new FileReader();
     reader.onload = () => {
       set('logo_base64', reader.result);
       setErrors((prev) => ({ ...prev, logo_base64: undefined }));
     };
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(blob);
+    setLogoCropSrc(null);
   }
 
   async function handleSave() {
@@ -441,14 +522,33 @@ function BusinessTab({ isAdmin }) {
 
       {/* Invoice logo */}
       <BField label="Invoice Logo" error={T.logo_base64 && E.logo_base64}>
-        <div>
-          <input type="file" accept="image/*" onChange={handleLogoUpload} className="text-xs u-text-2" />
-          <p className="text-xs u-text-3 mt-1">Max 500 KB. Used on invoice headers.</p>
-          {form.logo_base64 && (
-            <img src={form.logo_base64} alt="logo preview" className="mt-2 h-10 object-contain rounded border" style={{ borderColor: 'var(--border)' }} />
-          )}
+        <div className="flex flex-col items-start gap-2">
+          <div
+            className="h-20 w-20 rounded-xl border-2 flex items-center justify-center overflow-hidden u-bg-subtle"
+            style={{ borderColor: form.logo_base64 ? 'var(--brand-primary)' : 'var(--border)' }}
+          >
+            {form.logo_base64
+              ? <img src={form.logo_base64} alt="logo" className="h-full w-full object-contain" />
+              : <Image className="h-7 w-7 u-text-3" />
+            }
+          </div>
+          <label className="flex items-center gap-1.5 px-3 py-1.5 u-bg-subtle u-text-2 text-xs rounded-lg hover:opacity-80 cursor-pointer">
+            <Upload className="h-3.5 w-3.5" /> Upload Logo
+            <input type="file" accept="image/*" className="hidden" onChange={handleLogoUpload} />
+          </label>
+          <p className="text-xs u-text-3">Max 500 KB · SVG, PNG, JPG · Used on invoice headers.</p>
         </div>
       </BField>
+
+      {logoCropSrc && (
+        <ImageCropModal
+          imageSrc={logoCropSrc}
+          aspect={3 / 1}
+          title="Crop Invoice Logo"
+          onConfirm={handleLogoCropConfirm}
+          onCancel={() => setLogoCropSrc(null)}
+        />
+      )}
 
       {isAdmin && (
         <Button icon={Save} onClick={handleSave} loading={saving}>

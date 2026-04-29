@@ -9,9 +9,11 @@ class BrandingSetting(models.Model):
     ]
 
     system_name = models.CharField(max_length=255, default='Vardhan ERP')
-    logo = models.ImageField(upload_to='branding/', blank=True, null=True)
-    favicon = models.ImageField(upload_to='branding/', blank=True, null=True)
-    login_bg = models.ImageField(upload_to='branding/', blank=True, null=True)
+    # FileField instead of ImageField — Pillow doesn't support SVG,
+    # so we validate MIME types in the serializer instead.
+    logo = models.FileField(upload_to='branding/', blank=True, null=True)
+    favicon = models.FileField(upload_to='branding/', blank=True, null=True)
+    login_bg = models.FileField(upload_to='branding/', blank=True, null=True)
     primary_color = models.CharField(max_length=7, default='#6366f1')
     secondary_color = models.CharField(max_length=7, default='#10b981')
     dark_mode_default = models.CharField(
