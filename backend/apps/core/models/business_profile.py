@@ -46,6 +46,12 @@ class BusinessProfile(models.Model):
         super().save(*args, **kwargs)
 
     @classmethod
-    def get_instance(cls):
+    def get_or_none(cls):
+        """Return existing profile or None — does NOT auto-create a blank row."""
+        return cls.objects.filter(pk=1).first()
+
+    @classmethod
+    def get_or_create_instance(cls):
+        """Use only on PUT/save — creates the row if it doesn't exist yet."""
         instance, _ = cls.objects.get_or_create(pk=1)
         return instance
