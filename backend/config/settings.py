@@ -157,22 +157,20 @@ AI_SERVICE_API_KEY = os.environ.get('AI_SERVICE_API_KEY', 'umiya-ai-dev-key-chan
 # Storage / MinIO / S3 Configuration   <-- ADD HERE
 # ---------------------------------------------------
 
-STORAGE_ENDPOINT = os.getenv("STORAGE_ENDPOINT", "http://localhost:9000")
-STORAGE_ACCESS_KEY = os.getenv("STORAGE_ACCESS_KEY", "minioadmin")
-STORAGE_SECRET_KEY = os.getenv("STORAGE_SECRET_KEY", "minioadmin123")
-STORAGE_BUCKET = os.getenv("STORAGE_BUCKET", "erp-files")
-STORAGE_REGION = os.getenv("STORAGE_REGION", "us-east-1")
-STORAGE_USE_PATH_STYLE = os.getenv("STORAGE_USE_PATH_STYLE", "true").lower() == "true"
+STORAGE_ENDPOINT     = os.environ.get('STORAGE_ENDPOINT', 'http://localhost:9000')
+STORAGE_ACCESS_KEY   = os.environ.get('STORAGE_ACCESS_KEY', 'minioadmin')
+STORAGE_SECRET_KEY   = os.environ.get('STORAGE_SECRET_KEY', 'minioadmin123')
+STORAGE_BUCKET       = os.environ.get('STORAGE_BUCKET', 'erp-files')
+STORAGE_REGION       = os.environ.get('STORAGE_REGION', 'us-east-1')
+STORAGE_USE_PATH_STYLE = os.environ.get('STORAGE_USE_PATH_STYLE', 'true').lower() == 'true'
 
-PRESIGNED_URL_DEFAULT = int(os.getenv("PRESIGNED_URL_DEFAULT", 1800))
-PRESIGNED_URL_INVOICE = int(os.getenv("PRESIGNED_URL_INVOICE", 1800))
-PRESIGNED_URL_REPORT = int(os.getenv("PRESIGNED_URL_REPORT", 900))
-PRESIGNED_URL_IMAGE = int(os.getenv("PRESIGNED_URL_IMAGE", 86400))
-
-STORAGE_CONFIG = {
-    "endpoint": STORAGE_ENDPOINT,
-    "bucket": STORAGE_BUCKET,
-    "region": STORAGE_REGION,
+PRESIGNED_URL_EXPIRY = {
+    'invoices':   3600,    # 1 hour
+    'challans':   3600,    # 1 hour
+    'reports':    1800,    # 30 minutes
+    'documents':  3600,    # 1 hour
+    'products':  86400,    # 24 hours
+    'branding':  86400,    # 24 hours
 }
 
 # ---------------------------------------------------

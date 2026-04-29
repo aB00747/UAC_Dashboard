@@ -31,6 +31,12 @@ services:
       DB_PASSWORD: postgres123
       DB_HOST: host.docker.internal # Reaches your Windows host's PostgreSQL from inside Docker
       DB_PORT: "5432"
+      STORAGE_ENDPOINT: http://minio:9000
+      STORAGE_ACCESS_KEY: minioadmin
+      STORAGE_SECRET_KEY: minioadmin123
+      STORAGE_BUCKET: erp-files
+      STORAGE_USE_PATH_STYLE: "true"
+
     volumes:
       - ./backend:/app
       - backend_pip_cache:/root/.cache/pip
@@ -70,6 +76,7 @@ services:
       - minio_data:/data
     healthcheck:
       test: [ "CMD", "mc", "ready", "local" ]
+      # test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -81,12 +88,13 @@ services:
         condition: service_healthy
     entrypoint: >
       /bin/sh -c "
-        mc alias set local http://minio:9000 minioadmin minioadmin123;
-        mc mb --ignore-existing local/erp-files;
-        mc anonymous set none local/erp-files;
-        exit 0;
+        mc alias set local http://minio:9000 minioadmin minioadmin123 &&
+        mc mb --ignore-existing local/erp-files &&
+        mc anonymous set none local/erp-files &&
+        echo 'Bucket ready.'
       "
 
 volumes:
   backend_pip_cache:
   frontend_node_modules:
+  minio_data:
