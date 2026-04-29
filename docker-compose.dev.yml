@@ -19,12 +19,13 @@ services:
     environment:
       PYTHONDONTWRITEBYTECODE: "1"
       PYTHONUNBUFFERED: "1"
+      DOCKER_ENV: "1"           # Prevents .env files from overriding these vars
       DJANGO_ENV: development
       DEBUG: "True"
       SECRET_KEY: dev-secret-key-not-for-production
       ALLOWED_HOSTS: "*"
       CORS_ALLOWED_ORIGINS: "http://localhost:5173"
-      # Uses SQLite by default — no DB_ENGINE override needed
+      DB_ENGINE: django.db.backends.sqlite3  # Force SQLite, ignore any .env postgres config
     volumes:
       - ./backend:/app
       - backend_pip_cache:/root/.cache/pip

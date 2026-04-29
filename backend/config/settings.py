@@ -5,10 +5,13 @@ from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Load environment-specific .env file, then local .env overrides
+# Load environment-specific .env file, then local .env overrides.
+# When running in Docker (DOCKER_ENV=1), env vars are injected by compose —
+# skip dotenv loading so .env files don't override Docker env vars.
 DJANGO_ENV = os.environ.get('DJANGO_ENV', 'development')
-load_dotenv(BASE_DIR / f'.env.{DJANGO_ENV}')
-load_dotenv(BASE_DIR / '.env', override=True)
+if not os.environ.get('DOCKER_ENV'):
+    load_dotenv(BASE_DIR / f'.env.{DJANGO_ENV}')
+    load_dotenv(BASE_DIR / '.env', override=True)
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 if not SECRET_KEY:
