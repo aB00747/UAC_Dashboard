@@ -19,7 +19,7 @@ services:
     environment:
       PYTHONDONTWRITEBYTECODE: "1"
       PYTHONUNBUFFERED: "1"
-      DOCKER_ENV: "1"           # Prevents .env files from overriding these vars
+      DOCKER_ENV: "1" # Prevents .env files from overriding these vars
       DJANGO_ENV: development
       DEBUG: "True"
       SECRET_KEY: dev-secret-key-not-for-production
@@ -29,7 +29,7 @@ services:
       DB_NAME: umiya_dashboard
       DB_USER: postgres
       DB_PASSWORD: postgres123
-      DB_HOST: host.docker.internal  # Reaches your Windows host's PostgreSQL from inside Docker
+      DB_HOST: host.docker.internal # Reaches your Windows host's PostgreSQL from inside Docker
       DB_PORT: "5432"
     volumes:
       - ./backend:/app
@@ -37,7 +37,7 @@ services:
     ports:
       - "8000:8000"
     extra_hosts:
-      - "host.docker.internal:host-gateway"  # Maps to your Windows host IP
+      - "host.docker.internal:host-gateway" # Maps to your Windows host IP
     restart: unless-stopped
 
   frontend:
@@ -56,6 +56,36 @@ services:
     depends_on:
       - backend
     restart: unless-stopped
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000" # S3 API
+      - "9001:9001" # Web console (http://localhost:9001)
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin123
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: [ "CMD", "mc", "ready", "local" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  createbuckets:
+    image: minio/mc
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+        mc alias set local http://minio:9000 minioadmin minioadmin123;
+        mc mb --ignore-existing local/erp-files;
+        mc anonymous set none local/erp-files;
+        exit 0;
+      "
 
 volumes:
   backend_pip_cache:

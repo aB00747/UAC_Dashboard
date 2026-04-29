@@ -152,3 +152,29 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # AI Service
 AI_SERVICE_URL = os.environ.get('AI_SERVICE_URL', 'http://localhost:8001')
 AI_SERVICE_API_KEY = os.environ.get('AI_SERVICE_API_KEY', 'umiya-ai-dev-key-change-in-production')
+
+# ---------------------------------------------------
+# Storage / MinIO / S3 Configuration   <-- ADD HERE
+# ---------------------------------------------------
+
+STORAGE_ENDPOINT = os.getenv("STORAGE_ENDPOINT", "http://localhost:9000")
+STORAGE_ACCESS_KEY = os.getenv("STORAGE_ACCESS_KEY", "minioadmin")
+STORAGE_SECRET_KEY = os.getenv("STORAGE_SECRET_KEY", "minioadmin123")
+STORAGE_BUCKET = os.getenv("STORAGE_BUCKET", "erp-files")
+STORAGE_REGION = os.getenv("STORAGE_REGION", "us-east-1")
+STORAGE_USE_PATH_STYLE = os.getenv("STORAGE_USE_PATH_STYLE", "true").lower() == "true"
+
+PRESIGNED_URL_DEFAULT = int(os.getenv("PRESIGNED_URL_DEFAULT", 1800))
+PRESIGNED_URL_INVOICE = int(os.getenv("PRESIGNED_URL_INVOICE", 1800))
+PRESIGNED_URL_REPORT = int(os.getenv("PRESIGNED_URL_REPORT", 900))
+PRESIGNED_URL_IMAGE = int(os.getenv("PRESIGNED_URL_IMAGE", 86400))
+
+STORAGE_CONFIG = {
+    "endpoint": STORAGE_ENDPOINT,
+    "bucket": STORAGE_BUCKET,
+    "region": STORAGE_REGION,
+}
+
+# ---------------------------------------------------
+# End Storage Config
+# ---------------------------------------------------
