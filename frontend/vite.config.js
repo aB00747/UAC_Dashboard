@@ -6,9 +6,15 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     port: 5173,
+    host: '0.0.0.0',
+    watch: {
+      // Required for hot reload inside Docker on Windows (NTFS doesn't emit inotify events)
+      usePolling: true,
+      interval: 500,
+    },
     proxy: {
       '/api': {
-        target: 'http://localhost:8000',
+        target: process.env.VITE_BACKEND_URL || 'http://localhost:8000',
         changeOrigin: true,
       },
     },
