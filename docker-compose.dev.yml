@@ -1,0 +1,100 @@
+# Local development — hot reload for both frontend and backend.
+# Usage: docker compose -f docker-compose.dev.yml up
+#
+# Frontend: Vite dev server with HMR on http://localhost:5173
+# Backend:  Django runserver with auto-reload on http://localhost:8000
+# Database: SQLite (no Postgres needed for local dev)
+#
+# No build step required. Source files are mounted as volumes.
+# Changes to .py / .jsx / .css files reflect instantly without rebuilding.
+
+services:
+  backend:
+    image: python:3.13-slim
+    working_dir: /app
+    command: >
+      sh -c "pip install --quiet -r requirements.txt &&
+             python manage.py migrate --run-syncdb &&
+             python manage.py runserver 0.0.0.0:8000"
+    environment:
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONUNBUFFERED: "1"
+      DOCKER_ENV: "1" # Prevents .env files from overriding these vars
+      DJANGO_ENV: development
+      DEBUG: "True"
+      SECRET_KEY: dev-secret-key-not-for-production
+      ALLOWED_HOSTS: "*"
+      CORS_ALLOWED_ORIGINS: "http://localhost:5173"
+      DB_ENGINE: django.db.backends.postgresql
+      DB_NAME: umiya_dashboard
+      DB_USER: postgres
+      DB_PASSWORD: postgres123
+      DB_HOST: host.docker.internal # Reaches your Windows host's PostgreSQL from inside Docker
+      DB_PORT: "5432"
+      STORAGE_ENDPOINT: http://minio:9000
+      STORAGE_ACCESS_KEY: minioadmin
+      STORAGE_SECRET_KEY: minioadmin123
+      STORAGE_BUCKET: erp-files
+      STORAGE_USE_PATH_STYLE: "true"
+
+    volumes:
+      - ./backend:/app
+      - backend_pip_cache:/root/.cache/pip
+    ports:
+      - "8000:8000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway" # Maps to your Windows host IP
+    restart: unless-stopped
+
+  frontend:
+    image: node:22-alpine
+    working_dir: /app
+    command: >
+      sh -c "npm install && npm run dev"
+    environment:
+      # Points Vite's /api proxy to the backend service inside Docker
+      VITE_BACKEND_URL: http://backend:8000
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000" # S3 API
+      - "9001:9001" # Web console (http://localhost:9001)
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin123
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: [ "CMD", "mc", "ready", "local" ]
+      # test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  createbuckets:
+    image: minio/mc
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+        mc alias set local http://minio:9000 minioadmin minioadmin123 &&
+        mc mb --ignore-existing local/erp-files &&
+        mc anonymous set none local/erp-files &&
+        echo 'Bucket ready.'
+      "
+
+volumes:
+  backend_pip_cache:
+  frontend_node_modules:
+  minio_data:

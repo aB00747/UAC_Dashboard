@@ -2,9 +2,23 @@ from django.db import models
 
 
 class BrandingSetting(models.Model):
-    system_name = models.CharField(max_length=255, default='Umiya Chemical Dashboard')
-    logo = models.ImageField(upload_to='branding/', blank=True, null=True)
-    favicon = models.ImageField(upload_to='branding/', blank=True, null=True)
+    DARK_MODE_CHOICES = [
+        ('light', 'Light'),
+        ('dark', 'Dark'),
+        ('system', 'System'),
+    ]
+
+    system_name = models.CharField(max_length=255, default='Vardhan ERP')
+    # FileField instead of ImageField — Pillow doesn't support SVG,
+    # so we validate MIME types in the serializer instead.
+    logo = models.FileField(upload_to='branding/', blank=True, null=True)
+    favicon = models.FileField(upload_to='branding/', blank=True, null=True)
+    login_bg = models.FileField(upload_to='branding/', blank=True, null=True)
+    primary_color = models.CharField(max_length=7, default='#6366f1')
+    secondary_color = models.CharField(max_length=7, default='#10b981')
+    dark_mode_default = models.CharField(
+        max_length=10, choices=DARK_MODE_CHOICES, default='system'
+    )
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:

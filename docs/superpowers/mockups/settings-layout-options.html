@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Settings Layout Options — Vardhan ERP</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f172a; color: #e2e8f0; padding: 24px; }
+
+  h1 { font-size: 22px; font-weight: 700; color: #f8fafc; margin-bottom: 6px; }
+  .subtitle { font-size: 13px; color: #94a3b8; margin-bottom: 32px; }
+
+  .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .option { background: #1e293b; border: 2px solid #334155; border-radius: 16px; overflow: hidden; }
+  .option.recommended { border-color: #6366f1; }
+  .option-label { padding: 14px 18px; background: #0f172a; border-bottom: 1px solid #334155; display: flex; align-items: center; justify-content: space-between; }
+  .option-label .letter { font-size: 18px; font-weight: 800; color: #6366f1; margin-right: 10px; }
+  .option-label .title { font-size: 14px; font-weight: 600; color: #f1f5f9; }
+  .badge { font-size: 10px; font-weight: 700; background: #6366f1; color: white; padding: 2px 8px; border-radius: 100px; letter-spacing: 0.5px; }
+  .mockup { padding: 16px; }
+
+  /* ── Option A: Tabs ── */
+  .tabs-bar { display: flex; gap: 2px; background: #0f172a; border-radius: 8px; padding: 3px; margin-bottom: 14px; }
+  .tab { padding: 6px 12px; font-size: 11px; font-weight: 500; border-radius: 6px; color: #94a3b8; cursor: pointer; }
+  .tab.active { background: #6366f1; color: white; }
+  .tab-content { background: #0f172a; border-radius: 10px; padding: 14px; }
+  .field-row { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
+  .field-label { font-size: 10px; color: #94a3b8; font-weight: 500; }
+  .field-input { background: #1e293b; border: 1px solid #334155; border-radius: 6px; padding: 6px 10px; font-size: 11px; color: #e2e8f0; }
+  .field-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+  .color-swatch { width: 28px; height: 28px; border-radius: 6px; border: 2px solid #334155; }
+  .color-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .color-row .field-label { font-size: 10px; color: #94a3b8; }
+  .save-btn { background: #6366f1; color: white; border: none; border-radius: 6px; padding: 7px 16px; font-size: 11px; font-weight: 600; cursor: pointer; margin-top: 4px; }
+
+  /* ── Option B: Sidebar Nav ── */
+  .settings-shell { display: flex; gap: 0; background: #0f172a; border-radius: 10px; overflow: hidden; min-height: 230px; }
+  .settings-sidebar { width: 130px; background: #0c1220; border-right: 1px solid #1e293b; padding: 10px 0; flex-shrink: 0; }
+  .settings-sidebar .s-section { font-size: 9px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.8px; padding: 6px 12px 3px; }
+  .settings-sidebar .s-item { font-size: 11px; color: #94a3b8; padding: 6px 12px; cursor: pointer; border-left: 2px solid transparent; }
+  .settings-sidebar .s-item.active { color: #818cf8; background: #1e2a3e; border-left-color: #6366f1; }
+  .settings-main { flex: 1; padding: 14px; }
+  .settings-main h3 { font-size: 13px; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+
+  /* ── Option C: Accordion ── */
+  .accordion { display: flex; flex-direction: column; gap: 6px; }
+  .accordion-item { background: #0f172a; border-radius: 8px; overflow: hidden; border: 1px solid #1e293b; }
+  .accordion-header { padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+  .accordion-header .a-title { font-size: 12px; font-weight: 600; color: #e2e8f0; }
+  .accordion-header .a-icon { font-size: 10px; color: #64748b; }
+  .accordion-body { padding: 10px 14px; border-top: 1px solid #1e293b; }
+  .accordion-body.open { display: block; }
+  .accordion-body.closed { display: none; }
+  .mini-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .mini-field { background: #1e293b; border-radius: 6px; padding: 6px 8px; font-size: 9px; color: #64748b; }
+  .mini-field span { display: block; color: #94a3b8; font-size: 10px; margin-top: 2px; }
+
+  /* ── Option D: Current ── */
+  .current-page { display: flex; flex-direction: column; gap: 8px; }
+  .current-card { background: #0f172a; border-radius: 8px; padding: 12px 14px; border: 1px solid #1e293b; }
+  .current-card h3 { font-size: 12px; font-weight: 600; color: #f1f5f9; margin-bottom: 8px; }
+  .current-fields { display: flex; flex-direction: column; gap: 6px; }
+  .cf-item { display: flex; align-items: center; gap: 8px; }
+  .cf-label { font-size: 9px; color: #64748b; width: 70px; flex-shrink: 0; }
+  .cf-val { flex: 1; background: #1e293b; border-radius: 4px; height: 20px; border: 1px solid #334155; }
+  .tag-new { font-size: 9px; background: #10b981; color: white; border-radius: 4px; padding: 1px 5px; font-weight: 700; }
+
+  .desc { font-size: 11px; color: #64748b; padding: 10px 18px 14px; line-height: 1.5; }
+  .pros-cons { display: flex; gap: 10px; padding: 0 18px 14px; }
+  .pros, .cons { flex: 1; }
+  .pros h4 { font-size: 10px; color: #4ade80; font-weight: 700; margin-bottom: 4px; }
+  .cons h4 { font-size: 10px; color: #f87171; font-weight: 700; margin-bottom: 4px; }
+  .pros li, .cons li { font-size: 10px; color: #94a3b8; list-style: none; padding-left: 10px; position: relative; margin-bottom: 2px; }
+  .pros li::before { content: '✓'; position: absolute; left: 0; color: #4ade80; }
+  .cons li::before { content: '✗'; position: absolute; left: 0; color: #f87171; }
+</style>
+</head>
+<body>
+
+<h1>Company Settings — Layout Options</h1>
+<p class="subtitle">Vardhan ERP · Choose how the Company Settings panel should be structured</p>
+
+<div class="options-grid">
+
+  <!-- OPTION A: TABS -->
+  <div class="option recommended">
+    <div class="option-label">
+      <div style="display:flex;align-items:center">
+        <span class="letter">A</span>
+        <span class="title">Tabs Layout</span>
+      </div>
+      <span class="badge">RECOMMENDED</span>
+    </div>
+    <div class="mockup">
+      <div class="tabs-bar">
+        <div class="tab active">Branding</div>
+        <div class="tab">Business Info</div>
+        <div class="tab">Invoice</div>
+        <div class="tab">App Settings</div>
+      </div>
+      <div class="tab-content">
+        <div class="field-row">
+          <div class="field-label">Company Display Name</div>
+          <div class="field-input">Shree Chemicals Pvt. Ltd.</div>
+        </div>
+        <div class="field-row-2">
+          <div class="field-row">
+            <div class="field-label">Logo</div>
+            <div class="field-input" style="display:flex;align-items:center;gap:6px">
+              <div style="width:20px;height:20px;background:#334155;border-radius:4px"></div>
+              <span style="font-size:10px;color:#64748b">Upload</span>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-label">Favicon</div>
+            <div class="field-input" style="display:flex;align-items:center;gap:6px">
+              <div style="width:20px;height:20px;background:#334155;border-radius:4px"></div>
+              <span style="font-size:10px;color:#64748b">Upload</span>
+            </div>
+          </div>
+        </div>
+        <div class="color-row">
+          <div class="field-label">Primary Color</div>
+          <div class="color-swatch" style="background:#6366f1"></div>
+          <div class="color-swatch" style="background:#10b981"></div>
+          <div class="color-swatch" style="background:#f59e0b"></div>
+          <div class="color-swatch" style="background:#ef4444"></div>
+          <div class="color-swatch" style="background:#3b82f6"></div>
+        </div>
+        <button class="save-btn">Save Branding</button>
+      </div>
+    </div>
+    <div class="desc">Single page, tabs switch content area. Familiar pattern (Gmail, GitHub). All settings reachable without leaving the page.</div>
+    <div class="pros-cons">
+      <ul class="pros"><h4>Pros</h4>
+        <li>Fast to navigate</li>
+        <li>Non-technical friendly</li>
+        <li>Builds on existing page</li>
+        <li>Mobile friendly</li>
+      </ul>
+      <ul class="cons"><h4>Cons</h4>
+        <li>Can feel cramped if many tabs</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- OPTION B: SIDEBAR NAV -->
+  <div class="option">
+    <div class="option-label">
+      <div style="display:flex;align-items:center">
+        <span class="letter">B</span>
+        <span class="title">Sidebar Nav Layout</span>
+      </div>
+    </div>
+    <div class="mockup">
+      <div class="settings-shell">
+        <div class="settings-sidebar">
+          <div class="s-section">Company</div>
+          <div class="s-item active">Branding</div>
+          <div class="s-item">Business Info</div>
+          <div class="s-item">Invoice</div>
+          <div class="s-section" style="margin-top:8px">System</div>
+          <div class="s-item">App Settings</div>
+          <div class="s-item">Users</div>
+          <div class="s-item">Roles</div>
+          <div class="s-section" style="margin-top:8px">Advanced</div>
+          <div class="s-item">Integrations</div>
+          <div class="s-item">Audit Log</div>
+        </div>
+        <div class="settings-main">
+          <h3>Branding</h3>
+          <div class="field-row">
+            <div class="field-label">Company Display Name</div>
+            <div class="field-input">Shree Chemicals Pvt. Ltd.</div>
+          </div>
+          <div class="field-row" style="margin-top:8px">
+            <div class="field-label">Primary Color</div>
+            <div class="color-row" style="margin:4px 0 0">
+              <div class="color-swatch" style="background:#6366f1"></div>
+              <div class="color-swatch" style="background:#10b981"></div>
+              <div class="color-swatch" style="background:#f59e0b"></div>
+            </div>
+          </div>
+          <button class="save-btn" style="margin-top:10px">Save</button>
+        </div>
+      </div>
+    </div>
+    <div class="desc">Dedicated settings area with its own left nav. Like GitHub org settings or Notion workspace settings. Best for many settings sections.</div>
+    <div class="pros-cons">
+      <ul class="pros"><h4>Pros</h4>
+        <li>Scales to many sections</li>
+        <li>Professional / enterprise feel</li>
+        <li>Easy to add future sections</li>
+      </ul>
+      <ul class="cons"><h4>Cons</h4>
+        <li>More work to build</li>
+        <li>Nested nav can confuse</li>
+        <li>Poor on mobile</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- OPTION C: ACCORDION -->
+  <div class="option">
+    <div class="option-label">
+      <div style="display:flex;align-items:center">
+        <span class="letter">C</span>
+        <span class="title">Accordion Sections</span>
+      </div>
+    </div>
+    <div class="mockup">
+      <div class="accordion">
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="a-title">🎨 Branding</span>
+            <span class="a-icon">▲</span>
+          </div>
+          <div class="accordion-body open">
+            <div class="mini-fields">
+              <div class="mini-field">Company Name<span>Shree Chemicals</span></div>
+              <div class="mini-field">Primary Color<span>#6366f1</span></div>
+              <div class="mini-field">Logo<span>logo.png ✓</span></div>
+              <div class="mini-field">Favicon<span>Not set</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="a-title">🏢 Business Info</span>
+            <span class="a-icon">▼</span>
+          </div>
+          <div class="accordion-body closed"></div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="a-title">🧾 Invoice Branding</span>
+            <span class="a-icon">▼</span>
+          </div>
+          <div class="accordion-body closed"></div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <span class="a-title">⚙️ App Settings</span>
+            <span class="a-icon">▼</span>
+          </div>
+          <div class="accordion-body closed"></div>
+        </div>
+      </div>
+    </div>
+    <div class="desc">All settings on one long scrollable page. Sections expand/collapse. Simple to build, but can become overwhelming with many fields.</div>
+    <div class="pros-cons">
+      <ul class="pros"><h4>Pros</h4>
+        <li>Easiest to build</li>
+        <li>No navigation needed</li>
+        <li>Everything visible at once</li>
+      </ul>
+      <ul class="cons"><h4>Cons</h4>
+        <li>Gets long/overwhelming</li>
+        <li>Harder to find specific setting</li>
+        <li>Less polished feel</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- OPTION D: CURRENT -->
+  <div class="option">
+    <div class="option-label">
+      <div style="display:flex;align-items:center">
+        <span class="letter">D</span>
+        <span class="title">Extend Current Page</span>
+      </div>
+    </div>
+    <div class="mockup">
+      <div class="current-page">
+        <div class="current-card">
+          <h3>Branding <span class="tag-new">existing</span></h3>
+          <div class="current-fields">
+            <div class="cf-item"><div class="cf-label">System Name</div><div class="cf-val"></div></div>
+            <div class="cf-item"><div class="cf-label">Logo</div><div class="cf-val"></div></div>
+            <div class="cf-item"><div class="cf-label">Favicon</div><div class="cf-val"></div></div>
+            <div class="cf-item"><div class="cf-label" style="color:#6366f1">Primary Color</div><div class="cf-val" style="border-color:#6366f1"></div><span class="tag-new">new</span></div>
+          </div>
+        </div>
+        <div class="current-card">
+          <h3>Business Info <span class="tag-new">new</span></h3>
+          <div class="current-fields">
+            <div class="cf-item"><div class="cf-label">GST Number</div><div class="cf-val"></div></div>
+            <div class="cf-item"><div class="cf-label">Address</div><div class="cf-val"></div></div>
+            <div class="cf-item"><div class="cf-label">Currency</div><div class="cf-val"></div></div>
+          </div>
+        </div>
+        <div class="current-card" style="opacity:0.5">
+          <h3>App Settings <span class="tag-new">existing</span></h3>
+        </div>
+      </div>
+    </div>
+    <div class="desc">Just extend the existing Settings page with new card sections. Fastest to build. Keeps everything familiar but the page gets long over time.</div>
+    <div class="pros-cons">
+      <ul class="pros"><h4>Pros</h4>
+        <li>Fastest to implement</li>
+        <li>No UX redesign needed</li>
+      </ul>
+      <ul class="cons"><h4>Cons</h4>
+        <li>Page grows unwieldy</li>
+        <li>Not "ERP product" quality</li>
+        <li>Hard to extend later</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<div style="margin-top:28px;background:#1e293b;border-radius:12px;padding:16px 20px;border:1px solid #334155;">
+  <p style="font-size:13px;color:#94a3b8;line-height:1.7">
+    <strong style="color:#f1f5f9">My recommendation: Option A (Tabs)</strong> — it's the right balance of polish and buildability for your current codebase.
+    It builds directly on the existing Settings page, delivers a clean product feel, and is easy for non-technical users.
+    Option B is better long-term if you plan to add Integrations, Webhooks, SSO etc. — but that's Phase 3 territory.
+  </p>
+</div>
+
+</body>
+</html>

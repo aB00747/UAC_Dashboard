@@ -5,10 +5,13 @@ from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Load environment-specific .env file, then local .env overrides
+# Load environment-specific .env file, then local .env overrides.
+# When running in Docker (DOCKER_ENV=1), env vars are injected by compose —
+# skip dotenv loading so .env files don't override Docker env vars.
 DJANGO_ENV = os.environ.get('DJANGO_ENV', 'development')
-load_dotenv(BASE_DIR / f'.env.{DJANGO_ENV}')
-load_dotenv(BASE_DIR / '.env', override=True)
+if not os.environ.get('DOCKER_ENV'):
+    load_dotenv(BASE_DIR / f'.env.{DJANGO_ENV}')
+    load_dotenv(BASE_DIR / '.env', override=True)
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 if not SECRET_KEY:
@@ -149,3 +152,27 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # AI Service
 AI_SERVICE_URL = os.environ.get('AI_SERVICE_URL', 'http://localhost:8001')
 AI_SERVICE_API_KEY = os.environ.get('AI_SERVICE_API_KEY', 'umiya-ai-dev-key-change-in-production')
+
+# ---------------------------------------------------
+# Storage / MinIO / S3 Configuration   <-- ADD HERE
+# ---------------------------------------------------
+
+STORAGE_ENDPOINT     = os.environ.get('STORAGE_ENDPOINT', 'http://localhost:9000')
+STORAGE_ACCESS_KEY   = os.environ.get('STORAGE_ACCESS_KEY', 'minioadmin')
+STORAGE_SECRET_KEY   = os.environ.get('STORAGE_SECRET_KEY', 'minioadmin123')
+STORAGE_BUCKET       = os.environ.get('STORAGE_BUCKET', 'erp-files')
+STORAGE_REGION       = os.environ.get('STORAGE_REGION', 'us-east-1')
+STORAGE_USE_PATH_STYLE = os.environ.get('STORAGE_USE_PATH_STYLE', 'true').lower() == 'true'
+
+PRESIGNED_URL_EXPIRY = {
+    'invoices':   3600,    # 1 hour
+    'challans':   3600,    # 1 hour
+    'reports':    1800,    # 30 minutes
+    'documents':  3600,    # 1 hour
+    'products':  86400,    # 24 hours
+    'branding':  86400,    # 24 hours
+}
+
+# ---------------------------------------------------
+# End Storage Config
+# ---------------------------------------------------
