@@ -54,6 +54,18 @@ html.dark ::selection {
   color: var(--text);
 }
 
+/* ── Pointer cursor on all interactive elements ─────────────── */
+
+button,
+[role="button"],
+select,
+label[for],
+input[type="checkbox"],
+input[type="radio"],
+input[type="file"] {
+  cursor: pointer;
+}
+
 /* ── Focus Ring ─────────────────────────────────────────────── */
 
 :focus-visible {
