@@ -1,17 +1,26 @@
 import { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { useBranding } from './BrandingContext';
 
+const STORAGE_KEY = 'vardhan-theme';
 const ThemeContext = createContext();
 
-function getInitialTheme() {
-  const stored = localStorage.getItem('umiya-theme');
+function resolveTheme(stored, companyDefault) {
   if (stored === 'dark' || stored === 'light') return stored;
-  if (globalThis.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
-  return 'light';
+  if (companyDefault === 'dark') return 'dark';
+  if (companyDefault === 'light') return 'light';
+  return globalThis.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState(getInitialTheme);
+  const { darkModeDefault } = useBranding();
+  const stored = localStorage.getItem(STORAGE_KEY);
+  const [theme, setTheme] = useState(() => resolveTheme(stored, darkModeDefault));
+
+  useEffect(() => {
+    const currentStored = localStorage.getItem(STORAGE_KEY);
+    setTheme(resolveTheme(currentStored, darkModeDefault));
+  }, [darkModeDefault]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -20,14 +29,22 @@ export function ThemeProvider({ children }) {
     } else {
       root.classList.remove('dark');
     }
-    localStorage.setItem('umiya-theme', theme);
+    localStorage.setItem(STORAGE_KEY, theme);
   }, [theme]);
 
   function toggleTheme() {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
   }
 
-  const value = useMemo(() => ({ theme, isDark: theme === 'dark', toggleTheme }), [theme]);
+  function resetToCompanyDefault() {
+    localStorage.removeItem(STORAGE_KEY);
+    setTheme(resolveTheme(null, darkModeDefault));
+  }
+
+  const value = useMemo(
+    () => ({ theme, isDark: theme === 'dark', toggleTheme, resetToCompanyDefault }),
+    [theme] // eslint-disable-line react-hooks/exhaustive-deps
+  );
 
   return (
     <ThemeContext.Provider value={value}>
