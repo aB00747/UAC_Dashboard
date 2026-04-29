@@ -25,12 +25,19 @@ services:
       SECRET_KEY: dev-secret-key-not-for-production
       ALLOWED_HOSTS: "*"
       CORS_ALLOWED_ORIGINS: "http://localhost:5173"
-      DB_ENGINE: django.db.backends.sqlite3  # Force SQLite, ignore any .env postgres config
+      DB_ENGINE: django.db.backends.postgresql
+      DB_NAME: umiya_dashboard
+      DB_USER: postgres
+      DB_PASSWORD: postgres123
+      DB_HOST: host.docker.internal  # Reaches your Windows host's PostgreSQL from inside Docker
+      DB_PORT: "5432"
     volumes:
       - ./backend:/app
       - backend_pip_cache:/root/.cache/pip
     ports:
       - "8000:8000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"  # Maps to your Windows host IP
     restart: unless-stopped
 
   frontend:
